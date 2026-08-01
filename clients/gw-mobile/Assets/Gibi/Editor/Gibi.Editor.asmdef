@@ -1,0 +1,28 @@
+{
+  "name": "Gibi.Editor",
+  "rootNamespace": "Gibi.Editor",
+  "references": [
+    "Gibi.Core",
+    "Gibi.Spatial",
+    "Gibi.Pets",
+    "Gibi.AssetRuntime",
+    "Gibi.Gameplay",
+    "Gibi.Networking",
+    "Gibi.AI",
+    "Gibi.Telemetry",
+    "Gibi.UI",
+    "Unity.XR.ARFoundation",
+    "Unity.XR.CoreUtils"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

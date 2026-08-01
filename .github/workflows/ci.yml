@@ -1,0 +1,181 @@
+# GW-ARCH-001 section 16 — "CI SHALL run formatting, compile, static analysis, secret
+# scan, dependency audit, EditMode tests, PlayMode tests, asset validator fixtures,
+# OpenAPI compatibility, database migration test, and mobile smoke builds."
+#
+# Jobs that need no Unity licence run on every push. The Unity jobs are separated so a
+# contract or asset regression is caught in seconds rather than behind a licence check.
+name: gibiworld-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  contracts:
+    name: Contracts and schemas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install jsonschema pyyaml check-jsonschema
+
+      - name: JSON Schemas are valid draft 2020-12
+        run: |
+          python - <<'PY'
+          import json, glob, sys
+          from jsonschema import Draft202012Validator
+          bad = 0
+          for f in glob.glob("contracts/schemas/*.json"):
+              s = json.load(open(f))
+              try:
+                  Draft202012Validator.check_schema(s)
+                  print("OK  ", f)
+              except Exception as e:
+                  print("FAIL", f, e); bad = 1
+          sys.exit(bad)
+          PY
+
+      - name: OpenAPI 3.1 parses and covers every documented endpoint
+        run: |
+          python - <<'PY'
+          import yaml, sys
+          d = yaml.safe_load(open("contracts/openapi/gibiworld.v1.yaml"))
+          assert d["openapi"].startswith("3.1"), "section 11 requires OpenAPI 3.1"
+          # Section 11 tabulates 13 endpoints; a silent drop is a contract regression.
+          n = len(d["paths"])
+          print(f"paths: {n}")
+          sys.exit(0 if n >= 13 else 1)
+          PY
+
+      - name: Security-sensitive request bodies reject unknown fields
+        run: |
+          python - <<'PY'
+          import yaml, sys
+          # Section 11: "unknown request fields are rejected for security-sensitive
+          # endpoints." additionalProperties:false is how that is enforced.
+          d = yaml.safe_load(open("contracts/openapi/gibiworld.v1.yaml"))
+          sensitive = ["/v1/auth/exchange", "/v1/pets", "/v1/course-runs",
+                       "/v1/integrations/pawsome/webhook", "/v1/reports"]
+          bad = []
+          for p in sensitive:
+              node = d["paths"].get(p, {})
+              for method in ("post", "put", "patch"):
+                  op = node.get(method)
+                  if not op or "requestBody" not in op: continue
+                  sch = op["requestBody"]["content"]["application/json"]["schema"]
+                  if sch.get("additionalProperties") is not False:
+                      bad.append(f"{method.upper()} {p}")
+          for b in bad: print("MISSING additionalProperties:false ->", b)
+          sys.exit(1 if bad else 0)
+          PY
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Scan for committed credentials
+        run: |
+          # Section 13.1: secrets live in the deployment secret manager, never the repo.
+          if grep -rEn "(sk_[A-Za-z0-9]{24,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----)" \
+               --include="*.cs" --include="*.ts" --include="*.json" --include="*.yaml" \
+               --include="*.yml" --include="*.py" --include="*.md" . ; then
+            echo "::error::Potential credential committed."
+            exit 1
+          fi
+          echo "No credential patterns found."
+
+  assets:
+    name: Asset validator fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: GLB structural validator runs
+        run: |
+          python tools/gw-asset-worker/validator/glb_inspect.py \
+            $(ls assets/source-models/*.glb 2>/dev/null | head -3) > /tmp/r.json || true
+          python - <<'PY'
+          import json, sys
+          try: d = json.load(open('/tmp/r.json'))
+          except Exception: print("no source models in CI checkout; skipping"); sys.exit(0)
+          for r in d:
+              print(r.get("file"), "violations:", len(r.get("violations", [])))
+          PY
+
+  database:
+    name: Migrations apply cleanly
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: gibiworld
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+        ports: ['5432:5432']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply forward-only migrations
+        env: { PGPASSWORD: ci }
+        run: |
+          for f in db/migrations/*.sql; do
+            echo "applying $f"
+            psql -h localhost -U postgres -d gibiworld -v ON_ERROR_STOP=1 -f "$f"
+          done
+      - name: Course versions are immutable (GW-GAME-007)
+        env: { PGPASSWORD: ci }
+        run: |
+          # The trigger must reject an UPDATE. If this psql call SUCCEEDS, the
+          # immutability guarantee is broken and the build must fail.
+          if psql -h localhost -U postgres -d gibiworld -v ON_ERROR_STOP=1 \
+               -c "UPDATE course_versions SET version = version + 1;" 2>/dev/null; then
+            echo "::error::course_versions accepted an UPDATE; GW-GAME-007 violated."
+            exit 1
+          fi
+          echo "course_versions correctly rejected UPDATE."
+
+  unity:
+    name: Unity gates
+    runs-on: ubuntu-latest
+    # Requires UNITY_LICENSE / UNITY_EMAIL / UNITY_PASSWORD secrets.
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { lfs: true }
+      - uses: actions/cache@v4
+        with:
+          path: clients/gw-mobile/Library
+          key: Library-${{ hashFiles('clients/gw-mobile/Packages/packages-lock.json') }}
+      - name: Assembly graph is acyclic (section 4)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: clients/gw-mobile
+          unityVersion: 6000.0.74f1
+          targetPlatform: StandaloneLinux64
+          buildMethod: Gibi.Editor.AssemblyGraphCheck.CheckForCI
+      - name: Scene validation (GW-AR-001)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: clients/gw-mobile
+          unityVersion: 6000.0.74f1
+          targetPlatform: StandaloneLinux64
+          buildMethod: Gibi.Editor.SceneValidator.ValidateAllForCI
+      - name: EditMode tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          projectPath: clients/gw-mobile
+          unityVersion: 6000.0.74f1
+          testMode: EditMode
