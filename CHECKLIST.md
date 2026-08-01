@@ -80,49 +80,57 @@ Status: `[x]` done · `[~]` partial · `[ ]` not started · `[!]` blocked on you
 
 ## Findings on your supplied models
 
-Measured inside **Blender 5.2 headless**, not inferred from the container. Full data in
-`tools/gw-asset-worker/blender-inspection-report.json`.
+Measured in **Blender 5.2 headless**. Raw data in `tools/gw-asset-worker/`.
+Full breakdown of all nine assets: **`docs/ASSET_INVENTORY.md`**.
 
-All three are **Tripo3D**-generated, share one 25-bone rig, and fail identically.
+### Correction to an earlier finding
 
-| Check | Result |
+I previously reported a stray `Icosphere` "Tripo bounding proxy" inflating bounds to
+2.0 m. **That was wrong.** It is Blender's own glTF importer creating a custom bone
+*display* shape, parked in the `glTF_not_exported` collection. It is not in your asset,
+not in the scene, and never exported. The inspector now ignores it, and the real pet
+bounds — ~1.0 × 0.38 × 0.59 m — were always fine.
+
+### Two systemic issues (see inventory for detail)
+
+1. **Everything is normalized to a ~1 m cube.** Tripo never authored real-world scale.
+   Your `toyball` is a **one-metre ball**; `startgate` is 0.42 m tall against a §9.2
+   corridor minimum of 1.5 m. Every prop needs an explicit rescale.
+2. **Rigid skin binding** — `randy11` binds *one* bone per vertex (§6.2 permits 4).
+   Passes every automated gate; joints will still crease. Re-skinning is hand work.
+
+### Remediation run — `randy11`, all four LODs
+
+| LOD | Triangles | Limit | Result |
+|---|---|---|---|
+| LOD0 | 34,929 | 35,000 | **PASS** |
+| LOD1 | 17,964 | 18,000 | **PASS** |
+| LOD2 | 7,485 | 7,500 | **PASS** |
+| LOD3 | 1,996 | 2,000 | **PASS** |
+
+Applied automatically and verified by independent re-inspection:
+
+- **1,275 scale F-curves** removed in-scene, then **200 scale channels per LOD** stripped
+  at container level — Blender's exporter re-emits them regardless, so the GLB itself
+  must be rewritten (`glb_strip_scale.py`)
+- **51 root-motion curves across 17 clips** removed — locomotion is now in-place per §6.3
+- **18 bones** retargeted onto `GIBI_QUADRUPED_V1`, vertex groups renamed in step
+- **6 out-of-scope clips dropped** (`pee_legLift`, `poop_squat`, `eat`, `eating`,
+  `drink`, `drinking`) and duplicate clip targets resolved deterministically
+- Provenance emitted with SHA-256 for source and every output
+
+**Scale curves: 0. Root motion: 0. All LOD budgets met.**
+
+### What remains — genuinely manual
+
+| Task | Why automation can't do it |
 |---|---|
-| Transfer size | **Pass** — ~2 MB against a 45 MiB limit |
-| Materials / textures | **Pass** — 1 material, one 2048×2048 set |
-| Skinned meshes / bones | **Pass** — 1 skinned mesh, 25 bones (limits 2 / 96) |
-| Real body bounds | **Pass** — ~1.00 × 0.30 × 0.59–0.77 m, a plausible dog |
-| External URIs, cameras, lights | **Pass** — none |
-| LOD0 triangles | **Fail** — 40,026 / 40,078 / 40,076 vs 35,000 (~12.6% over) |
-| Scale curves | **Fail** — every clip animates scale; §6.3 forbids it |
-| **Root motion** | **Fail** — *every* clip translates `hips`; §6.3 requires in-place locomotion |
-| Skeleton profile | **Fail** — only **4 of 26** required joints present (`chest`, `neck`, `head`, `jaw`) |
-| Clip inventory | **Fail** — `randy11` has 4 of 23 required; the other Pawsome3D pair has 0 |
-| Out-of-scope clips | **Fail** — `pee_legLift`, `poop_squat`, `eat`, `drink` fall outside §1.2 |
-
-### Two things only Blender could reveal
-
-**1. A stray `Icosphere` in all three files.** 80 triangles, 42 vertices, unskinned — a
-Tripo bounding proxy left in the export. It is the *sole* reason bounds report exactly
-2.0 m (the §6.2 hard limit). Delete it and the models sit comfortably inside the budget.
-Container-level parsing counted its triangles and read its bounds as the pet's.
-
-**2. Max influences per vertex = 1.** The meshes are *rigidly* bound — every vertex
-follows exactly one bone. That passes the §6.2 limit of 4, so no automated gate catches
-it, but it means joints will crease and tear under animation. For a spec whose first
-pillar is **Present**, this is the single biggest quality gap, and re-skinning is
-hand work.
-
-### Corrected retarget profile
-
-My earlier profile guessed source bone names. Measured against the real rig, it now maps
-**25 bones directly** and identifies **6 that must be synthesized**, reaching 26/26:
-
-| Synthesized | Why |
-|---|---|
-| `root` | Rig roots at `hips`; motion controller needs a separate zero-transform root |
-| `spine_02` | Source has a **single** `spine` bone — must be subdivided and reweighted |
-| `clavicle_l` / `clavicle_r` | No shoulder bone exists at all |
-| `hock_l` / `hock_r` | Rear leg is upper→lower→paw; no hock, so digitigrade motion is impossible |
+| Re-skin to 4 influences | Cannot invent smooth weights without artefacts |
+| Subdivide `spine` → `spine_01` + `spine_02` | Weight redistribution needs judgement |
+| Insert `clavicle_l/r` | No shoulder bone exists in the source |
+| Insert `hock_l/r` | No hock exists; correct dog gait is impossible without it |
+| Author 6 P0 clips | `idle_b`, `sit_idle`, `stand`, `pickup`, `carry`, `drop` |
+| Rescale all 5 props | Requires a real-world size decision per prop |
 
 ## What I need from you
 

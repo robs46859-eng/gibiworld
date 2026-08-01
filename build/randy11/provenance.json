@@ -1,0 +1,393 @@
+{
+  "validatorVersion": "1.1.0",
+  "blenderVersion": "5.2.0 LTS",
+  "profileId": "GIBI_QUADRUPED_V1",
+  "sourceFile": "randy11.glb",
+  "sourceSha256": "9cadb2ba53304a55a300f6cd8e9d24b719f697bf0c131f1be0aeea1ceaeeb1cc",
+  "lods": {
+    "LOD0": {
+      "junkRemoved": [],
+      "trisAfterJunkRemoval": 40076,
+      "scaleCurvesRemoved": 1275,
+      "rootMotionCurvesRemoved": {
+        "bark_speak": 3,
+        "drink": 3,
+        "drinking": 3,
+        "eat": 3,
+        "eating": 3,
+        "idle": 3,
+        "pee_legLift": 3,
+        "photo": 3,
+        "play": 3,
+        "playing": 3,
+        "poop_squat": 3,
+        "run": 3,
+        "running": 3,
+        "sit": 3,
+        "sleep": 3,
+        "sleeping": 3,
+        "walk": 3
+      },
+      "boneRetarget": {
+        "applied": {
+          "hips": "pelvis",
+          "spine": "spine_01",
+          "eye.L": "eye_l",
+          "eye.R": "eye_r",
+          "front_leg_upper.L": "upper_front_l",
+          "front_leg_lower.L": "lower_front_l",
+          "front_paw.L": "paw_front_l",
+          "front_leg_upper.R": "upper_front_r",
+          "front_leg_lower.R": "lower_front_r",
+          "front_paw.R": "paw_front_r",
+          "back_leg_upper.L": "upper_rear_l",
+          "back_leg_lower.L": "lower_rear_l",
+          "back_paw.L": "paw_rear_l",
+          "back_leg_upper.R": "upper_rear_r",
+          "back_leg_lower.R": "lower_rear_r",
+          "back_paw.R": "paw_rear_r",
+          "ear.L": "ear_l_01",
+          "ear.R": "ear_r_01"
+        },
+        "sourceBonesAbsent": []
+      },
+      "clipRetarget": {
+        "renamed": {
+          "bark_speak": "success",
+          "idle": "idle_a",
+          "photo": "pet_react",
+          "play": "greet",
+          "run": "run",
+          "sit": "sit",
+          "sleep": "sleep",
+          "walk": "walk"
+        },
+        "dropped": [
+          "drink",
+          "drinking",
+          "eat",
+          "eating",
+          "pee_legLift",
+          "playing",
+          "poop_squat",
+          "running",
+          "sleeping"
+        ],
+        "claimedTargets": [
+          "greet",
+          "idle_a",
+          "pet_react",
+          "run",
+          "sit",
+          "sleep",
+          "success",
+          "walk"
+        ]
+      },
+      "decimate": {
+        "before": 40076,
+        "targetRatio": 0.87334,
+        "applied": true,
+        "afterEstimate": 40076
+      },
+      "screenTransition": null,
+      "outputFile": "randy11_LOD0.glb",
+      "outputBytes": 1793612,
+      "outputSha256": "e070f6208f3c5ba1b8ed39508446c8da68876884b4eedfbd431286af1f54f212"
+    },
+    "LOD1": {
+      "junkRemoved": [],
+      "trisAfterJunkRemoval": 40076,
+      "scaleCurvesRemoved": 1275,
+      "rootMotionCurvesRemoved": {
+        "bark_speak": 3,
+        "drink": 3,
+        "drinking": 3,
+        "eat": 3,
+        "eating": 3,
+        "idle": 3,
+        "pee_legLift": 3,
+        "photo": 3,
+        "play": 3,
+        "playing": 3,
+        "poop_squat": 3,
+        "run": 3,
+        "running": 3,
+        "sit": 3,
+        "sleep": 3,
+        "sleeping": 3,
+        "walk": 3
+      },
+      "boneRetarget": {
+        "applied": {
+          "hips": "pelvis",
+          "spine": "spine_01",
+          "eye.L": "eye_l",
+          "eye.R": "eye_r",
+          "front_leg_upper.L": "upper_front_l",
+          "front_leg_lower.L": "lower_front_l",
+          "front_paw.L": "paw_front_l",
+          "front_leg_upper.R": "upper_front_r",
+          "front_leg_lower.R": "lower_front_r",
+          "front_paw.R": "paw_front_r",
+          "back_leg_upper.L": "upper_rear_l",
+          "back_leg_lower.L": "lower_rear_l",
+          "back_paw.L": "paw_rear_l",
+          "back_leg_upper.R": "upper_rear_r",
+          "back_leg_lower.R": "lower_rear_r",
+          "back_paw.R": "paw_rear_r",
+          "ear.L": "ear_l_01",
+          "ear.R": "ear_r_01"
+        },
+        "sourceBonesAbsent": []
+      },
+      "clipRetarget": {
+        "renamed": {
+          "bark_speak": "success",
+          "idle": "idle_a",
+          "photo": "pet_react",
+          "play": "greet",
+          "run": "run",
+          "sit": "sit",
+          "sleep": "sleep",
+          "walk": "walk"
+        },
+        "dropped": [
+          "drink",
+          "drinking",
+          "eat",
+          "eating",
+          "pee_legLift",
+          "playing",
+          "poop_squat",
+          "running",
+          "sleeping"
+        ],
+        "claimedTargets": [
+          "greet",
+          "idle_a",
+          "pet_react",
+          "run",
+          "sit",
+          "sleep",
+          "success",
+          "walk"
+        ]
+      },
+      "decimate": {
+        "before": 40076,
+        "targetRatio": 0.44915,
+        "applied": true,
+        "afterEstimate": 40076
+      },
+      "screenTransition": 0.42,
+      "outputFile": "randy11_LOD1.glb",
+      "outputBytes": 1249236,
+      "outputSha256": "8dfd8f5a853741d2608ccbf98e8cd42333d6c12d439510c47d5ef176c1dffeba"
+    },
+    "LOD2": {
+      "junkRemoved": [],
+      "trisAfterJunkRemoval": 40076,
+      "scaleCurvesRemoved": 1275,
+      "rootMotionCurvesRemoved": {
+        "bark_speak": 3,
+        "drink": 3,
+        "drinking": 3,
+        "eat": 3,
+        "eating": 3,
+        "idle": 3,
+        "pee_legLift": 3,
+        "photo": 3,
+        "play": 3,
+        "playing": 3,
+        "poop_squat": 3,
+        "run": 3,
+        "running": 3,
+        "sit": 3,
+        "sleep": 3,
+        "sleeping": 3,
+        "walk": 3
+      },
+      "boneRetarget": {
+        "applied": {
+          "hips": "pelvis",
+          "spine": "spine_01",
+          "eye.L": "eye_l",
+          "eye.R": "eye_r",
+          "front_leg_upper.L": "upper_front_l",
+          "front_leg_lower.L": "lower_front_l",
+          "front_paw.L": "paw_front_l",
+          "front_leg_upper.R": "upper_front_r",
+          "front_leg_lower.R": "lower_front_r",
+          "front_paw.R": "paw_front_r",
+          "back_leg_upper.L": "upper_rear_l",
+          "back_leg_lower.L": "lower_rear_l",
+          "back_paw.L": "paw_rear_l",
+          "back_leg_upper.R": "upper_rear_r",
+          "back_leg_lower.R": "lower_rear_r",
+          "back_paw.R": "paw_rear_r",
+          "ear.L": "ear_l_01",
+          "ear.R": "ear_r_01"
+        },
+        "sourceBonesAbsent": []
+      },
+      "clipRetarget": {
+        "renamed": {
+          "bark_speak": "success",
+          "idle": "idle_a",
+          "photo": "pet_react",
+          "play": "greet",
+          "run": "run",
+          "sit": "sit",
+          "sleep": "sleep",
+          "walk": "walk"
+        },
+        "dropped": [
+          "drink",
+          "drinking",
+          "eat",
+          "eating",
+          "pee_legLift",
+          "playing",
+          "poop_squat",
+          "running",
+          "sleeping"
+        ],
+        "claimedTargets": [
+          "greet",
+          "idle_a",
+          "pet_react",
+          "run",
+          "sit",
+          "sleep",
+          "success",
+          "walk"
+        ]
+      },
+      "decimate": {
+        "before": 40076,
+        "targetRatio": 0.18714,
+        "applied": true,
+        "afterEstimate": 40076
+      },
+      "screenTransition": 0.18,
+      "outputFile": "randy11_LOD2.glb",
+      "outputBytes": 899700,
+      "outputSha256": "b8292dda701c10e7f7e61ee6fc6ae8e830bcfec866aec11af2a1b9608eb47ac4"
+    },
+    "LOD3": {
+      "junkRemoved": [],
+      "trisAfterJunkRemoval": 40076,
+      "scaleCurvesRemoved": 1275,
+      "rootMotionCurvesRemoved": {
+        "bark_speak": 3,
+        "drink": 3,
+        "drinking": 3,
+        "eat": 3,
+        "eating": 3,
+        "idle": 3,
+        "pee_legLift": 3,
+        "photo": 3,
+        "play": 3,
+        "playing": 3,
+        "poop_squat": 3,
+        "run": 3,
+        "running": 3,
+        "sit": 3,
+        "sleep": 3,
+        "sleeping": 3,
+        "walk": 3
+      },
+      "boneRetarget": {
+        "applied": {
+          "hips": "pelvis",
+          "spine": "spine_01",
+          "eye.L": "eye_l",
+          "eye.R": "eye_r",
+          "front_leg_upper.L": "upper_front_l",
+          "front_leg_lower.L": "lower_front_l",
+          "front_paw.L": "paw_front_l",
+          "front_leg_upper.R": "upper_front_r",
+          "front_leg_lower.R": "lower_front_r",
+          "front_paw.R": "paw_front_r",
+          "back_leg_upper.L": "upper_rear_l",
+          "back_leg_lower.L": "lower_rear_l",
+          "back_paw.L": "paw_rear_l",
+          "back_leg_upper.R": "upper_rear_r",
+          "back_leg_lower.R": "lower_rear_r",
+          "back_paw.R": "paw_rear_r",
+          "ear.L": "ear_l_01",
+          "ear.R": "ear_r_01"
+        },
+        "sourceBonesAbsent": []
+      },
+      "clipRetarget": {
+        "renamed": {
+          "bark_speak": "success",
+          "idle": "idle_a",
+          "photo": "pet_react",
+          "play": "greet",
+          "run": "run",
+          "sit": "sit",
+          "sleep": "sleep",
+          "walk": "walk"
+        },
+        "dropped": [
+          "drink",
+          "drinking",
+          "eat",
+          "eating",
+          "pee_legLift",
+          "playing",
+          "poop_squat",
+          "running",
+          "sleeping"
+        ],
+        "claimedTargets": [
+          "greet",
+          "idle_a",
+          "pet_react",
+          "run",
+          "sit",
+          "sleep",
+          "success",
+          "walk"
+        ]
+      },
+      "decimate": {
+        "before": 40076,
+        "targetRatio": 0.04991,
+        "applied": true,
+        "afterEstimate": 40076
+      },
+      "screenTransition": 0.06,
+      "outputFile": "randy11_LOD3.glb",
+      "outputBytes": 645136,
+      "outputSha256": "3bf75f4661347abf09a8e6f7da0deb9b117c7fcabfcd0ba7caae6a21c3c553e9"
+    }
+  },
+  "clipsStillToAuthor": [
+    "idle_b",
+    "trot",
+    "turn_l_90",
+    "turn_r_90",
+    "sit_idle",
+    "stand",
+    "down",
+    "down_idle",
+    "rise",
+    "jump_takeoff",
+    "jump_air",
+    "jump_land",
+    "pickup",
+    "carry",
+    "drop"
+  ],
+  "REMAINING_MANUAL_WORK": [
+    "RE-SKIN: source binds 1 bone per vertex. Section 6.2 permits 4. Automated tooling cannot invent smooth weights without introducing artefacts.",
+    "Subdivide 'spine' into spine_01 + spine_02 and redistribute weights.",
+    "Insert clavicle_l/r between chest and upper_front_l/r; rebind vertices.",
+    "Insert hock_l/r between lower_rear_l/r and paw_rear_l/r; rebind vertices.",
+    "Author the missing clips listed in clipsStillToAuthor."
+  ]
+}

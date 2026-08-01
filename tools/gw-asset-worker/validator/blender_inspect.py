@@ -46,8 +46,14 @@ def inspect(path):
     bpy.ops.wm.read_homefile(use_empty=True)
     bpy.ops.import_scene.gltf(filepath=path)
 
-    meshes = [o for o in bpy.data.objects if o.type == "MESH"]
-    arms   = [o for o in bpy.data.objects if o.type == "ARMATURE"]
+    # Blender's glTF importer synthesises a custom bone DISPLAY shape (an
+    # "Icosphere") and parks it in the glTF_not_exported collection. It is not part
+    # of the asset and is never exported. Counting it inflates triangles and bounds.
+    def is_import_artifact(ob):
+        return any(c.name == "glTF_not_exported" for c in ob.users_collection)
+
+    meshes = [o for o in bpy.data.objects if o.type == "MESH" and not is_import_artifact(o)]
+    arms   = [o for o in bpy.data.objects if o.type == "ARMATURE" and not is_import_artifact(o)]
 
     per_mesh, total, skinned_n = [], 0, 0
     gmn = [1e9]*3; gmx = [-1e9]*3

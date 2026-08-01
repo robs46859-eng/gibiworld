@@ -1,0 +1,597 @@
+{
+  "blender": "5.2.0 LTS",
+  "reports": [
+    {
+      "file": "randy11_LOD0.glb",
+      "sizeBytes": 1783516,
+      "totalTriangles": 34929,
+      "meshCount": 1,
+      "skinnedMeshCount": 1,
+      "meshes": [
+        {
+          "name": "tripo_node_0a4749da-17db-4bfc-a35e-f5685f863abe",
+          "tris": 34929,
+          "verts": 20256,
+          "materials": [
+            "tripo_material_0a4749da-17db-4bfc-a35e-f5685f863abe"
+          ],
+          "skinned": true,
+          "maxInfluences": 2,
+          "shapeKeys": 0,
+          "dims": [
+            1.0184,
+            0.4951,
+            0.6807
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        1.0184,
+        0.4951,
+        0.6807
+      ],
+      "boneCount": 25,
+      "bones": [
+        "chest",
+        "ear_l_01",
+        "ear_r_01",
+        "eye_l",
+        "eye_r",
+        "head",
+        "jaw",
+        "lower_front_l",
+        "lower_front_r",
+        "lower_rear_l",
+        "lower_rear_r",
+        "neck",
+        "paw_front_l",
+        "paw_front_r",
+        "paw_rear_l",
+        "paw_rear_r",
+        "pelvis",
+        "spine_01",
+        "tail_01",
+        "tail_02",
+        "tail_03",
+        "upper_front_l",
+        "upper_front_r",
+        "upper_rear_l",
+        "upper_rear_r"
+      ],
+      "missingRequiredJoints": [
+        "root",
+        "spine_02",
+        "clavicle_l",
+        "clavicle_r",
+        "hock_l",
+        "hock_r"
+      ],
+      "presentRequiredJoints": [
+        "pelvis",
+        "spine_01",
+        "chest",
+        "neck",
+        "head",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "actionCount": 8,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {
+        "greet": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 878
+        },
+        "idle_a": {
+          "frames": 47.0,
+          "secAt24": 1.958,
+          "fcurves": 175,
+          "keyframes": 1086
+        },
+        "pet_react": {
+          "frames": 11.0,
+          "secAt24": 0.458,
+          "fcurves": 175,
+          "keyframes": 350
+        },
+        "run": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "sit": {
+          "frames": 19.0,
+          "secAt24": 0.792,
+          "fcurves": 175,
+          "keyframes": 854
+        },
+        "sleep": {
+          "frames": 71.0,
+          "secAt24": 2.958,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "success": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 462
+        },
+        "walk": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 790
+        }
+      },
+      "materialCount": 1,
+      "imageSizes": [
+        "2048x2048"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 6/26 joints"
+      ]
+    },
+    {
+      "file": "randy11_LOD1.glb",
+      "sizeBytes": 1239140,
+      "totalTriangles": 17964,
+      "meshCount": 1,
+      "skinnedMeshCount": 1,
+      "meshes": [
+        {
+          "name": "tripo_node_0a4749da-17db-4bfc-a35e-f5685f863abe",
+          "tris": 17964,
+          "verts": 11745,
+          "materials": [
+            "tripo_material_0a4749da-17db-4bfc-a35e-f5685f863abe"
+          ],
+          "skinned": true,
+          "maxInfluences": 3,
+          "shapeKeys": 0,
+          "dims": [
+            1.0185,
+            0.4943,
+            0.6715
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        1.0185,
+        0.4943,
+        0.6715
+      ],
+      "boneCount": 25,
+      "bones": [
+        "chest",
+        "ear_l_01",
+        "ear_r_01",
+        "eye_l",
+        "eye_r",
+        "head",
+        "jaw",
+        "lower_front_l",
+        "lower_front_r",
+        "lower_rear_l",
+        "lower_rear_r",
+        "neck",
+        "paw_front_l",
+        "paw_front_r",
+        "paw_rear_l",
+        "paw_rear_r",
+        "pelvis",
+        "spine_01",
+        "tail_01",
+        "tail_02",
+        "tail_03",
+        "upper_front_l",
+        "upper_front_r",
+        "upper_rear_l",
+        "upper_rear_r"
+      ],
+      "missingRequiredJoints": [
+        "root",
+        "spine_02",
+        "clavicle_l",
+        "clavicle_r",
+        "hock_l",
+        "hock_r"
+      ],
+      "presentRequiredJoints": [
+        "pelvis",
+        "spine_01",
+        "chest",
+        "neck",
+        "head",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "actionCount": 8,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {
+        "greet": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 878
+        },
+        "idle_a": {
+          "frames": 47.0,
+          "secAt24": 1.958,
+          "fcurves": 175,
+          "keyframes": 1086
+        },
+        "pet_react": {
+          "frames": 11.0,
+          "secAt24": 0.458,
+          "fcurves": 175,
+          "keyframes": 350
+        },
+        "run": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "sit": {
+          "frames": 19.0,
+          "secAt24": 0.792,
+          "fcurves": 175,
+          "keyframes": 854
+        },
+        "sleep": {
+          "frames": 71.0,
+          "secAt24": 2.958,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "success": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 462
+        },
+        "walk": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 790
+        }
+      },
+      "materialCount": 1,
+      "imageSizes": [
+        "2048x2048"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 6/26 joints"
+      ]
+    },
+    {
+      "file": "randy11_LOD2.glb",
+      "sizeBytes": 889604,
+      "totalTriangles": 7485,
+      "meshCount": 1,
+      "skinnedMeshCount": 1,
+      "meshes": [
+        {
+          "name": "tripo_node_0a4749da-17db-4bfc-a35e-f5685f863abe",
+          "tris": 7485,
+          "verts": 6240,
+          "materials": [
+            "tripo_material_0a4749da-17db-4bfc-a35e-f5685f863abe"
+          ],
+          "skinned": true,
+          "maxInfluences": 3,
+          "shapeKeys": 0,
+          "dims": [
+            1.0191,
+            0.4927,
+            0.6591
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        1.0191,
+        0.4927,
+        0.6591
+      ],
+      "boneCount": 25,
+      "bones": [
+        "chest",
+        "ear_l_01",
+        "ear_r_01",
+        "eye_l",
+        "eye_r",
+        "head",
+        "jaw",
+        "lower_front_l",
+        "lower_front_r",
+        "lower_rear_l",
+        "lower_rear_r",
+        "neck",
+        "paw_front_l",
+        "paw_front_r",
+        "paw_rear_l",
+        "paw_rear_r",
+        "pelvis",
+        "spine_01",
+        "tail_01",
+        "tail_02",
+        "tail_03",
+        "upper_front_l",
+        "upper_front_r",
+        "upper_rear_l",
+        "upper_rear_r"
+      ],
+      "missingRequiredJoints": [
+        "root",
+        "spine_02",
+        "clavicle_l",
+        "clavicle_r",
+        "hock_l",
+        "hock_r"
+      ],
+      "presentRequiredJoints": [
+        "pelvis",
+        "spine_01",
+        "chest",
+        "neck",
+        "head",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "actionCount": 8,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {
+        "greet": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 878
+        },
+        "idle_a": {
+          "frames": 47.0,
+          "secAt24": 1.958,
+          "fcurves": 175,
+          "keyframes": 1086
+        },
+        "pet_react": {
+          "frames": 11.0,
+          "secAt24": 0.458,
+          "fcurves": 175,
+          "keyframes": 350
+        },
+        "run": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "sit": {
+          "frames": 19.0,
+          "secAt24": 0.792,
+          "fcurves": 175,
+          "keyframes": 854
+        },
+        "sleep": {
+          "frames": 71.0,
+          "secAt24": 2.958,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "success": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 462
+        },
+        "walk": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 790
+        }
+      },
+      "materialCount": 1,
+      "imageSizes": [
+        "2048x2048"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 6/26 joints"
+      ]
+    },
+    {
+      "file": "randy11_LOD3.glb",
+      "sizeBytes": 635040,
+      "totalTriangles": 1996,
+      "meshCount": 1,
+      "skinnedMeshCount": 1,
+      "meshes": [
+        {
+          "name": "tripo_node_0a4749da-17db-4bfc-a35e-f5685f863abe",
+          "tris": 1996,
+          "verts": 1978,
+          "materials": [
+            "tripo_material_0a4749da-17db-4bfc-a35e-f5685f863abe"
+          ],
+          "skinned": true,
+          "maxInfluences": 3,
+          "shapeKeys": 0,
+          "dims": [
+            1.0231,
+            0.4864,
+            0.6627
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        1.0231,
+        0.4864,
+        0.6627
+      ],
+      "boneCount": 25,
+      "bones": [
+        "chest",
+        "ear_l_01",
+        "ear_r_01",
+        "eye_l",
+        "eye_r",
+        "head",
+        "jaw",
+        "lower_front_l",
+        "lower_front_r",
+        "lower_rear_l",
+        "lower_rear_r",
+        "neck",
+        "paw_front_l",
+        "paw_front_r",
+        "paw_rear_l",
+        "paw_rear_r",
+        "pelvis",
+        "spine_01",
+        "tail_01",
+        "tail_02",
+        "tail_03",
+        "upper_front_l",
+        "upper_front_r",
+        "upper_rear_l",
+        "upper_rear_r"
+      ],
+      "missingRequiredJoints": [
+        "root",
+        "spine_02",
+        "clavicle_l",
+        "clavicle_r",
+        "hock_l",
+        "hock_r"
+      ],
+      "presentRequiredJoints": [
+        "pelvis",
+        "spine_01",
+        "chest",
+        "neck",
+        "head",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "actionCount": 8,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {
+        "greet": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 878
+        },
+        "idle_a": {
+          "frames": 47.0,
+          "secAt24": 1.958,
+          "fcurves": 175,
+          "keyframes": 1086
+        },
+        "pet_react": {
+          "frames": 11.0,
+          "secAt24": 0.458,
+          "fcurves": 175,
+          "keyframes": 350
+        },
+        "run": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "sit": {
+          "frames": 19.0,
+          "secAt24": 0.792,
+          "fcurves": 175,
+          "keyframes": 854
+        },
+        "sleep": {
+          "frames": 71.0,
+          "secAt24": 2.958,
+          "fcurves": 175,
+          "keyframes": 630
+        },
+        "success": {
+          "frames": 15.0,
+          "secAt24": 0.625,
+          "fcurves": 175,
+          "keyframes": 462
+        },
+        "walk": {
+          "frames": 23.0,
+          "secAt24": 0.958,
+          "fcurves": 175,
+          "keyframes": 790
+        }
+      },
+      "materialCount": 1,
+      "imageSizes": [
+        "2048x2048"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 6/26 joints"
+      ]
+    }
+  ]
+}

@@ -422,6 +422,222 @@
       ]
     },
     {
+      "file": "dog-obstacle-course.glb",
+      "sizeBytes": 691948,
+      "totalTriangles": 4745,
+      "meshCount": 1,
+      "skinnedMeshCount": 0,
+      "meshes": [
+        {
+          "name": "tripo_node_9fd233d2-69c6-4851-b43d-becb2e2aab07",
+          "tris": 4745,
+          "verts": 7221,
+          "materials": [
+            "tripo_mat_9fd233d2-69c6-4851-b43d-becb2e2aab07"
+          ],
+          "skinned": false,
+          "maxInfluences": 0,
+          "shapeKeys": 0,
+          "dims": [
+            0.834,
+            0.998,
+            0.2676
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        0.834,
+        0.998,
+        0.2676
+      ],
+      "boneCount": 0,
+      "bones": [],
+      "missingRequiredJoints": [
+        "root",
+        "pelvis",
+        "spine_01",
+        "spine_02",
+        "chest",
+        "neck",
+        "head",
+        "clavicle_l",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "clavicle_r",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "hock_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "hock_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "presentRequiredJoints": [],
+      "actionCount": 0,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {},
+      "materialCount": 1,
+      "imageSizes": [
+        "1024x1024"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 26/26 joints"
+      ]
+    },
+    {
+      "file": "endarch.glb",
+      "sizeBytes": 560104,
+      "totalTriangles": 4874,
+      "meshCount": 1,
+      "skinnedMeshCount": 0,
+      "meshes": [
+        {
+          "name": "tripo_node_5fd47843-2f8d-478f-98d1-7620440067e8",
+          "tris": 4874,
+          "verts": 6647,
+          "materials": [
+            "tripo_mat_5fd47843-2f8d-478f-98d1-7620440067e8"
+          ],
+          "skinned": false,
+          "maxInfluences": 0,
+          "shapeKeys": 0,
+          "dims": [
+            0.998,
+            0.0801,
+            0.6309
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        0.998,
+        0.0801,
+        0.6309
+      ],
+      "boneCount": 0,
+      "bones": [],
+      "missingRequiredJoints": [
+        "root",
+        "pelvis",
+        "spine_01",
+        "spine_02",
+        "chest",
+        "neck",
+        "head",
+        "clavicle_l",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "clavicle_r",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "hock_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "hock_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "presentRequiredJoints": [],
+      "actionCount": 0,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {},
+      "materialCount": 1,
+      "imageSizes": [
+        "1024x1024"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 26/26 joints"
+      ]
+    },
+    {
+      "file": "playgroundladder.glb",
+      "sizeBytes": 566676,
+      "totalTriangles": 4188,
+      "meshCount": 1,
+      "skinnedMeshCount": 0,
+      "meshes": [
+        {
+          "name": "tripo_node_50772b96-0987-4f1b-8b16-b47bd7580c82",
+          "tris": 4188,
+          "verts": 5662,
+          "materials": [
+            "tripo_mat_50772b96-0987-4f1b-8b16-b47bd7580c82"
+          ],
+          "skinned": false,
+          "maxInfluences": 0,
+          "shapeKeys": 0,
+          "dims": [
+            0.3379,
+            0.998,
+            0.5371
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        0.3379,
+        0.998,
+        0.5371
+      ],
+      "boneCount": 0,
+      "bones": [],
+      "missingRequiredJoints": [
+        "root",
+        "pelvis",
+        "spine_01",
+        "spine_02",
+        "chest",
+        "neck",
+        "head",
+        "clavicle_l",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "clavicle_r",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "hock_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "hock_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "presentRequiredJoints": [],
+      "actionCount": 0,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {},
+      "materialCount": 1,
+      "imageSizes": [
+        "1024x1024"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 26/26 joints"
+      ]
+    },
+    {
       "file": "randy11.glb",
       "sizeBytes": 2057824,
       "totalTriangles": 40076,
@@ -673,6 +889,268 @@
         "LOD0_TRIANGLES 40076 > 35000",
         "SCALE_CURVE_FORBIDDEN in 17 clips",
         "SKELETON_PROFILE missing 22/26 joints"
+      ]
+    },
+    {
+      "file": "randylow.glb",
+      "sizeBytes": 955808,
+      "totalTriangles": 4952,
+      "meshCount": 2,
+      "skinnedMeshCount": 1,
+      "meshes": [
+        {
+          "name": "Icosphere",
+          "tris": 80,
+          "verts": 42,
+          "materials": [],
+          "skinned": false,
+          "maxInfluences": 0,
+          "shapeKeys": 0,
+          "dims": [
+            1.9021,
+            2.0,
+            2.0
+          ]
+        },
+        {
+          "name": "tripo_node_1316f2f7-2a7a-47d4-8b17-86481cfde6f5",
+          "tris": 4872,
+          "verts": 7192,
+          "materials": [
+            "tripo_mat_1316f2f7-2a7a-47d4-8b17-86481cfde6f5"
+          ],
+          "skinned": true,
+          "maxInfluences": 4,
+          "shapeKeys": 0,
+          "dims": [
+            0.5058,
+            0.9969,
+            0.8727
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        1.9021,
+        2.0,
+        2.0
+      ],
+      "boneCount": 21,
+      "bones": [
+        "bone_20",
+        "bone_9",
+        "tripo::0_Left_Limb_0",
+        "tripo::0_Left_Limb_1",
+        "tripo::0_Left_Limb_2",
+        "tripo::0_Right_Limb_0",
+        "tripo::0_Right_Limb_1",
+        "tripo::1_Left_Limb_0",
+        "tripo::1_Left_Limb_1",
+        "tripo::1_Left_Limb_2",
+        "tripo::1_Left_Limb_3",
+        "tripo::1_Right_Limb_0",
+        "tripo::1_Right_Limb_1",
+        "tripo::1_Right_Limb_2",
+        "tripo::1_Right_Limb_3",
+        "tripo::Head_0",
+        "tripo::Head_1",
+        "tripo::Head_2",
+        "tripo::Head_3",
+        "tripo::Root",
+        "tripo::Spine_0"
+      ],
+      "missingRequiredJoints": [
+        "root",
+        "pelvis",
+        "spine_01",
+        "spine_02",
+        "chest",
+        "neck",
+        "head",
+        "clavicle_l",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "clavicle_r",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "hock_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "hock_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "presentRequiredJoints": [],
+      "actionCount": 1,
+      "clipsWithScaleCurves": [
+        "NlaTrack"
+      ],
+      "clipsWithRootMotion": [],
+      "clips": {
+        "NlaTrack": {
+          "frames": 62.0,
+          "secAt24": 2.583,
+          "fcurves": 210,
+          "keyframes": 4019
+        }
+      },
+      "materialCount": 1,
+      "imageSizes": [
+        "1024x1024"
+      ],
+      "violations": [
+        "SCALE_CURVE_FORBIDDEN in 1 clips",
+        "SKELETON_PROFILE missing 26/26 joints"
+      ]
+    },
+    {
+      "file": "startgate.glb",
+      "sizeBytes": 549340,
+      "totalTriangles": 4808,
+      "meshCount": 1,
+      "skinnedMeshCount": 0,
+      "meshes": [
+        {
+          "name": "tripo_node_39f70054-8f44-4856-88e3-262da0ec909a",
+          "tris": 4808,
+          "verts": 6340,
+          "materials": [
+            "tripo_mat_39f70054-8f44-4856-88e3-262da0ec909a"
+          ],
+          "skinned": false,
+          "maxInfluences": 0,
+          "shapeKeys": 0,
+          "dims": [
+            0.998,
+            0.4551,
+            0.416
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        0.998,
+        0.4551,
+        0.416
+      ],
+      "boneCount": 0,
+      "bones": [],
+      "missingRequiredJoints": [
+        "root",
+        "pelvis",
+        "spine_01",
+        "spine_02",
+        "chest",
+        "neck",
+        "head",
+        "clavicle_l",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "clavicle_r",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "hock_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "hock_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "presentRequiredJoints": [],
+      "actionCount": 0,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {},
+      "materialCount": 1,
+      "imageSizes": [
+        "1024x1024"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 26/26 joints"
+      ]
+    },
+    {
+      "file": "toyball.glb",
+      "sizeBytes": 518732,
+      "totalTriangles": 4837,
+      "meshCount": 1,
+      "skinnedMeshCount": 0,
+      "meshes": [
+        {
+          "name": "tripo_node_987ab3b3-18ad-4f94-af51-3d6cdddb206b",
+          "tris": 4837,
+          "verts": 5065,
+          "materials": [
+            "tripo_mat_987ab3b3-18ad-4f94-af51-3d6cdddb206b"
+          ],
+          "skinned": false,
+          "maxInfluences": 0,
+          "shapeKeys": 0,
+          "dims": [
+            0.9863,
+            0.998,
+            0.998
+          ]
+        }
+      ],
+      "boundsXYZ_m": [
+        0.9863,
+        0.998,
+        0.998
+      ],
+      "boneCount": 0,
+      "bones": [],
+      "missingRequiredJoints": [
+        "root",
+        "pelvis",
+        "spine_01",
+        "spine_02",
+        "chest",
+        "neck",
+        "head",
+        "clavicle_l",
+        "upper_front_l",
+        "lower_front_l",
+        "paw_front_l",
+        "clavicle_r",
+        "upper_front_r",
+        "lower_front_r",
+        "paw_front_r",
+        "upper_rear_l",
+        "lower_rear_l",
+        "hock_l",
+        "paw_rear_l",
+        "upper_rear_r",
+        "lower_rear_r",
+        "hock_r",
+        "paw_rear_r",
+        "jaw",
+        "eye_l",
+        "eye_r"
+      ],
+      "presentRequiredJoints": [],
+      "actionCount": 0,
+      "clipsWithScaleCurves": [],
+      "clipsWithRootMotion": [],
+      "clips": {},
+      "materialCount": 1,
+      "imageSizes": [
+        "1024x1024"
+      ],
+      "violations": [
+        "SKELETON_PROFILE missing 26/26 joints"
       ]
     }
   ]
