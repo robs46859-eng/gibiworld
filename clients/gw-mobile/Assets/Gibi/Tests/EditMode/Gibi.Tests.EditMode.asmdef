@@ -1,0 +1,32 @@
+{
+  "name": "Gibi.Tests.EditMode",
+  "rootNamespace": "Gibi.Tests",
+  "references": [
+    "UnityEngine.TestRunner",
+    "UnityEditor.TestRunner",
+    "Gibi.Core",
+    "Gibi.AssetRuntime",
+    "Gibi.Spatial",
+    "Gibi.Pets",
+    "Gibi.Gameplay",
+    "Gibi.Networking",
+    "Gibi.AI",
+    "Gibi.Telemetry",
+    "Gibi.UI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

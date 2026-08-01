@@ -1,0 +1,18 @@
+{
+  "name": "Gibi.Pets",
+  "rootNamespace": "Gibi.Pets",
+  "references": [
+    "Gibi.Core",
+    "Gibi.AssetRuntime",
+    "Unity.Animation.Rigging"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.gibiworld.com/agility-course/v1.json",
+  "title": "GibiWorld Agility Course Version",
+  "description": "GW-ARCH-001 section 9.2. Immutable after publication (GW-GAME-007). Any change creates version+1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["courseId","version","siteId","anchorId","mode","ruleset","objects","safetyRevision","contentDigest"],
+  "properties": {
+    "courseId": { "type": "string", "pattern": "^crs_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "siteId": { "type": "string", "pattern": "^site_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "anchorId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "mode": { "enum": ["RANKED","PRACTICE"] },
+    "ruleset": { "enum": ["AGILITY_V1"] },
+    "objects": {
+      "type": "array", "minItems": 3, "maxItems": 22,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["order","type","pose"],
+        "properties": {
+          "order": { "type": "integer", "minimum": 0 },
+          "type": { "enum": ["START_GATE","FINISH_GATE","JUMP_LOW","JUMP_MED","WEAVE","TUNNEL","PAUSE_TABLE"] },
+          "pose": {
+            "type": "object", "additionalProperties": false, "required": ["p","q"],
+            "properties": {
+              "p": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number", "minimum": -75, "maximum": 75 } },
+              "q": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number", "minimum": -1, "maximum": 1 } }
+            }
+          }
+        }
+      }
+    },
+    "safetyRevision": { "type": "integer", "minimum": 1 },
+    "contentDigest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

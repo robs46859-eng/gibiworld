@@ -1,0 +1,445 @@
+openapi: 3.1.0
+info:
+  title: GibiWorld Public API
+  version: 1.0.0
+  description: |
+    Normative contract per GW-ARCH-001 section 11. OpenAPI 3.1 is the SINGLE SOURCE OF TRUTH.
+    All timestamps RFC 3339 UTC. All field names lowerCamelCase. All IDs opaque prefixed strings.
+    Unknown response fields MUST be ignored by clients.
+    Unknown request fields are REJECTED for security-sensitive endpoints (additionalProperties:false).
+    Sequential database IDs SHALL NOT cross this boundary.
+servers:
+  - url: https://api.gibiworld.com
+    description: production
+  - url: https://staging-api.gibiworld.com
+    description: staging
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Access token, lifetime <= 15 minutes, audience- and environment-scoped (section 13.1).
+    webhookHmac:
+      type: apiKey
+      in: header
+      name: X-Pawsome-Signature
+      description: HMAC-SHA256 over timestamp + eventId + body. Events older than 5 minutes rejected (GW-SEC-003).
+
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: { type: string, minLength: 16, maxLength: 128 }
+      description: Scope is authenticated subject + method + route. Retained >= 24 h (section 11.2).
+    IfMatchRevision:
+      name: If-Match
+      in: header
+      required: false
+      schema: { type: string }
+      description: Aggregate revision for optimistic concurrency. Mismatch returns REVISION_CONFLICT.
+
+  schemas:
+    Error:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required: [code, message, requestId, retryable]
+          properties:
+            code:
+              type: string
+              enum:
+                - AUTH_REQUIRED
+                - FORBIDDEN
+                - REVISION_CONFLICT
+                - IDEMPOTENCY_CONFLICT
+                - ASSET_NOT_ENTITLED
+                - ASSET_SIGNATURE_INVALID
+                - ASSET_REVOKED
+                - ANCHOR_NOT_TRACKED
+                - COURSE_VERSION_STALE
+                - RUN_NOT_RANKED
+                - RATE_LIMITED
+                - DEPENDENCY_UNAVAILABLE
+            message: { type: string, description: Player-safe. Never contains tokens, URLs, or stack traces. }
+            requestId: { type: string }
+            retryable: { type: boolean }
+            details: { type: object, additionalProperties: true }
+
+    Pet:
+      type: object
+      additionalProperties: false
+      required: [petId, petAssetId, assetVersion, displayName, revision]
+      properties:
+        petId: { type: string, pattern: '^pet_[0-9A-HJKMNP-TV-Z]{26}$' }
+        petAssetId: { type: string, pattern: '^asset_[0-9A-HJKMNP-TV-Z]{26}$' }
+        assetVersion: { type: integer, minimum: 1 }
+        displayName: { type: string, minLength: 1, maxLength: 24 }
+        species: { type: string, enum: [dog, cat, rabbit, guinea_pig, ferret, miniature_pig] }
+        bond: { type: integer, minimum: 0, maximum: 100 }
+        energy: { type: integer, minimum: 0, maximum: 100 }
+        revision: { type: integer, format: int64, description: Incremented in the same transaction as any mutation. }
+
+    FetchDescriptor:
+      type: object
+      additionalProperties: false
+      required: [url, expiresAt, digest, sizeBytes]
+      properties:
+        url: { type: string, format: uri, description: Short-lived signed URL. SHALL NOT be logged or persisted (GW-API-005). }
+        expiresAt: { type: string, format: date-time }
+        digest: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+        sizeBytes: { type: integer, maximum: 47185920 }
+
+    CourseRunResult:
+      type: object
+      additionalProperties: false
+      required: [runId, result, ranked]
+      properties:
+        runId: { type: string, pattern: '^run_[0-9A-HJKMNP-TV-Z]{26}$' }
+        result: { type: string, enum: [FINISHED, ABANDONED, INVALIDATED] }
+        ranked: { type: boolean, description: False when tracking loss > 3.0 s, digest mismatch, impossible velocity, out-of-order gate, backgrounding, or safety intervention occurred. }
+        timeMs: { type: integer, minimum: 0 }
+        invalidationReason:
+          type: string
+          enum: [TRACKING_LOSS, DIGEST_MISMATCH, IMPOSSIBLE_VELOCITY, GATE_ORDER, BACKGROUNDED, SAFETY_INTERVENTION]
+
+  responses:
+    Unauthorized:
+      description: AUTH_REQUIRED
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    Conflict:
+      description: REVISION_CONFLICT or IDEMPOTENCY_CONFLICT
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    RateLimited:
+      description: RATE_LIMITED. Honor Retry-After.
+      headers:
+        Retry-After: { schema: { type: integer } }
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+paths:
+  /v1/auth/exchange:
+    post:
+      summary: Exchange external identity token for GibiWorld token pair
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [identityToken, provider]
+              properties:
+                identityToken: { type: string }
+                provider: { type: string, enum: [APPLE, GOOGLE, OIDC] }
+      responses:
+        '200':
+          description: Token pair. Refresh token rotates on use; reuse of an old token revokes the family (GW-SEC-002).
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [accessToken, refreshToken, expiresIn]
+                properties:
+                  accessToken: { type: string }
+                  refreshToken: { type: string }
+                  expiresIn: { type: integer, maximum: 900 }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /v1/pets:
+    get:
+      summary: List owned pet instances and catalog state
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [pets]
+                properties:
+                  pets: { type: array, items: { $ref: '#/components/schemas/Pet' } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      summary: Create a pet instance from an ACTIVE entitlement
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [petAssetId, assetVersion, displayName]
+              properties:
+                petAssetId: { type: string, pattern: '^asset_[0-9A-HJKMNP-TV-Z]{26}$' }
+                assetVersion: { type: integer, minimum: 1 }
+                displayName: { type: string, minLength: 1, maxLength: 24 }
+      responses:
+        '201':
+          description: Created. Repeated key + identical body returns this original response.
+          content: { application/json: { schema: { $ref: '#/components/schemas/Pet' } } }
+        '403':
+          description: ASSET_NOT_ENTITLED
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /v1/assets/{petAssetId}/manifest:
+    get:
+      summary: Signed manifest and short-lived fetch descriptor
+      parameters:
+        - { name: petAssetId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: ETag is the asset digest.
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [manifest, fetch]
+                properties:
+                  manifest: { $ref: 'https://schemas.gibiworld.com/pet-manifest/v1.json' }
+                  fetch: { $ref: '#/components/schemas/FetchDescriptor' }
+        '403':
+          description: ASSET_NOT_ENTITLED
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+        '410':
+          description: ASSET_REVOKED. Client SHALL fall back to a preset and SHALL NOT retry.
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+        '422':
+          description: ASSET_SIGNATURE_INVALID. Never retried without fresh user action.
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/integrations/pawsome/webhook:
+    post:
+      summary: Accept Pawsome3D asset-ready event
+      security: [ { webhookHmac: [] } ]
+      parameters:
+        - { name: X-Pawsome-Timestamp, in: header, required: true, schema: { type: string } }
+        - { name: X-Pawsome-Event-Id, in: header, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [sourceAssetId, ownerSubject, sourceVersion, fetchUrl, generatedAt]
+              properties:
+                sourceAssetId: { type: string }
+                ownerSubject: { type: string }
+                sourceVersion: { type: integer }
+                fetchUrl: { type: string, format: uri, description: Server-side fetch only. The mobile client NEVER receives this URL. }
+                generatedAt: { type: string, format: date-time }
+      responses:
+        '202': { description: Queued for quarantine fetch and validation. }
+        '401': { description: Signature invalid, timestamp outside 5-minute window, or eventId already consumed. }
+
+  /v1/training/sessions:
+    post:
+      summary: Start a deterministic training lesson
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [petId, lessonId]
+              properties:
+                petId: { type: string }
+                lessonId: { type: string, enum: [SIT, COME, STAY, FETCH, DOWN] }
+      responses:
+        '201': { description: Session started. }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /v1/training/sessions/{sessionId}/events:
+    post:
+      summary: Append a cue, action, or reward event
+      parameters:
+        - { name: sessionId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [sequence, eventType]
+              properties:
+                sequence: { type: integer, minimum: 0, description: Exact sequence required. Gaps are rejected. }
+                eventType: { type: string, enum: [CUE, ACTION, REWARD, CANCEL] }
+      responses:
+        '202': { description: Appended. }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /v1/world/nearby:
+    get:
+      summary: Discover nearby sites and cards
+      parameters:
+        - { name: lat, in: query, required: true, schema: { type: number, format: double } }
+        - { name: lon, in: query, required: true, schema: { type: number, format: double } }
+        - { name: radiusM, in: query, required: false, schema: { type: integer, maximum: 5000 } }
+      responses:
+        '200':
+          description: Cacheable 30 s. Coordinates are float64 end to end (section 5.1).
+          headers:
+            Cache-Control: { schema: { type: string } }
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  sites: { type: array, items: { type: object, additionalProperties: true } }
+        '429': { $ref: '#/components/responses/RateLimited' }
+
+  /v1/sites/{siteId}/course-versions/{version}:
+    get:
+      summary: Immutable published course payload
+      parameters:
+        - { name: siteId, in: path, required: true, schema: { type: string } }
+        - { name: version, in: path, required: true, schema: { type: integer } }
+      responses:
+        '200':
+          description: ETag is contentDigest. Payload is immutable (GW-GAME-007).
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: 'https://schemas.gibiworld.com/agility-course/v1.json' }
+        '409':
+          description: COURSE_VERSION_STALE. Fetch the current version.
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/course-runs:
+    post:
+      summary: Create a run and obtain the server start token
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [courseId, version, petId]
+              properties:
+                courseId: { type: string }
+                version: { type: integer }
+                petId: { type: string }
+      responses:
+        '201':
+          description: Authoritative timer origin. Client wall-clock is never trusted for ranking.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [runId, startEpochMs, startToken]
+                properties:
+                  runId: { type: string }
+                  startEpochMs: { type: integer, format: int64 }
+                  startToken: { type: string }
+        '409':
+          description: ANCHOR_NOT_TRACKED or COURSE_VERSION_STALE
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/course-runs/{runId}/finish:
+    post:
+      summary: Submit run proof and receive ranked or unranked result
+      parameters:
+        - { name: runId, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [startToken, gateCrossings, proofDigest]
+              properties:
+                startToken: { type: string }
+                gateCrossings:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    required: [order, monotonicDeltaMs]
+                    properties:
+                      order: { type: integer }
+                      monotonicDeltaMs: { type: integer, description: Monotonic client delta from server startEpochMs. }
+                proofDigest: { type: string, pattern: '^sha256:[a-f0-9]{64}$' }
+      responses:
+        '200':
+          description: One terminal write. RUN_NOT_RANKED is a 200 result, not an error.
+          content: { application/json: { schema: { $ref: '#/components/schemas/CourseRunResult' } } }
+        '409': { $ref: '#/components/responses/Conflict' }
+
+  /v1/ai/intents:
+    post:
+      summary: Request a validated high-level intent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [petId, contextRevision]
+              properties:
+                petId: { type: string }
+                contextRevision: { type: integer }
+                nearbyObjectTypes: { type: array, items: { type: string }, maxItems: 12 }
+      responses:
+        '200':
+          description: Validated against the fixed intent enum. Timeout p95 <= 2.5 s; on breach the client uses its local fallback silently (GW-AI-004).
+          content:
+            application/json:
+              schema: { $ref: 'https://schemas.gibiworld.com/ai-intent/v1.json' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+        '503':
+          description: DEPENDENCY_UNAVAILABLE. Client falls back to CALM_IDLE without player-visible error.
+          content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+  /v1/pets/{petId}/memories/{memoryId}:
+    delete:
+      summary: Tombstone a pet memory
+      parameters:
+        - { name: petId, in: path, required: true, schema: { type: string } }
+        - { name: memoryId, in: path, required: true, schema: { type: string } }
+      responses:
+        '204': { description: Tombstoned. Absent from AI context within 24 hours (GW-AI-006). Idempotent. }
+
+  /v1/reports:
+    post:
+      summary: Submit a safety or moderation report
+      parameters: [ { $ref: '#/components/parameters/IdempotencyKey' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [targetType, targetId, reason]
+              properties:
+                targetType: { type: string, enum: [SITE, COURSE, NAME, SCRAPBOOK_SHARE] }
+                targetId: { type: string }
+                reason: { type: string, enum: [UNSAFE, INACCESSIBLE, PRIVATE_PROPERTY, OFFENSIVE, OTHER] }
+      responses:
+        '202': { description: Accepted. Threshold breach disables discovery immediately without deleting evidence. }

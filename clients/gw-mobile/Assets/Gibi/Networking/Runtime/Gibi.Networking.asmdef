@@ -1,0 +1,16 @@
+{
+  "name": "Gibi.Networking",
+  "rootNamespace": "Gibi.Networking",
+  "references": [
+    "Gibi.Core"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

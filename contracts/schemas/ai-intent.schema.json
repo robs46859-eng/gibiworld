@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.gibiworld.com/ai-intent/v1.json",
+  "title": "GibiWorld AI Intent Response",
+  "description": "GW-ARCH-001 section 8.2. AI SHALL NOT output animation clip names, coordinates, physics forces, prices, inventory grants, leaderboard scores, moderation results, or executable text (GW-AI-002). additionalProperties:false enforces this structurally.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion","requestId","petId","contextRevision","intent","expiresAt"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "requestId": { "type": "string", "pattern": "^req_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "petId": { "type": "string", "pattern": "^pet_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "contextRevision": { "type": "integer", "minimum": 0 },
+    "intent": {
+      "enum": ["GREET","INSPECT_TOY","SEEK_SHADE","INVITE_PLAY","SETTLE","FOLLOW_GAZE","CURIOUS_SNIFF","CALM_IDLE"]
+    },
+    "targetId": { "type": "string", "pattern": "^(toy|spo|pet)_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "emotion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["valence","arousal"],
+      "properties": {
+        "valence": { "type": "number", "minimum": -1.0, "maximum": 1.0 },
+        "arousal": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+    "utteranceKey": { "type": "string", "pattern": "^pet\\.[a-z_]{1,32}\\.[0-9]{2}$" },
+    "memoryProposals": {
+      "type": "array", "maxItems": 3,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["factType","value"],
+        "properties": {
+          "factType": { "enum": ["FAVORITE_TOY","PREFERRED_TRICK","PLAY_TIME_OF_DAY","FAVORITE_PLACE_TAG"] },
+          "value": { "type": "string", "maxLength": 64 }
+        }
+      }
+    },
+    "expiresAt": { "type": "string", "format": "date-time" }
+  }
+}

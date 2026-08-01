@@ -1,0 +1,23 @@
+{
+  "name": "Gibi.UI",
+  "rootNamespace": "Gibi.UI",
+  "references": [
+    "Gibi.Core",
+    "Gibi.Gameplay",
+    "Gibi.Pets",
+    "Gibi.Spatial",
+    "Gibi.Networking",
+    "Gibi.AI",
+    "Gibi.Telemetry",
+    "Unity.InputSystem"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

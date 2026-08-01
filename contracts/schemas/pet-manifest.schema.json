@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.gibiworld.com/pet-manifest/v1.json",
+  "title": "GibiWorld Pet Asset Manifest",
+  "description": "GW-ARCH-001 section 6.1. Canonicalized per RFC 8785 before Ed25519 signing. The signature field is EXCLUDED from canonicalization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion","petAssetId","assetVersion","issuer","keyId","digest","species","skeletonProfile","bounds","transferSizeBytes","compatibility","clips","signature"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "petAssetId": { "type": "string", "pattern": "^asset_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "assetVersion": { "type": "integer", "minimum": 1 },
+    "issuer": { "enum": ["PAWSOME3D","GIBIWORLD_PRESET"] },
+    "sourceId": { "type": "string", "maxLength": 128 },
+    "keyId": { "type": "string", "pattern": "^key_[a-z0-9_-]{4,48}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "species": { "enum": ["dog","cat","rabbit","guinea_pig","ferret","miniature_pig"] },
+    "skeletonProfile": { "enum": ["GIBI_QUADRUPED_V1","GIBI_SMALL_MAMMAL_V1"] },
+    "shoulderHeightM": { "type": "number", "minimum": 0.12, "maximum": 1.10 },
+    "bounds": {
+      "type": "object", "additionalProperties": false,
+      "required": ["minM","maxM"],
+      "properties": {
+        "minM": { "type": "array", "items": {"type":"number"}, "minItems": 3, "maxItems": 3 },
+        "maxM": { "type": "array", "items": {"type":"number"}, "minItems": 3, "maxItems": 3 }
+      }
+    },
+    "transferSizeBytes": { "type": "integer", "minimum": 1, "maximum": 47185920 },
+    "lods": {
+      "type": "array", "minItems": 1, "maxItems": 4,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["level","triangles","vertices","screenTransition"],
+        "properties": {
+          "level": { "type": "integer", "minimum": 0, "maximum": 3 },
+          "triangles": { "type": "integer", "minimum": 1 },
+          "vertices": { "type": "integer", "minimum": 1 },
+          "screenTransition": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "materialCount": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "skinnedMeshCount": { "type": "integer", "minimum": 1, "maximum": 2 },
+    "deformBoneCount": { "type": "integer", "minimum": 1, "maximum": 96 },
+    "morphTargetCount": { "type": "integer", "minimum": 0, "maximum": 12 },
+    "clips": {
+      "type": "array", "minItems": 1, "maxItems": 48,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["clipId","loop","durationS"],
+        "properties": {
+          "clipId": { "type": "string", "pattern": "^[a-z0-9_]{1,48}$" },
+          "loop": { "type": "boolean" },
+          "durationS": { "type": "number", "exclusiveMinimum": 0, "maximum": 8.0 }
+        }
+      }
+    },
+    "totalKeyframes": { "type": "integer", "minimum": 0, "maximum": 300000 },
+    "compatibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["minClientSchema","maxClientSchema"],
+      "properties": {
+        "minClientSchema": { "type": "integer", "minimum": 1 },
+        "maxClientSchema": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "signature": { "type": "string", "contentEncoding": "base64", "description": "Ed25519 detached signature over RFC 8785 canonical bytes of this object with signature removed." }
+  }
+}

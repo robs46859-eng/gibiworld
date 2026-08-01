@@ -1,0 +1,41 @@
+# Unity
+clients/gw-mobile/[Ll]ibrary/
+clients/gw-mobile/[Tt]emp/
+clients/gw-mobile/[Oo]bj/
+clients/gw-mobile/[Bb]uild/
+clients/gw-mobile/[Bb]uilds/
+clients/gw-mobile/[Ll]ogs/
+clients/gw-mobile/[Uu]ser[Ss]ettings/
+clients/gw-mobile/[Mm]emoryCaptures/
+clients/gw-mobile/Assets/AddressableAssetsData/*/*.bin*
+*.csproj
+*.sln
+*.unityproj
+*.apk
+*.aab
+*.ipa
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets — never commit. See docs/security/secrets-policy.md
+*.pem
+*.key
+!**/testdata/*.key
+secrets/
+*.p8
+*.keystore

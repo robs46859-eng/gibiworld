@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.gibiworld.com/spatial-object/v1.json",
+  "title": "GibiWorld Spatial Tagging Contract",
+  "description": "GW-ARCH-001 section 5.3. anchorFrame LOCAL_SESSION is REJECTED by persistence endpoints (GW-AR-004).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion","spatialObjectId","anchorFrame","pose","semanticTags","safety","content"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "spatialObjectId": { "type": "string", "pattern": "^spo_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "anchorFrame": { "enum": ["LOCAL_SESSION","VPS_SITE"] },
+    "siteId": { "type": "string", "pattern": "^site_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "anchorId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "pose": {
+      "type": "object", "additionalProperties": false, "required": ["p","q"],
+      "properties": {
+        "p": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number", "minimum": -75, "maximum": 75 } },
+        "q": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number", "minimum": -1, "maximum": 1 } }
+      }
+    },
+    "semanticTags": {
+      "type": "array", "minItems": 1, "maxItems": 8,
+      "items": { "enum": ["ground","outdoor","indoor","path","grass","floor","sand","gravel","pavement"] }
+    },
+    "safety": {
+      "type": "object", "additionalProperties": false,
+      "required": ["clearanceRadiusM","clearanceHeightM","hazardClass","validatedAt"],
+      "properties": {
+        "clearanceRadiusM": { "type": "number", "minimum": 1.5 },
+        "clearanceHeightM": { "type": "number", "minimum": 2.0 },
+        "hazardClass": { "enum": ["NONE","SKY","PERSON","VEHICLE","WATER","ROAD","RAIL","UNKNOWN"] },
+        "validatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "content": {
+      "type": "object", "additionalProperties": false,
+      "required": ["type","catalogId","version"],
+      "properties": {
+        "type": { "enum": ["START_GATE","FINISH_GATE","JUMP_LOW","JUMP_MED","WEAVE","TUNNEL","PAUSE_TABLE","AGILITY_GATE","TOY","MARKER"] },
+        "catalogId": { "type": "string", "pattern": "^[a-z0-9_]{1,48}$" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "anchorFrame": { "const": "VPS_SITE" } }, "required": ["anchorFrame"] },
+      "then": { "required": ["siteId","anchorId"] }
+    },
+    {
+      "if": { "properties": { "safety": { "properties": { "hazardClass": { "not": { "const": "NONE" } } } } } },
+      "then": { "properties": { "content": { "properties": { "type": { "const": "MARKER" } } } } }
+    }
+  ]
+}
