@@ -1,10 +1,12 @@
 {
-  "_comment": "GW-ARCH-001 section 0: package versions SHALL be frozen. An upgrade is a release project, not an automatic dependency update. Do not edit without an ADR.",
+  "_comment": "GW-ARCH-001 section 0: package versions SHALL be frozen. An upgrade is a release project, not an automatic dependency update. AR Foundation is 6.4.2 rather than the 6.4.1 named in section 0 because NSDK 4.1.0 requires it; see docs/adr/ADR-008. Do not edit without an ADR.",
   "dependencies": {
-    "com.nianticspatial.sdk": "4.1.0",
+    "com.nianticspatial.nsdk": "https://github.com/nianticspatial/nsdk-library-upm.git#4.1.0-26051913",
     "com.unity.addressables": "1.22.3",
     "com.unity.animation.rigging": "1.3.0",
+    "com.unity.burst": "1.8.17",
     "com.unity.cloud.gltfast": "6.16.1",
+    "com.unity.editorcoroutines": "1.0.0",
     "com.unity.ide.rider": "3.0.28",
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.inputsystem": "1.11.2",
@@ -23,17 +25,10 @@
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.render-pipelines.universal": "17.0.4",
     "com.unity.test-framework": "1.4.6",
-    "com.unity.xr.arcore": "6.4.1",
-    "com.unity.xr.arfoundation": "6.4.1",
-    "com.unity.xr.arkit": "6.4.1"
-  },
-  "scopedRegistries": [
-    {
-      "name": "Niantic Spatial",
-      "url": "https://registry.npmjs.org",
-      "scopes": [
-        "com.nianticspatial"
-      ]
-    }
-  ]
+    "com.unity.xr.arcore": "6.4.2",
+    "com.unity.xr.arfoundation": "6.4.2",
+    "com.unity.xr.arkit": "6.4.2",
+    "com.unity.xr.core-utils": "2.1.0",
+    "com.unity.xr.management": "4.0.1"
+  }
 }

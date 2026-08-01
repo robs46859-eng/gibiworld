@@ -27,14 +27,19 @@ namespace Gibi.Editor
             PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.iOS, ManagedStrippingLevel.Low);
             PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.Android, ManagedStrippingLevel.Low);
 
-            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+            // NSDK setup docs (Android): "enable both ARMv7 and ARM64".
+            PlayerSettings.Android.targetArchitectures =
+                AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
 
             // --- section 7: URP requires linear ---
             PlayerSettings.colorSpace = ColorSpace.Linear;
 
             PlayerSettings.SetGraphicsAPIs(BuildTarget.iOS, new[] { GraphicsDeviceType.Metal });
+            // NSDK setup docs (Android): "Uncheck Auto Graphics API. If Vulkan appears
+            // in the Graphics API list, remove it." NSDK does not support the Vulkan path,
+            // so OpenGLES3 is the only entry.
             PlayerSettings.SetGraphicsAPIs(BuildTarget.Android,
-                new[] { GraphicsDeviceType.Vulkan, GraphicsDeviceType.OpenGLES3 });
+                new[] { GraphicsDeviceType.OpenGLES3 });
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.iOS, false);
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.Android, false);
 
@@ -42,8 +47,8 @@ namespace Gibi.Editor
             PlayerSettings.gpuSkinning = true;
 
             // --- platform minimums for AR ---
-            PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel29;
-            PlayerSettings.iOS.targetOSVersionString = "13.0";
+            PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel29;  // NSDK floor is 24; 29 kept for ARCore depth + section 17.1 device matrix
+            PlayerSettings.iOS.targetOSVersionString = "14.0";   // NSDK minimum
             PlayerSettings.iOS.requiresFullScreen = true;
 
             // --- section 13.2: minimise sensor and location capture ---
