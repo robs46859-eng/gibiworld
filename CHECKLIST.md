@@ -42,8 +42,9 @@ Status: `[x]` done · `[~]` partial · `[ ]` not started · `[!]` blocked on you
 - [x] `GateCrossing` — swept-volume intersection with aperture and order checks (GW-GAME-003)
 - [x] `PlayerSafetyGate` — 4.5 m/s sustained 10 s → passenger-safe, with hysteresis (§13.3)
 - [x] **27 EditMode tests** written, each named for the GW-* requirement it discharges
+- [x] **27/27 EditMode tests passing in Unity** (first real compile + run)
 - [ ] PlayMode tests and recorded AR playback fixtures
-- [ ] Scene validator enforcing exactly one ARSession + XR Origin (GW-AR-001)
+- [x] **Scene validator passing — GW-AR-001 verified in Unity**
 
 ## Phase 3 — Asset pipeline
 
@@ -53,7 +54,7 @@ Status: `[x]` done · `[~]` partial · `[ ]` not started · `[!]` blocked on you
 - [x] `blender_remediate.py` — headless `--factory-startup` worker: strips scale curves, forces root identity, retargets bones and clips, generates LOD0–3, emits provenance
 - [ ] Ed25519 signing service + pinned key distribution
 - [ ] Malicious/boundary GLB fixture matrix (external URI, oversized, tampered digest)
-- [!] **Blender MCP addon not installed** — see "What I need from you"
+- [x] Blender MCP addon installed and connected
 
 ## Phase 4 — Backend and data
 

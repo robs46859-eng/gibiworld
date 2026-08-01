@@ -17,10 +17,12 @@ namespace Gibi.Editor
         public static void Apply()
         {
             // --- section 3.1: IL2CPP ---
+            // Unity 6 exposes a single ApiCompatibilityLevel.NET_Standard member;
+            // the versioned NET_Standard_2_1 name was removed.
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.iOS, ScriptingImplementation.IL2CPP);
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
-            PlayerSettings.SetApiCompatibilityLevel(NamedBuildTarget.iOS, ApiCompatibilityLevel.NET_Standard_2_1);
-            PlayerSettings.SetApiCompatibilityLevel(NamedBuildTarget.Android, ApiCompatibilityLevel.NET_Standard_2_1);
+            PlayerSettings.SetApiCompatibilityLevel(NamedBuildTarget.iOS, ApiCompatibilityLevel.NET_Standard);
+            PlayerSettings.SetApiCompatibilityLevel(NamedBuildTarget.Android, ApiCompatibilityLevel.NET_Standard);
 
             // glTFast and JSON contract binding rely on reflection; aggressive stripping
             // removes types the asset runtime resolves by name at load time.

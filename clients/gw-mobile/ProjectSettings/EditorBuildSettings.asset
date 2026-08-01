@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes: []
+  m_configObjects:
+    NianticSpatial.NSDK.AR.AuthBuildSettings: {fileID: 11400000, guid: 66986cf2257c64a51bd351889f1d3a4a, type: 2}
+    NianticSpatial.NSDK.AR.NsdkSettings: {fileID: 11400000, guid: 57ee025967f9945418a7aecc393e8bae, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 4f3b7690eca4347b7b48d3689a72e258, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 22cd1bbe1deaf4400adcd4ccf09711d5, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 28990d450430343d88647167bb2fda9a, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 33b9e3c64e3de4bd682267377316de3c, type: 2}
+  m_UseUCBPForAssetBundles: 0

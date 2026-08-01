@@ -218,8 +218,16 @@ namespace Gibi.Tests.EditMode
 
                 int frames = (int)(seconds / frameDelta);
                 for (int i = 0; i < frames; i++)
-                    for (int s = 0; s < acc.Consume(frameDelta); s++)
+                {
+                    // Consume() MUST be hoisted. In a loop condition it is re-evaluated
+                    // every iteration, feeding the accumulator an extra frame each pass
+                    // until MaxStepsPerFrame clamps -- which clamps at different points
+                    // for different frame rates and manufactures the exact divergence
+                    // this test exists to detect. PetController.FixedUpdate hoists it.
+                    int steps = acc.Consume(frameDelta);
+                    for (int s = 0; s < steps; s++)
                         motion.Step(0f);
+                }
 
                 return motion.DistanceTravelledM;
             }
