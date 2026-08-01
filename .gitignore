@@ -39,3 +39,15 @@ Thumbs.db
 secrets/
 *.p8
 *.keystore
+
+# --- NSDK / Niantic credentials (GW-ARCH-001 section 13.1) ---
+# Secrets live in the deployment secret manager, never the repo. NSDK writes an access
+# token into its XR settings asset and an AuthBuildSettings asset on import; both are
+# ordinary Unity assets and would otherwise be committed.
+**/AuthBuildSettings.asset
+**/AuthBuildSettings.asset.meta
+**/NSDK Settings.asset
+**/NSDK Settings.asset.meta
+**/NianticSpatial*Settings.asset
+**/*AccessToken*
+**/*.token
