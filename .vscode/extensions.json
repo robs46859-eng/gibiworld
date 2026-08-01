@@ -1,0 +1,11 @@
+{
+  "//": "Install these when VS Code prompts. C# Dev Kit + the Unity extension are the two that matter; the rest support the asset validators and contracts.",
+  "recommendations": [
+    "ms-dotnettools.csdevkit",
+    "visualstudiotoolsforunity.vstuc",
+    "ms-python.python",
+    "redhat.vscode-yaml",
+    "42crunch.vscode-openapi"
+  ],
+  "unwantedRecommendations": []
+}

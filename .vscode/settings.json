@@ -1,0 +1,64 @@
+{
+  "//": "GibiWorld workspace settings. The exclusions are not cosmetic: Unity's Library/ folder holds hundreds of thousands of generated files, and without excluding it VS Code's file watcher and search become unusable on this project.",
+
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "clients/gw-mobile/Library": true,
+    "clients/gw-mobile/Temp": true,
+    "clients/gw-mobile/Obj": true,
+    "clients/gw-mobile/Logs": true,
+    "clients/gw-mobile/UserSettings": true,
+    "clients/gw-mobile/MemoryCaptures": true,
+    "**/*.meta": true,
+    "**/__pycache__": true,
+    "**/node_modules": true
+  },
+
+  "files.watcherExclude": {
+    "clients/gw-mobile/Library/**": true,
+    "clients/gw-mobile/Temp/**": true,
+    "clients/gw-mobile/Obj/**": true,
+    "clients/gw-mobile/Logs/**": true,
+    "build/**": true,
+    "**/node_modules/**": true
+  },
+
+  "search.exclude": {
+    "clients/gw-mobile/Library": true,
+    "clients/gw-mobile/Temp": true,
+    "clients/gw-mobile/Logs": true,
+    "build": true,
+    "assets/source-models": true,
+    "blender-mcp-main": true
+  },
+
+  "files.associations": {
+    "*.asmdef": "json",
+    "*.unity": "yaml",
+    "*.prefab": "yaml",
+    "*.asset": "yaml",
+    "*.mat": "yaml"
+  },
+
+  "//editor": "Section 14 requires localisation keys, never concatenated sentences. Trailing whitespace in .cs files creates noisy diffs in a repo where every change is reviewed against a normative spec.",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "editor.rulers": [100],
+
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true
+  },
+  "[python]": { "editor.tabSize": 4 },
+  "[json]": { "editor.tabSize": 2 },
+  "[yaml]": { "editor.tabSize": 2 },
+
+  "//unity": "Point the C# tooling at the pinned editor, not whatever Hub last installed.",
+  "dotnet.defaultSolution": "clients/gw-mobile/gw-mobile.sln",
+
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  }
+}

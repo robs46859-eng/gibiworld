@@ -1,0 +1,121 @@
+{
+  "version": "2.0.0",
+  "//": "Every GibiWorld gate, runnable from Cmd+Shift+B or the Tasks menu. Each one mirrors a CI job, so you can reproduce a CI failure locally without pushing.",
+  "tasks": [
+    {
+      "label": "Spec: validate all contracts",
+      "type": "shell",
+      "command": "python3",
+      "args": ["-c", "import json,glob,sys;from jsonschema import Draft202012Validator as V;bad=0\nfor f in glob.glob('contracts/schemas/*.json'):\n    try: V.check_schema(json.load(open(f))); print('OK  ',f)\n    except Exception as e: print('FAIL',f,e); bad=1\nsys.exit(bad)"],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Assets: inspect source models (Blender headless)",
+      "type": "shell",
+      "command": "/Applications/Blender.app/Contents/MacOS/Blender",
+      "args": [
+        "--background", "--factory-startup",
+        "--python", "tools/gw-asset-worker/validator/blender_inspect.py",
+        "--", "--src", "assets/source-models", "--out", "build/inspection.json"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Assets: remediate randy11 to spec",
+      "type": "shell",
+      "command": "/Applications/Blender.app/Contents/MacOS/Blender",
+      "args": [
+        "--background", "--factory-startup",
+        "--python", "tools/gw-asset-worker/validator/blender_remediate.py",
+        "--", "--input", "assets/source-models/randy11.glb",
+        "--profile", "tools/gw-asset-worker/profiles/pawsome_to_gibi_quadruped_v1.json",
+        "--output", "build/randy11"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Assets: strip scale channels from built GLBs",
+      "type": "shell",
+      "command": "bash",
+      "args": ["-c", "python3 tools/gw-asset-worker/validator/glb_strip_scale.py build/randy11/*.glb"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Unity: apply required project settings",
+      "type": "shell",
+      "command": "/Applications/Unity/Hub/Editor/6000.0.74f1/Unity.app/Contents/MacOS/Unity",
+      "args": [
+        "-batchmode", "-quit", "-nographics",
+        "-projectPath", "clients/gw-mobile",
+        "-executeMethod", "Gibi.Editor.ProjectSettingsApplier.ApplyForCI",
+        "-logFile", "-"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Unity: build P0 scenes",
+      "type": "shell",
+      "command": "/Applications/Unity/Hub/Editor/6000.0.74f1/Unity.app/Contents/MacOS/Unity",
+      "args": [
+        "-batchmode", "-quit", "-nographics",
+        "-projectPath", "clients/gw-mobile",
+        "-executeMethod", "Gibi.Editor.SceneBuilder.BuildAllForCI",
+        "-logFile", "-"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Unity: validate scenes (GW-AR-001)",
+      "type": "shell",
+      "command": "/Applications/Unity/Hub/Editor/6000.0.74f1/Unity.app/Contents/MacOS/Unity",
+      "args": [
+        "-batchmode", "-quit", "-nographics",
+        "-projectPath", "clients/gw-mobile",
+        "-executeMethod", "Gibi.Editor.SceneValidator.ValidateAllForCI",
+        "-logFile", "-"
+      ],
+      "problemMatcher": [],
+      "group": { "kind": "test", "isDefault": true }
+    },
+    {
+      "label": "Unity: check assembly graph (section 4)",
+      "type": "shell",
+      "command": "/Applications/Unity/Hub/Editor/6000.0.74f1/Unity.app/Contents/MacOS/Unity",
+      "args": [
+        "-batchmode", "-quit", "-nographics",
+        "-projectPath", "clients/gw-mobile",
+        "-executeMethod", "Gibi.Editor.AssemblyGraphCheck.CheckForCI",
+        "-logFile", "-"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Unity: run EditMode tests",
+      "type": "shell",
+      "command": "/Applications/Unity/Hub/Editor/6000.0.74f1/Unity.app/Contents/MacOS/Unity",
+      "args": [
+        "-batchmode", "-runTests", "-nographics",
+        "-projectPath", "clients/gw-mobile",
+        "-testPlatform", "EditMode",
+        "-testResults", "build/editmode-results.xml",
+        "-logFile", "-"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "GATE: full local check (matches CI)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Spec: validate all contracts",
+        "Unity: check assembly graph (section 4)",
+        "Unity: validate scenes (GW-AR-001)",
+        "Unity: run EditMode tests"
+      ],
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    }
+  ]
+}

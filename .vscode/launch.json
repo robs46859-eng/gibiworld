@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "//": "Attach to the running Unity editor to debug play mode. Requires the Unity extension (visualstudiotoolsforunity.vstuc).",
+  "configurations": [
+    {
+      "name": "Attach to Unity Editor",
+      "type": "vstuc",
+      "request": "attach"
+    }
+  ]
+}
