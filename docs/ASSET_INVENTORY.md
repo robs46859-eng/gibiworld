@@ -153,3 +153,54 @@ these are what the meshes actually are:
 - **No jump obstacle in the set.** `JUMP_LOW` / `JUMP_MED` are still unmodelled — the
   most common agility obstacle of all, and the one the `jump_takeoff/air/land` clips need.
 - **`toyball` is 4,837 triangles for a 6.7 cm sphere.** Decimate to ≤800 for LOD0.
+
+
+---
+
+# Batch 3 — four additions (14:00)
+
+Also renamed: the two Pawsome3D dogs are now `ammo-dog.glb` and `goldenshep.glb`.
+
+| File | Tris | Identified | Catalog type | Factor | Result (m) |
+|---|---|---|---|---|---|
+| `weavepoles.glb` | 875 | **6 weave poles on T-bases** | `WEAVE` | ×3.056 | 1.39 × **3.05** × 1.06 |
+| `woodenramp.glb` | 1,076 | Elevated platform + access ramp | `DOG_WALK` | ×2.073 | 2.07 × 1.85 × **1.17** |
+| `catscratch.glb` | 942 | Cat tree — post, platforms, hanging ball | `CAT_FURNITURE` | ×1.202 | 1.05 × 1.15 × **1.20** |
+| `toyball-930.glb` | 2,272 | Decimated ball (was 4,837) | `TOY` | ×0.067 | **0.067** diameter |
+
+**`weavepoles` is scaled by spacing, not height** — 6 poles means 5 gaps at NADAC's
+0.610 m centre-to-centre = 3.05 m run. The resulting pole height of 1.056 m lands
+inside the 1.041–1.219 m band, so spacing and height are in spec simultaneously.
+
+These are also markedly cleaner than batch 2: **875–2,272 triangles** versus
+4,188–4,837. Same visual role, a quarter of the cost.
+
+## What this closes
+
+- **`WEAVE` now exists standalone** — no longer trapped inside `dog-obstacle-course`
+- **`DOG_WALK` now exists** — same
+- **Ball optimised** — `toyball-930` supersedes `toyball`
+- **First cat asset** — `catscratch` opens the ADR-005 cat track
+
+## What it does not close
+
+- **Still no jump obstacle.** `JUMP_LOW` / `JUMP_MED` remain unmodelled. This is the
+  most common agility obstacle and the reason `jump_takeoff` / `jump_air` / `jump_land`
+  exist in the §6.3 clip table.
+- **Still no cat model.** `catscratch` is furniture for a species that has no pet asset.
+- **Still no placement marker ring** — the §5.3 UI object needing colour + icon + label.
+
+## Catalog status
+
+| Type | Asset | State |
+|---|---|---|
+| `START_GATE` | `startgate` | scaled |
+| `FINISH_GATE` | `endarch` | scaled |
+| `A_FRAME` | `playgroundladder` | scaled |
+| `WEAVE` | `weavepoles` | scaled |
+| `DOG_WALK` | `woodenramp` | scaled |
+| `TOY` | `toyball-930` | scaled |
+| `JUMP_LOW` / `JUMP_MED` | — | **missing** |
+| `TUNNEL` | — | missing |
+| `PAUSE_TABLE` | — | missing |
+| marker ring | — | missing |

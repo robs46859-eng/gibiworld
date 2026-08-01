@@ -126,6 +126,106 @@
       "targetM": 1.17,
       "constrainAxis": "Z"
     },
+    "weavepoles.glb": {
+      "boundsBefore": [
+        0.4551,
+        0.998,
+        0.3457
+      ],
+      "boundsAfter": [
+        1.3908,
+        3.0501,
+        1.0565
+      ],
+      "scaleFactor": 3.05611,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 273168,
+      "outputSha256": "f90ad075443cb4a36a4fde59cb3e0169a1608a62d2f766d6a8aea9ff5560a731",
+      "catalogType": "WEAVE",
+      "targetM": 3.05,
+      "constrainAxis": "Y"
+    },
+    "woodenramp.glb": {
+      "boundsBefore": [
+        0.998,
+        0.8926,
+        0.5645
+      ],
+      "boundsAfter": [
+        2.0686,
+        1.85,
+        1.1699
+      ],
+      "scaleFactor": 2.07264,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 424912,
+      "outputSha256": "73414f6fe6a26a4494b11090b0241fdf0894ce2db9b7bcb8db58ec241a940259",
+      "catalogType": "DOG_WALK",
+      "targetM": 1.17,
+      "constrainAxis": "Z"
+    },
+    "catscratch.glb": {
+      "boundsBefore": [
+        0.873,
+        0.959,
+        0.998
+      ],
+      "boundsAfter": [
+        1.0498,
+        1.1531,
+        1.2001
+      ],
+      "scaleFactor": 1.2024,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 273888,
+      "outputSha256": "23c5953cf814758763d6ce4a3d081f56fdafbf953afd40f91108f97e66571c05",
+      "catalogType": "CAT_FURNITURE",
+      "targetM": 1.2,
+      "constrainAxis": "Z"
+    },
+    "toyball-930.glb": {
+      "boundsBefore": [
+        0.9797,
+        0.9945,
+        0.9959
+      ],
+      "boundsAfter": [
+        0.0659,
+        0.0669,
+        0.067
+      ],
+      "scaleFactor": 0.06728,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 434272,
+      "outputSha256": "b0582c2eecbea2d8df32a848fc83c7fe3891fdf0adff31d625a6c8a9a7393de1",
+      "catalogType": "TOY",
+      "targetM": 0.067,
+      "constrainAxis": "MAX"
+    },
     "randy11_LOD0.glb": {
       "boundsBefore": [
         1.0184,

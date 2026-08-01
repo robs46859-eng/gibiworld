@@ -5,7 +5,7 @@
     "measuredShoulderHeightUnits": 0.4582,
     "measuredTotalHeightUnits": 0.5875,
     "measuredBodyLengthUnits": 0.9997,
-    "targetShoulderHeightM": 0.50,
+    "targetShoulderHeightM": 0.5,
     "sizeClass": "MEDIUM",
     "rationale": "Border collie / spaniel build. The model's 1.12 body-to-shoulder ratio already matches this class. NADAC jump class for a 0.50 m dog is 16-20 in (0.41-0.51 m).",
     "uniformScaleFactor": 1.09123
@@ -13,66 +13,187 @@
   "props": {
     "endarch.glb": {
       "catalogType": "FINISH_GATE",
-      "identified": "Finish gantry — two uprights with a crossbeam.",
+      "identified": "Finish gantry \u2014 two uprights with a crossbeam.",
       "constrainAxis": "Z",
-      "currentM": [0.998, 0.080, 0.631],
-      "targetM": 1.60,
+      "currentM": [
+        0.998,
+        0.08,
+        0.631
+      ],
+      "targetM": 1.6,
       "uniformScaleFactor": 2.53566,
-      "resultM": [2.531, 0.203, 1.600],
+      "resultM": [
+        2.531,
+        0.203,
+        1.6
+      ],
       "specCheck": "Aperture height 1.60 m >= 1.5 m corridor minimum (section 9.2). Width 2.53 m >= 0.8 m."
     },
     "startgate.glb": {
       "catalogType": "START_GATE",
       "identified": "Multi-lane racing starting stalls on wheels (~8 bays).",
       "constrainAxis": "Z",
-      "currentM": [0.998, 0.455, 0.416],
-      "targetM": 1.20,
+      "currentM": [
+        0.998,
+        0.455,
+        0.416
+      ],
+      "targetM": 1.2,
       "uniformScaleFactor": 2.88462,
-      "resultM": [2.879, 1.313, 1.200],
+      "resultM": [
+        2.879,
+        1.313,
+        1.2
+      ],
       "specCheck": "1.20 m matches a greyhound starting box. Each of ~8 bays becomes ~0.36 m wide; a 0.50 m-shoulder dog occupies one bay. NOTE: a single-lane variant is preferable for solo play."
     },
     "playgroundladder.glb": {
       "catalogType": "A_FRAME",
-      "identified": "A-frame contact obstacle — two ramps meeting at an apex.",
+      "identified": "A-frame contact obstacle \u2014 two ramps meeting at an apex.",
       "constrainAxis": "Z",
-      "currentM": [0.338, 0.998, 0.537],
+      "currentM": [
+        0.338,
+        0.998,
+        0.537
+      ],
       "targetM": 1.42,
       "uniformScaleFactor": 2.64432,
-      "resultM": [0.894, 2.639, 1.420],
+      "resultM": [
+        0.894,
+        2.639,
+        1.42
+      ],
       "specCheck": "NADAC A-frame apex 4 ft 8 in (1.42 m) for 8 ft ramps. Ramp width 0.894 m is just under the 0.91-1.22 m spec; acceptable for a stylised obstacle. Footprint 2.64 m is steeper than the ~3.74 m regulation run."
     },
     "toyball.glb": {
       "catalogType": "TOY",
       "identified": "Panelled ball.",
       "constrainAxis": "MAX",
-      "currentM": [0.986, 0.998, 0.998],
+      "currentM": [
+        0.986,
+        0.998,
+        0.998
+      ],
       "targetM": 0.067,
       "uniformScaleFactor": 0.06713,
-      "resultM": [0.066, 0.067, 0.067],
-      "specCheck": "Tennis-ball diameter, correct for a medium dog's mouth. 4,837 triangles is heavy for a sphere this size — decimate to LOD0 <= 800."
+      "resultM": [
+        0.066,
+        0.067,
+        0.067
+      ],
+      "specCheck": "Tennis-ball diameter, correct for a medium dog's mouth. 4,837 triangles is heavy for a sphere this size \u2014 decimate to LOD0 <= 800."
     },
     "dog-obstacle-course.glb": {
       "catalogType": "LAYOUT_REFERENCE_ONLY",
       "identified": "Composite: 4 weave poles + dog walk + A-frame baked into one mesh.",
       "constrainAxis": "Z",
-      "currentM": [0.834, 0.998, 0.268],
+      "currentM": [
+        0.834,
+        0.998,
+        0.268
+      ],
       "targetM": 1.17,
       "uniformScaleFactor": 4.36567,
-      "resultM": [3.641, 4.357, 1.170],
+      "resultM": [
+        3.641,
+        4.357,
+        1.17
+      ],
       "specCheck": "Scaled so the dog walk reaches NADAC's 46 in (1.17 m). BLOCKED for runtime use: section 4.1 requires course content be data-driven from individually placed catalog props. Must be split into WEAVE, DOG_WALK and A_FRAME before publication."
+    },
+    "weavepoles.glb": {
+      "catalogType": "WEAVE",
+      "identified": "Six weave poles on T-bases. Fills the gap left by dog-obstacle-course.",
+      "constrainAxis": "Y",
+      "currentM": [
+        0.4551,
+        0.998,
+        0.3457
+      ],
+      "targetM": 3.05,
+      "note": "Driven by pole SPACING, not height: 6 poles = 5 gaps x 0.610 m (NADAC centre-to-centre) = 3.05 m run.",
+      "uniformScaleFactor": 3.05611,
+      "specCheck": "Resulting pole height 1.056 m sits inside NADAC's 1.041-1.219 m band, so spacing and height are simultaneously in spec."
+    },
+    "woodenramp.glb": {
+      "catalogType": "DOG_WALK",
+      "identified": "Elevated platform on legs with an access ramp.",
+      "constrainAxis": "Z",
+      "currentM": [
+        0.998,
+        0.8926,
+        0.5645
+      ],
+      "targetM": 1.17,
+      "uniformScaleFactor": 2.07264,
+      "specCheck": "NADAC dog walk height 46-50 in (1.168-1.270 m). Run is ~2.07 m against a regulation 3.5-3.66 m plank; this is a compact stylised variant."
+    },
+    "catscratch.glb": {
+      "catalogType": "CAT_FURNITURE",
+      "identified": "Cat tree - scratching post, tiered platforms, hanging ball.",
+      "constrainAxis": "Z",
+      "currentM": [
+        0.873,
+        0.959,
+        0.998
+      ],
+      "targetM": 1.2,
+      "uniformScaleFactor": 1.2024,
+      "specCheck": "Typical cat tree 0.8-1.5 m. NOTE: first CAT asset in the set. Species 'cat' is allowed by section 6.2 and is ADR-005 primary, but no cat MODEL exists yet."
+    },
+    "toyball-930.glb": {
+      "catalogType": "TOY",
+      "identified": "Decimated toyball - 2,272 tris, down from 4,837.",
+      "constrainAxis": "MAX",
+      "currentM": [
+        0.9797,
+        0.9945,
+        0.9959
+      ],
+      "targetM": 0.067,
+      "uniformScaleFactor": 0.06728,
+      "specCheck": "Tennis-ball diameter. Supersedes toyball.glb. Still heavy for a 6.7 cm sphere at typical screen size; 800 tris would be ample."
     }
   },
   "referenceDimensions": {
     "source": "NADAC Equipment Specifications, 2013-01-15",
-    "weavePoleSpacingM": 0.610,
-    "weavePoleHeightM": [1.041, 1.219],
-    "tunnelDiameterM": 0.610,
-    "jumpWidthM": [1.219, 1.524],
+    "weavePoleSpacingM": 0.61,
+    "weavePoleHeightM": [
+      1.041,
+      1.219
+    ],
+    "tunnelDiameterM": 0.61,
+    "jumpWidthM": [
+      1.219,
+      1.524
+    ],
     "jumpUprightMinHeightM": 0.813,
-    "jumpBarHeightsM": [0.102, 0.203, 0.305, 0.406, 0.508],
-    "aFrameApexHeightM": [1.422, 1.524],
-    "aFrameRampWidthM": [0.914, 1.219],
-    "dogWalkHeightM": [1.168, 1.270],
-    "dogWalkPlankWidthM": [0.286, 0.305]
+    "jumpBarHeightsM": [
+      0.102,
+      0.203,
+      0.305,
+      0.406,
+      0.508
+    ],
+    "aFrameApexHeightM": [
+      1.422,
+      1.524
+    ],
+    "aFrameRampWidthM": [
+      0.914,
+      1.219
+    ],
+    "dogWalkHeightM": [
+      1.168,
+      1.27
+    ],
+    "dogWalkPlankWidthM": [
+      0.286,
+      0.305
+    ]
+  },
+  "_renames": {
+    "1783286266224-65e1201c-8585-4907-8355-e5f7763a22d6.glb": "ammo-dog.glb",
+    "1783217001710-5f11f075-dbb0-47e6-a8e5-84102ef3149e.glb": "goldenshep.glb"
   }
 }
