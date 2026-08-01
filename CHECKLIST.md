@@ -80,30 +80,49 @@ Status: `[x]` done · `[~]` partial · `[ ]` not started · `[!]` blocked on you
 
 ## Findings on your supplied models
 
-All three GLBs share one rig (25 deform bones, `Khronos glTF Blender I/O v5.1.20`) and
-**fail the spec identically**. They are close — every failure is mechanical, none is structural.
+Measured inside **Blender 5.2 headless**, not inferred from the container. Full data in
+`tools/gw-asset-worker/blender-inspection-report.json`.
+
+All three are **Tripo3D**-generated, share one 25-bone rig, and fail identically.
 
 | Check | Result |
 |---|---|
 | Transfer size | **Pass** — ~2 MB against a 45 MiB limit |
-| Materials / skins / bones | **Pass** — 1 / 1 / 25 against limits of 3 / 2 / 96 |
-| External URIs, cameras, lights | **Pass** — none present |
-| LOD0 triangles | **Fail** — 39,946 / 39,996 / 39,998 against a 35,000 limit (~14% over) |
-| Scale curves | **Fail** — every clip animates scale; §6.3 forbids this outright |
-| Skeleton profile | **Fail** — 20 of 24 required joints missing; rig uses `back_leg_lower.L`, spec requires `lower_rear_l` |
-| Clip inventory | **Fail** — `randy11` has 4 of 23 required clips; the Pawsome3D pair has 0 of 23 |
-| Out-of-scope clips | **Fail** — `pee_legLift`, `poop_squat`, `eat`, `drink` are outside §1.2 and absent from the §6.3 table |
+| Materials / textures | **Pass** — 1 material, one 2048×2048 set |
+| Skinned meshes / bones | **Pass** — 1 skinned mesh, 25 bones (limits 2 / 96) |
+| Real body bounds | **Pass** — ~1.00 × 0.30 × 0.59–0.77 m, a plausible dog |
+| External URIs, cameras, lights | **Pass** — none |
+| LOD0 triangles | **Fail** — 40,026 / 40,078 / 40,076 vs 35,000 (~12.6% over) |
+| Scale curves | **Fail** — every clip animates scale; §6.3 forbids it |
+| **Root motion** | **Fail** — *every* clip translates `hips`; §6.3 requires in-place locomotion |
+| Skeleton profile | **Fail** — only **4 of 26** required joints present (`chest`, `neck`, `head`, `jaw`) |
+| Clip inventory | **Fail** — `randy11` has 4 of 23 required; the other Pawsome3D pair has 0 |
+| Out-of-scope clips | **Fail** — `pee_legLift`, `poop_squat`, `eat`, `drink` fall outside §1.2 |
 
-**Remediation path, already encoded in the profile:** decimate ~14%, strip scale curves,
-insert a synthetic `root` above `pelvis`, apply the 30-entry bone map, rename 11 clips,
-drop 6 out-of-scope clips, and author the **15 missing clips** (`idle_b`, `trot`,
-`turn_l_90/r_90`, `sit_idle`, `stand`, `down`, `down_idle`, `rise`, `jump_takeoff/air/land`,
-`pickup`, `carry`, `drop`).
+### Two things only Blender could reveal
 
-That last item is the real schedule risk: **15 new animation clips is art work, not code.**
-Everything else `blender_remediate.py` does automatically.
+**1. A stray `Icosphere` in all three files.** 80 triangles, 42 vertices, unskinned — a
+Tripo bounding proxy left in the export. It is the *sole* reason bounds report exactly
+2.0 m (the §6.2 hard limit). Delete it and the models sit comfortably inside the budget.
+Container-level parsing counted its triangles and read its bounds as the pet's.
 
----
+**2. Max influences per vertex = 1.** The meshes are *rigidly* bound — every vertex
+follows exactly one bone. That passes the §6.2 limit of 4, so no automated gate catches
+it, but it means joints will crease and tear under animation. For a spec whose first
+pillar is **Present**, this is the single biggest quality gap, and re-skinning is
+hand work.
+
+### Corrected retarget profile
+
+My earlier profile guessed source bone names. Measured against the real rig, it now maps
+**25 bones directly** and identifies **6 that must be synthesized**, reaching 26/26:
+
+| Synthesized | Why |
+|---|---|
+| `root` | Rig roots at `hips`; motion controller needs a separate zero-transform root |
+| `spine_02` | Source has a **single** `spine` bone — must be subdivided and reweighted |
+| `clavicle_l` / `clavicle_r` | No shoulder bone exists at all |
+| `hock_l` / `hock_r` | Rear leg is upper→lower→paw; no hock, so digitigrade motion is impossible |
 
 ## What I need from you
 
