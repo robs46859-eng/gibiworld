@@ -104,3 +104,52 @@ layout reference.
 
 Prop coverage went from 0 to 4 of 5. The remaining P0 gap is **6 animation clips, one
 marker ring, and a re-skin.**
+
+
+---
+
+# Real-world scale — RESOLVED
+
+Decision: **medium dog, 0.50 m at the shoulder; props at true regulation scale.**
+Reference dimensions from NADAC Equipment Specifications (2013-01-15).
+Applied by `blender_rescale.py`; results in `build/scaled/scale-report.json`.
+
+Agility equipment is *defined* relative to dog shoulder height, so the pet is the
+reference and everything else derives from it. Uniform scale only — no ratios changed.
+All object scales are baked back to identity so no non-unit transform reaches the
+runtime (§6.3).
+
+| Asset | Before (m) | Factor | After (m) | Verdict |
+|---|---|---|---|---|
+| `randy11_LOD0` | 1.018 × 0.495 × 0.681 | ×1.0912 | **shoulder 0.5000** | on target |
+| `endarch` | 0.998 × 0.080 × 0.631 | ×2.5357 | 2.531 × 0.203 × **1.600** | ≥1.5 m corridor ✓ |
+| `playgroundladder` | 0.338 × 0.998 × 0.537 | ×2.6443 | 0.894 × 2.639 × **1.420** | NADAC apex ✓ |
+| `startgate` | 0.998 × 0.455 × 0.416 | ×2.8846 | 2.879 × 1.313 × **1.200** | greyhound box height |
+| `toyball` | 0.986 × 0.998 × 0.998 | ×0.0671 | **0.067** diameter | tennis ball ✓ |
+| `dog-obstacle-course` | 0.834 × 0.998 × 0.268 | ×4.3657 | 3.641 × 4.357 × **1.168** | dog-walk height ✓ |
+
+Final pet: **0.500 m shoulder, 0.641 m total height, 1.091 m long.** A credible
+border-collie-class dog.
+
+## Corrected prop identification
+
+Renders in `tools/gw-asset-worker/previews/`. Three of my earlier guesses were wrong —
+these are what the meshes actually are:
+
+| File | Earlier guess | Actually | Catalog type |
+|---|---|---|---|
+| `startgate.glb` | agility gate | **Multi-lane racing starting stalls on wheels (~8 bays)** | `START_GATE` |
+| `endarch.glb` | finish gate | Finish gantry — two uprights + crossbeam | `FINISH_GATE` ✓ |
+| `playgroundladder.glb` | weave poles | **A-frame contact obstacle** | `A_FRAME` |
+| `dog-obstacle-course.glb` | composite | **Weave poles + dog walk + A-frame**, baked together | `LAYOUT_REFERENCE_ONLY` |
+| `toyball.glb` | ball | Panelled ball | `TOY` ✓ |
+
+### Consequences
+
+- **No weave poles exist as a standalone prop.** The only weaves are baked inside
+  `dog-obstacle-course`. Splitting it yields `WEAVE`, `DOG_WALK`, and a second `A_FRAME`.
+- **`startgate` is a multi-lane racing box.** At 1.20 m each of ~8 bays is ~0.36 m wide;
+  a 0.50 m-shoulder dog fits one bay. For solo play a single-lane variant reads better.
+- **No jump obstacle in the set.** `JUMP_LOW` / `JUMP_MED` are still unmodelled — the
+  most common agility obstacle of all, and the one the `jump_takeoff/air/land` clips need.
+- **`toyball` is 4,837 triangles for a 6.7 cm sphere.** Decimate to ≤800 for LOD0.

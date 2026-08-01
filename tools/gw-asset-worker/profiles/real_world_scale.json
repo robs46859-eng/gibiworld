@@ -1,0 +1,78 @@
+{
+  "_comment": "GW-ARCH-001 sections 5.3, 6.2, 9.2. Tripo normalizes every generated asset into a ~1 m bounding cube, so authored scale is meaningless. This profile restores real-world scale. Equipment dimensions follow NADAC Equipment Specifications (2013-01-15); agility gear is sized relative to dog shoulder height, so the pet is the reference and everything else derives from it.",
+  "referenceDog": {
+    "asset": "randy11",
+    "measuredShoulderHeightUnits": 0.4582,
+    "measuredTotalHeightUnits": 0.5875,
+    "measuredBodyLengthUnits": 0.9997,
+    "targetShoulderHeightM": 0.50,
+    "sizeClass": "MEDIUM",
+    "rationale": "Border collie / spaniel build. The model's 1.12 body-to-shoulder ratio already matches this class. NADAC jump class for a 0.50 m dog is 16-20 in (0.41-0.51 m).",
+    "uniformScaleFactor": 1.09123
+  },
+  "props": {
+    "endarch.glb": {
+      "catalogType": "FINISH_GATE",
+      "identified": "Finish gantry — two uprights with a crossbeam.",
+      "constrainAxis": "Z",
+      "currentM": [0.998, 0.080, 0.631],
+      "targetM": 1.60,
+      "uniformScaleFactor": 2.53566,
+      "resultM": [2.531, 0.203, 1.600],
+      "specCheck": "Aperture height 1.60 m >= 1.5 m corridor minimum (section 9.2). Width 2.53 m >= 0.8 m."
+    },
+    "startgate.glb": {
+      "catalogType": "START_GATE",
+      "identified": "Multi-lane racing starting stalls on wheels (~8 bays).",
+      "constrainAxis": "Z",
+      "currentM": [0.998, 0.455, 0.416],
+      "targetM": 1.20,
+      "uniformScaleFactor": 2.88462,
+      "resultM": [2.879, 1.313, 1.200],
+      "specCheck": "1.20 m matches a greyhound starting box. Each of ~8 bays becomes ~0.36 m wide; a 0.50 m-shoulder dog occupies one bay. NOTE: a single-lane variant is preferable for solo play."
+    },
+    "playgroundladder.glb": {
+      "catalogType": "A_FRAME",
+      "identified": "A-frame contact obstacle — two ramps meeting at an apex.",
+      "constrainAxis": "Z",
+      "currentM": [0.338, 0.998, 0.537],
+      "targetM": 1.42,
+      "uniformScaleFactor": 2.64432,
+      "resultM": [0.894, 2.639, 1.420],
+      "specCheck": "NADAC A-frame apex 4 ft 8 in (1.42 m) for 8 ft ramps. Ramp width 0.894 m is just under the 0.91-1.22 m spec; acceptable for a stylised obstacle. Footprint 2.64 m is steeper than the ~3.74 m regulation run."
+    },
+    "toyball.glb": {
+      "catalogType": "TOY",
+      "identified": "Panelled ball.",
+      "constrainAxis": "MAX",
+      "currentM": [0.986, 0.998, 0.998],
+      "targetM": 0.067,
+      "uniformScaleFactor": 0.06713,
+      "resultM": [0.066, 0.067, 0.067],
+      "specCheck": "Tennis-ball diameter, correct for a medium dog's mouth. 4,837 triangles is heavy for a sphere this size — decimate to LOD0 <= 800."
+    },
+    "dog-obstacle-course.glb": {
+      "catalogType": "LAYOUT_REFERENCE_ONLY",
+      "identified": "Composite: 4 weave poles + dog walk + A-frame baked into one mesh.",
+      "constrainAxis": "Z",
+      "currentM": [0.834, 0.998, 0.268],
+      "targetM": 1.17,
+      "uniformScaleFactor": 4.36567,
+      "resultM": [3.641, 4.357, 1.170],
+      "specCheck": "Scaled so the dog walk reaches NADAC's 46 in (1.17 m). BLOCKED for runtime use: section 4.1 requires course content be data-driven from individually placed catalog props. Must be split into WEAVE, DOG_WALK and A_FRAME before publication."
+    }
+  },
+  "referenceDimensions": {
+    "source": "NADAC Equipment Specifications, 2013-01-15",
+    "weavePoleSpacingM": 0.610,
+    "weavePoleHeightM": [1.041, 1.219],
+    "tunnelDiameterM": 0.610,
+    "jumpWidthM": [1.219, 1.524],
+    "jumpUprightMinHeightM": 0.813,
+    "jumpBarHeightsM": [0.102, 0.203, 0.305, 0.406, 0.508],
+    "aFrameApexHeightM": [1.422, 1.524],
+    "aFrameRampWidthM": [0.914, 1.219],
+    "dogWalkHeightM": [1.168, 1.270],
+    "dogWalkPlankWidthM": [0.286, 0.305]
+  }
+}

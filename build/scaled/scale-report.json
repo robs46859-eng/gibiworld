@@ -1,0 +1,153 @@
+{
+  "blender": "5.2.0 LTS",
+  "assets": {
+    "endarch.glb": {
+      "boundsBefore": [
+        0.998,
+        0.0801,
+        0.6309
+      ],
+      "boundsAfter": [
+        2.5307,
+        0.2031,
+        1.5996
+      ],
+      "scaleFactor": 2.53566,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 560712,
+      "outputSha256": "10ad81e5eeaed1f6c89c481884bd8b1b0de25460e77307481149f2929ca9402d",
+      "catalogType": "FINISH_GATE",
+      "targetM": 1.6,
+      "constrainAxis": "Z"
+    },
+    "startgate.glb": {
+      "boundsBefore": [
+        0.998,
+        0.4551,
+        0.416
+      ],
+      "boundsAfter": [
+        2.879,
+        1.3127,
+        1.2
+      ],
+      "scaleFactor": 2.88462,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 549624,
+      "outputSha256": "15585324d9612ef17136dabaafd9b07eb19ba83c5249b0c5c37affeade7e530c",
+      "catalogType": "START_GATE",
+      "targetM": 1.2,
+      "constrainAxis": "Z"
+    },
+    "playgroundladder.glb": {
+      "boundsBefore": [
+        0.3379,
+        0.998,
+        0.5371
+      ],
+      "boundsAfter": [
+        0.8935,
+        2.6392,
+        1.4203
+      ],
+      "scaleFactor": 2.64432,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 567032,
+      "outputSha256": "bb4c94411da61412886d46d0f35bb1912ef4ef393033fe57edf0dd15f371d297",
+      "catalogType": "A_FRAME",
+      "targetM": 1.42,
+      "constrainAxis": "Z"
+    },
+    "toyball.glb": {
+      "boundsBefore": [
+        0.9863,
+        0.998,
+        0.998
+      ],
+      "boundsAfter": [
+        0.0662,
+        0.067,
+        0.067
+      ],
+      "scaleFactor": 0.06713,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 518936,
+      "outputSha256": "dfd0c3288c926d534698e127cab0fa0bab430883d5415707b476d14edd2d6db3",
+      "catalogType": "TOY",
+      "targetM": 0.067,
+      "constrainAxis": "MAX"
+    },
+    "dog-obstacle-course.glb": {
+      "boundsBefore": [
+        0.834,
+        0.998,
+        0.2676
+      ],
+      "boundsAfter": [
+        3.6409,
+        4.3571,
+        1.1682
+      ],
+      "scaleFactor": 4.36567,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 693452,
+      "outputSha256": "b7957b6af069eb69a30cae99e318f913f812cd30f66cc4127be2a5c75b643b75",
+      "catalogType": "LAYOUT_REFERENCE_ONLY",
+      "targetM": 1.17,
+      "constrainAxis": "Z"
+    },
+    "randy11_LOD0.glb": {
+      "boundsBefore": [
+        1.0184,
+        0.4951,
+        0.6807
+      ],
+      "boundsAfter": [
+        1.1113,
+        0.5403,
+        0.7428
+      ],
+      "scaleFactor": 1.09123,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 1794844,
+      "outputSha256": "2da0409ca54e2016807a0bccb096468e2f57ab659c73ee85559044db8b53543d",
+      "catalogType": "PET"
+    }
+  }
+}
