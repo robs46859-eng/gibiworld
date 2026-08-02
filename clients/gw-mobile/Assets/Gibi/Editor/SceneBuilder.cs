@@ -110,7 +110,14 @@ namespace Gibi.Editor
             originGo.AddComponent<ARPlaneManager>();
             originGo.AddComponent<ARRaycastManager>();
             originGo.AddComponent<ARAnchorManager>();
-            originGo.AddComponent<ARMeshManager>();
+
+            // ARMeshManager SHALL be a CHILD of the XR Origin, not a component on it.
+            // It parents generated mesh GameObjects under its own transform, so AR
+            // Foundation rejects it on the origin itself ("An ARMeshManager must be a
+            // child of an XROrigin") and forces component removal on scene open.
+            var meshing = new GameObject("Meshing");
+            meshing.transform.SetParent(originGo.transform, worldPositionStays: false);
+            meshing.AddComponent<ARMeshManager>();
 
             // Session driver bridges provider state into the deterministic
             // AnchorEligibility machine (section 5.2).
