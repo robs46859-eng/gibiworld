@@ -74,6 +74,13 @@ people, that is important information for you — not something the app can fix.
   they were doing
 - **No** points, streaks, badges, or rewards for playing longer or more often. Deliberately.
   We do not want to make this compelling beyond its natural appeal.
+- The pet plays the same whether or not you have a good internet connection. If the signal
+  drops mid-play, nothing changes and nothing is lost.
+
+An internet connection **is** needed from time to time — to check the pet is still yours to
+use, and to receive updates including any safety changes we need to send out. If your
+device has been offline for several days, the app will ask you to reconnect before
+continuing.
 
 If your child asks the pet to do the same thing a hundred times, **it will do it a hundred
 times.** Repetitive play is often how children calm themselves, and we will not interrupt

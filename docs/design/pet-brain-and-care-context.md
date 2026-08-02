@@ -357,6 +357,45 @@ The trainable brain and the safety design are the same mechanism viewed from two
 - **The smart part is optional.** §8.3 requires a complete offline behaviour library. When
   AI is unavailable the pet still plays. A child who notices this has learned something
   many adults have not.
+
+### Local-first is a wellbeing decision, not only an availability one
+
+The implementation inverts the usual arrangement. A conventional design calls the model,
+waits, and substitutes something simpler on failure — which makes the AI **load-bearing**.
+The pet is visibly worse when the network is poor, so the child learns the pet is *better
+when connected*, and attachment attaches to the connected state rather than to the pet.
+
+Instead, the local library is the **baseline** and AI is a **supplement**. Local always
+produces a valid intent immediately, without waiting. An AI response is accepted only if it
+arrives inside budget and validates; otherwise nothing happens, because nothing was
+pending. There is no fallback path because there is no failure state.
+
+A crash, a timeout, an outage, a tunnel, and a deliberate airplane-mode session are
+therefore **indistinguishable from the child's side**. That is the point. A companion whose
+warmth is contingent on connectivity teaches a dependence we do not want to create.
+
+None of this appears in the consent form beyond a plain statement that the pet works
+without a connection. Explaining the reasoning to a guardian would frame ordinary
+robustness as an intervention, which invites exactly the anxious reading §7 was removed to
+avoid.
+
+### But connectivity is still required
+
+Offline tolerance is not offline autonomy. §6.4 requires a current entitlement before a pet
+instantiates, and §10.2 requires revocation to take effect immediately. A pet that never
+contacts the server is a pet whose revocation never lands.
+
+Two separate cadences, deliberately:
+
+| | Interval | Carries |
+|---|---|---|
+| **Update poll** | 15 min active, 1 min after resume | Revocation list, feature flags and **kill switches** (§16), safety revision (§9.2), catalog version |
+| **Entitlement revalidation** | 72 h hard window + 24 h silent grace | Whether this pet is still this user's to render |
+
+The fast cadence exists because §16 requires every flag to have a kill switch, and a kill
+switch that waits 72 hours is not a kill switch. The slow one exists so a weekend without
+signal is not a punishment. A device playing normally never approaches the deadline,
+because every successful update poll also refreshes entitlement freshness.
 - **Limits are discovered, not lectured.** The pet cannot be trained into unkindness
   because those intents do not exist in the enum. A child who tries finds a wall, not a
   scolding.
