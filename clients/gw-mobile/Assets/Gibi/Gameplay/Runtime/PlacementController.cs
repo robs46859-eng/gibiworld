@@ -55,8 +55,21 @@ namespace Gibi.Gameplay
 
         private void Awake()
         {
-            _probe = GetComponentInParent<ARSurfaceProbe>();
-            _sessionDriver = GetComponentInParent<ARSessionDriver>();
+            // GetComponentInParent only walks UP. In the generated scene SessionDriver is
+            // a SIBLING of this object under the XR Origin, so the parent walk finds
+            // nothing and the null-guard below silently reports AR_UNAVAILABLE forever --
+            // even while the driver is reporting SessionTracking with planes detected.
+            // Scene-wide lookup is the correct fallback for a code-built hierarchy.
+            _probe = GetComponentInParent<ARSurfaceProbe>()
+                     ?? FindAnyObjectByType<ARSurfaceProbe>();
+            _sessionDriver = GetComponentInParent<ARSessionDriver>()
+                             ?? FindAnyObjectByType<ARSessionDriver>();
+
+            if (_sessionDriver == null)
+                Debug.LogError("[GibiWorld] No ARSessionDriver found — placement will " +
+                               "report AR_UNAVAILABLE regardless of actual session state.");
+            if (_probe == null)
+                Debug.LogError("[GibiWorld] No ARSurfaceProbe found — no surface can ever be hit.");
 
             var clock = GibiBootstrap.Services != null
                 ? GibiBootstrap.Services.Resolve<IMonotonicClock>()

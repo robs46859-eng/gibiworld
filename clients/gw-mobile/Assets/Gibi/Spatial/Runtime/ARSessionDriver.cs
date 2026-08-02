@@ -27,6 +27,8 @@ namespace Gibi.Spatial
         private AnchorEligibility _eligibility;
         private IMonotonicClock _clock;
 
+        private ARSessionState _lastLoggedState = (ARSessionState)(-1);
+        private int _lastPlaneCount = -1;
         private Vector3 _lastAnchorPosition;
         private bool _hasLastAnchorPosition;
 
@@ -61,6 +63,17 @@ namespace Gibi.Spatial
             // --- step 1: provider frame ---
             bool sessionTracking = ARSession.state == ARSessionState.SessionTracking;
 
+            // Diagnostic: report the PROVIDER's own state on change. Without this a
+            // rejected placement is indistinguishable from a session that never started,
+            // and the two have completely different fixes.
+            if (ARSession.state != _lastLoggedState)
+            {
+                _lastLoggedState = ARSession.state;
+                int planes = planeManager != null ? planeManager.trackables.count : -1;
+                Debug.Log($"[GibiWorld] ARSession.state = {ARSession.state}, " +
+                          $"planes = {planes}, notTrackingReason = {ARSession.notTrackingReason}");
+            }
+
             // --- step 2: anchor quality snapshot ---
             bool usingVpsSite = TargetSiteAnchor != null;
             bool anchorTracked = usingVpsSite &&
@@ -68,6 +81,16 @@ namespace Gibi.Spatial
 
             // --- step 3: pose-correction magnitude, before smoothing is applied ---
             LastPoseJumpM = MeasurePoseJump(usingVpsSite);
+
+            if (planeManager != null && planeManager.trackables.count != _lastPlaneCount)
+            {
+                _lastPlaneCount = planeManager.trackables.count;
+                int horizontal = 0;
+                foreach (var pl in planeManager.trackables)
+                    if (pl.alignment == PlaneAlignment.HorizontalUp) horizontal++;
+                Debug.Log($"[GibiWorld] planes = {_lastPlaneCount} " +
+                          $"({horizontal} horizontal-up, which is what section 5.3 accepts)");
+            }
 
             bool surfaceAccepted = HasAcceptedSurface();
 
