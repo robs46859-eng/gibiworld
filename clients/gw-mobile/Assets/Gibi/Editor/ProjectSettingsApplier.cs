@@ -63,6 +63,31 @@ namespace Gibi.Editor
             // Microphone stays unset: section 8.2 forbids sending raw voice, and §14
             // makes voice optional, so the permission is not requested at all in P0.
 
+            // Active Input Handling. 0 = legacy only, 1 = Input System only, 2 = both.
+            //
+            // BOTH IS UNSUPPORTED ON ANDROID -- Unity blocks the build with a warning about
+            // input correctness and performance. The project depends on
+            // com.unity.inputsystem, NSDK prompts to enable it, and nothing in Gibi.*
+            // touches the legacy Input class, so 1 is correct. An earlier revision of this
+            // file left it at 2 because the value looked "already set"; it was set wrong.
+            //
+            // Not exposed on PlayerSettings, so it is written through SerializedObject.
+            // Changing it requires an editor restart to take effect.
+            var playerSettings = AssetDatabase.LoadAllAssetsAtPath(
+                "ProjectSettings/ProjectSettings.asset");
+            if (playerSettings != null && playerSettings.Length > 0)
+            {
+                var so = new SerializedObject(playerSettings[0]);
+                var handler = so.FindProperty("activeInputHandler");
+                if (handler != null && handler.intValue != 1)
+                {
+                    handler.intValue = 1;
+                    so.ApplyModifiedPropertiesWithoutUndo();
+                    Debug.Log("[GibiWorld] Active Input Handling set to Input System only " +
+                              "(Both is unsupported on Android). RESTART THE EDITOR.");
+                }
+            }
+
             PlayerSettings.defaultInterfaceOrientation = UIOrientation.AutoRotation;
             PlayerSettings.allowedAutorotateToPortrait = true;
             PlayerSettings.allowedAutorotateToLandscapeLeft = true;
