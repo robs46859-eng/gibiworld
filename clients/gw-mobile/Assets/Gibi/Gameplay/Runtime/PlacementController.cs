@@ -53,6 +53,15 @@ namespace Gibi.Gameplay
         public PlacementStatus Status { get; private set; }
         public Pose CandidatePose { get; private set; }
 
+        /// <summary>
+        /// Where the probe last struck a surface, REGARDLESS of whether placement was
+        /// allowed. CandidatePose only updates on success, so a ring driven by it stays
+        /// frozen at world origin during rejection -- which reads as a giant disc on the
+        /// floor beneath the player rather than as feedback.
+        /// </summary>
+        public Pose LastHitPose { get; private set; }
+        public bool HasHit { get; private set; }
+
         private void Awake()
         {
             // GetComponentInParent only walks UP. In the generated scene SessionDriver is
@@ -110,6 +119,9 @@ namespace Gibi.Gameplay
 
             // --- surface probe, through the adapter seam ---
             var probe = _probe?.Probe(screenPoint) ?? SurfaceProbeResult.Miss;
+            HasHit = probe.Hit;
+            if (probe.Hit) LastHitPose = new Pose(probe.Position, probe.Rotation);
+
             if (!probe.Hit)
                 return Set(Reject("NO_SURFACE", "placement.blocked.no_surface",
                                   "icon.no_surface", ColorNeutral, haptic: false));

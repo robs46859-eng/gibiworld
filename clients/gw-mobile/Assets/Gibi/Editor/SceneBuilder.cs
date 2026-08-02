@@ -245,13 +245,18 @@ namespace Gibi.Editor
             var disc = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             disc.name = "RingMesh";
             disc.transform.SetParent(parent.transform, false);
-            disc.transform.localScale = new Vector3(0.30f, 0.004f, 0.30f);
+            // 0.22 m across — comfortably smaller than the 0.45 m pet clearance so the
+            // ring reads as a marker rather than as the placement volume itself.
+            disc.transform.localScale = new Vector3(0.22f, 0.003f, 0.22f);
             Object.DestroyImmediate(disc.GetComponent<Collider>());
 
             var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
             mat.name = "PlacementRingMaterial";
             SetTransparent(mat, new Color(0.2f, 0.75f, 0.35f, 0.75f));
             disc.GetComponent<MeshRenderer>().sharedMaterial = mat;
+
+            // Start hidden: before the first successful probe there is nothing to mark.
+            disc.GetComponent<MeshRenderer>().enabled = false;
 
             var so = new SerializedObject(ring);
             var prop = so.FindProperty("ringRenderer");

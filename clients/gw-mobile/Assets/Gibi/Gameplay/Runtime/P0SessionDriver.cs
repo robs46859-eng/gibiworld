@@ -30,6 +30,8 @@ namespace Gibi.Gameplay
 
         public bool PetIsPlaced => _pet != null;
         public Pose CandidatePose => placement != null ? placement.CandidatePose : default;
+        public Pose LastHitPose  => placement != null ? placement.LastHitPose : default;
+        public bool HasHit       => placement != null && placement.HasHit;
         public string LastFailureCode { get; private set; }
 
         private void Awake()

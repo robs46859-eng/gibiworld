@@ -75,8 +75,18 @@ namespace Gibi.UI
             if (!tapped && ring != null)
             {
                 var status = session.PreviewAt(reticle, playerSpeedMps);
-                ring.SetPose(session.CandidatePose);
-                ring.Apply(status, hapticsSupported: SystemInfo.supportsVibration);
+
+                if (!session.HasHit)
+                {
+                    // Nothing under the reticle. A ring floating in space with no surface
+                    // to sit on is worse than no ring at all.
+                    ring.Hide();
+                }
+                else
+                {
+                    ring.SetPose(session.LastHitPose);
+                    ring.Apply(status, hapticsSupported: SystemInfo.supportsVibration);
+                }
 
                 // Log only on CHANGE. Logging every frame at 60 fps drowns logcat and
                 // makes the one line that matters impossible to find.

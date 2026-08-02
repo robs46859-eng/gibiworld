@@ -36,15 +36,12 @@ namespace Gibi.UI
         /// </summary>
         public void Apply(in PlacementStatus status, bool hapticsSupported)
         {
-            // A ring that never moves is not a placement indicator. Position it at the
-            // candidate pose so the player can see WHERE the pet would land, not merely
-            // whether placement is currently legal.
-            if (status.CanPlace)
-            {
-                transform.SetPositionAndRotation(
-                    _lastPose.position + Vector3.up * 0.005f,
-                    Quaternion.Euler(0f, _lastPose.rotation.eulerAngles.y, 0f));
-            }
+            // Follow the aim point ALWAYS, not only on success. Moving it only when
+            // placement is legal leaves it parked at world origin -- on the floor directly
+            // beneath the player -- where it fills the screen and reads as a bug.
+            transform.SetPositionAndRotation(
+                _lastPose.position + Vector3.up * 0.005f,
+                Quaternion.Euler(0f, _lastPose.rotation.eulerAngles.y, 0f));
 
             CurrentColor = status.RingColor;
             CurrentIconId = status.IconId;
