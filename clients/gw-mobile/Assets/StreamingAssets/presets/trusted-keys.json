@@ -1,0 +1,9 @@
+{
+  "keys": [
+    {
+      "keyId": "key_gibi_dev_001",
+      "algorithm": "Ed25519",
+      "publicKeyHex": "35d39c8738d8ca2d5a5df8084b4a42ebe6ef259454f37c84610dbd49f09a733c"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "petAssetId": "asset_01J8ZQK5T7VN2MXR4WD6GHYAB3",
+  "assetVersion": 1,
+  "issuer": "GIBIWORLD_PRESET",
+  "keyId": "key_gibi_dev_001",
+  "digest": "sha256:01fd252e89cf87d8fa8bb56c1f273dde6c3b1768788905a2793f6787956c4947",
+  "species": "dog",
+  "skeletonProfile": "GIBI_QUADRUPED_V1",
+  "shoulderHeightM": 0.5,
+  "transferSizeBytes": 1783516,
+  "materialCount": 1,
+  "skinnedMeshCount": 1,
+  "deformBoneCount": 25,
+  "morphTargetCount": 0,
+  "lods": [
+    {
+      "level": 0,
+      "triangles": 34929,
+      "vertices": 20256,
+      "screenTransition": 1.0
+    }
+  ],
+  "clips": [
+    {
+      "clipId": "greet",
+      "loop": false,
+      "durationS": 2.0
+    },
+    {
+      "clipId": "idle_a",
+      "loop": true,
+      "durationS": 2.0
+    },
+    {
+      "clipId": "pet_react",
+      "loop": false,
+      "durationS": 2.0
+    },
+    {
+      "clipId": "run",
+      "loop": true,
+      "durationS": 2.0
+    },
+    {
+      "clipId": "sit",
+      "loop": false,
+      "durationS": 2.0
+    },
+    {
+      "clipId": "sleep",
+      "loop": false,
+      "durationS": 2.0
+    },
+    {
+      "clipId": "success",
+      "loop": false,
+      "durationS": 2.0
+    },
+    {
+      "clipId": "walk",
+      "loop": true,
+      "durationS": 2.0
+    }
+  ],
+  "totalKeyframes": 0,
+  "bounds": {
+    "minM": [
+      -0.6,
+      -0.4,
+      -0.4
+    ],
+    "maxM": [
+      0.6,
+      0.4,
+      0.4
+    ]
+  },
+  "compatibility": {
+    "minClientSchema": 1,
+    "maxClientSchema": 1
+  },
+  "generatedAt": "2026-08-01T00:00:00Z",
+  "signature": "521b353a49fa0add19236c62f1d003f89d4a5d69f6bf742b2adc14d7a5f27c090aa5686a926c270206a2d02208233e71afbbf3a0f64872920a32a8168319d80a"
+}

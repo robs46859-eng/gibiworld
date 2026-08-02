@@ -51,3 +51,4 @@ secrets/
 **/NianticSpatial*Settings.asset
 **/*AccessToken*
 **/*.token
+tools/gw-signing/*.pem
