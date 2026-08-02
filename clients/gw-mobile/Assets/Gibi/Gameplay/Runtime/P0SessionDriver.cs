@@ -29,6 +29,7 @@ namespace Gibi.Gameplay
         private CancellationTokenSource _cts;
 
         public bool PetIsPlaced => _pet != null;
+        public Pose CandidatePose => placement != null ? placement.CandidatePose : default;
         public string LastFailureCode { get; private set; }
 
         private void Awake()

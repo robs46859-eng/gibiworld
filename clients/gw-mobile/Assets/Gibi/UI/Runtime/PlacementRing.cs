@@ -21,6 +21,11 @@ namespace Gibi.UI
 
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
 
+        private Pose _lastPose;
+
+        /// <summary>Aim point for the current frame, supplied by the caller.</summary>
+        public void SetPose(Pose pose) => _lastPose = pose;
+
         public string CurrentIconId { get; private set; }
         public string CurrentLabelKey { get; private set; }
         public Color CurrentColor { get; private set; }
@@ -31,6 +36,16 @@ namespace Gibi.UI
         /// </summary>
         public void Apply(in PlacementStatus status, bool hapticsSupported)
         {
+            // A ring that never moves is not a placement indicator. Position it at the
+            // candidate pose so the player can see WHERE the pet would land, not merely
+            // whether placement is currently legal.
+            if (status.CanPlace)
+            {
+                transform.SetPositionAndRotation(
+                    _lastPose.position + Vector3.up * 0.005f,
+                    Quaternion.Euler(0f, _lastPose.rotation.eulerAngles.y, 0f));
+            }
+
             CurrentColor = status.RingColor;
             CurrentIconId = status.IconId;
             CurrentLabelKey = status.LocalizationKey;

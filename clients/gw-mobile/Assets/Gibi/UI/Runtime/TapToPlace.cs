@@ -29,6 +29,8 @@ namespace Gibi.UI
             EnhancedTouchSupport.Disable();
         }
 
+        private string _lastStatusCode;
+
         private void Awake()
         {
             if (session == null) session = FindAnyObjectByType<P0SessionDriver>();
@@ -52,7 +54,11 @@ namespace Gibi.UI
                 if (touch.phase != UnityEngine.InputSystem.TouchPhase.Began) continue;
                 point = touch.screenPosition;
                 tapped = true;
-                await session.TryPlaceAt(point, playerSpeedMps);
+                Debug.Log($"[GibiWorld] tap at {point}");
+                bool placed = await session.TryPlaceAt(point, playerSpeedMps);
+                Debug.Log(placed
+                    ? "[GibiWorld] PET PLACED"
+                    : $"[GibiWorld] tap rejected: {session.LastFailureCode}");
                 break;
             }
 
@@ -62,7 +68,17 @@ namespace Gibi.UI
             {
                 var centre = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
                 var status = session.PreviewAt(centre, playerSpeedMps);
+                ring.SetPose(session.CandidatePose);
                 ring.Apply(status, hapticsSupported: SystemInfo.supportsVibration);
+
+                // Log only on CHANGE. Logging every frame at 60 fps drowns logcat and
+                // makes the one line that matters impossible to find.
+                string code = status.CanPlace ? "READY" : status.RejectionCode;
+                if (code != _lastStatusCode)
+                {
+                    _lastStatusCode = code;
+                    Debug.Log($"[GibiWorld] placement: {code} ({status.LocalizationKey})");
+                }
             }
         }
     }

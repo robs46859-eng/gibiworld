@@ -107,7 +107,11 @@ namespace Gibi.Editor
             // NOTE: deliberately NO AudioListener here. Bootstrap owns the only one,
             // and a second would silently degrade spatial audio.
 
-            originGo.AddComponent<ARPlaneManager>();
+            var planeManager = originGo.AddComponent<ARPlaneManager>();
+            // Without a plane prefab, detected planes are INVISIBLE. AR then appears
+            // broken even when tracking is perfect, because the player has no way to see
+            // what the device has found or where it is safe to tap.
+            planeManager.planePrefab = CreatePlaneVisualizerPrefab();
             originGo.AddComponent<ARRaycastManager>();
             originGo.AddComponent<ARAnchorManager>();
 
@@ -139,6 +143,13 @@ namespace Gibi.Editor
             var session = new GameObject("P0Session");
             session.transform.SetParent(originGo.transform);
             session.AddComponent<Gibi.Gameplay.P0SessionDriver>();
+
+            // Section 5.3: the placement ring needs actual geometry to tint. A ring with
+            // no renderer encodes status into nothing at all.
+            var ringGo = new GameObject("PlacementRing");
+            ringGo.transform.SetParent(originGo.transform);
+            var ring = ringGo.AddComponent<Gibi.UI.PlacementRing>();
+            BuildRingMesh(ringGo, ring);
 
             var input = new GameObject("TapToPlace");
             input.transform.SetParent(originGo.transform);
@@ -191,6 +202,70 @@ namespace Gibi.Editor
             effects.transform.SetParent(petRoot.transform);
 
             EditorSceneManager.SaveScene(scene, SceneValidator.PetSandboxScene);
+        }
+    
+        /// <summary>
+        /// A minimal translucent plane visualizer. AR Foundation drives the mesh through
+        /// ARPlaneMeshVisualizer; this only supplies geometry and a material to tint.
+        /// </summary>
+        private static GameObject CreatePlaneVisualizerPrefab()
+        {
+            const string dir = "Assets/Prefabs";
+            const string path = dir + "/ARPlaneVisualizer.prefab";
+            Directory.CreateDirectory(dir);
+
+            var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (existing != null) return existing;
+
+            var go = new GameObject("ARPlaneVisualizer");
+            go.AddComponent<ARPlane>();
+            go.AddComponent<MeshFilter>();
+            go.AddComponent<MeshCollider>();
+            var mr = go.AddComponent<MeshRenderer>();
+            go.AddComponent<ARPlaneMeshVisualizer>();
+
+            var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+            mat.name = "ARPlaneMaterial";
+            SetTransparent(mat, new Color(0.30f, 0.65f, 1f, 0.28f));
+            AssetDatabase.CreateAsset(mat, dir + "/ARPlaneMaterial.mat");
+            mr.sharedMaterial = mat;
+
+            var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
+            Object.DestroyImmediate(go);
+            return prefab;
+        }
+
+        /// <summary>Flat disc the PlacementRing tints per section 5.3.</summary>
+        private static void BuildRingMesh(GameObject parent, Gibi.UI.PlacementRing ring)
+        {
+            var disc = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            disc.name = "RingMesh";
+            disc.transform.SetParent(parent.transform, false);
+            disc.transform.localScale = new Vector3(0.30f, 0.004f, 0.30f);
+            Object.DestroyImmediate(disc.GetComponent<Collider>());
+
+            var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+            mat.name = "PlacementRingMaterial";
+            SetTransparent(mat, new Color(0.2f, 0.75f, 0.35f, 0.75f));
+            disc.GetComponent<MeshRenderer>().sharedMaterial = mat;
+
+            var so = new SerializedObject(ring);
+            var prop = so.FindProperty("ringRenderer");
+            if (prop != null) prop.objectReferenceValue = disc.GetComponent<MeshRenderer>();
+            so.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetTransparent(Material m, Color c)
+        {
+            m.SetFloat("_Surface", 1f);                 // transparent
+            m.SetFloat("_Blend", 0f);                   // alpha
+            m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            m.SetInt("_ZWrite", 0);
+            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            if (m.HasProperty("_BaseColor")) m.SetColor("_BaseColor", c);
+            if (m.HasProperty("_Color")) m.SetColor("_Color", c);
         }
     }
 }
