@@ -31,6 +31,17 @@ namespace Gibi.Gameplay
         public bool PetIsPlaced => _pet != null;
         public string LastFailureCode { get; private set; }
 
+        private void Awake()
+        {
+            // Scenes are generated from code (section 16 reproducibility), so there is no
+            // inspector pass to assign these. Resolve them at runtime instead of relying
+            // on serialised references that a regenerated scene would not carry.
+            if (placement == null) placement = GetComponentInParent<PlacementController>()
+                                             ?? FindAnyObjectByType<PlacementController>();
+            if (petSandboxRoot == null) petSandboxRoot = transform;
+            if (petShader == null) petShader = Shader.Find("Universal Render Pipeline/Lit");
+        }
+
         private async void Start()
         {
             _cts = new CancellationTokenSource();
@@ -45,6 +56,15 @@ namespace Gibi.Gameplay
             if (keys == 0)
                 Debug.LogError("[GibiWorld] No pinned keys — every asset will reject (section 6.4 step 1).");
         }
+
+        /// <summary>
+        /// Evaluate placement WITHOUT committing. Drives the section 5.3 ring so the
+        /// player can see whether a surface is acceptable before they commit to it.
+        /// </summary>
+        public PlacementStatus PreviewAt(Vector2 screenPoint, float playerSpeedMps)
+            => placement != null
+                ? placement.Evaluate(screenPoint, playerSpeedMps)
+                : default;
 
         /// <summary>
         /// Called on tap. Places the pet only if the §5.3 gates pass; a rejected placement

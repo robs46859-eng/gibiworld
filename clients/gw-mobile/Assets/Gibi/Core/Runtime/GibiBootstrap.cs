@@ -8,6 +8,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_ANDROID && !UNITY_EDITOR
+using UnityEngine.Android;
+#endif
 
 namespace Gibi.Core
 {
@@ -54,6 +57,39 @@ namespace Gibi.Core
             Services.Seal();
             IsReady = true;
             Debug.Log("[GibiWorld] Bootstrap complete.");
+        }
+
+        /// <summary>
+        /// Android requires a RUNTIME request; the manifest entry alone grants nothing.
+        /// Waits for the user's answer so ARWorld never starts against a denied camera.
+        /// </summary>
+        private IEnumerator RequestCameraPermission()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            if (Permission.HasUserAuthorizedPermission(Permission.Camera))
+            {
+                Debug.Log("[GibiWorld] Camera permission already granted.");
+                yield break;
+            }
+
+            Debug.Log("[GibiWorld] Requesting camera permission...");
+            Permission.RequestUserPermission(Permission.Camera);
+
+            // The prompt is modal and suspends the app; poll until it is answered rather
+            // than assuming a fixed delay, which races on slower devices.
+            float waited = 0f;
+            while (!Permission.HasUserAuthorizedPermission(Permission.Camera) && waited < 60f)
+            {
+                waited += Time.unscaledDeltaTime;
+                yield return null;
+            }
+
+            Debug.Log(Permission.HasUserAuthorizedPermission(Permission.Camera)
+                ? "[GibiWorld] Camera permission granted."
+                : "[GibiWorld] Camera permission DENIED — AR cannot start.");
+#else
+            yield break;
+#endif
         }
 
         /// <summary>Loads ARWorld additively; Bootstrap stays resident for lifecycle and UI.</summary>

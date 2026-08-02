@@ -125,9 +125,24 @@ namespace Gibi.Editor
             driver.transform.SetParent(originGo.transform);
             driver.AddComponent<Gibi.Spatial.ARSessionDriver>();
 
+            // ARSurfaceProbe is the section 4 adapter seam — the only place outside
+            // Gibi.Spatial that touches AR Foundation raycasting. PlacementController
+            // finds it via GetComponentInParent, so it must live on the XR Origin.
+            originGo.AddComponent<Gibi.Spatial.ARSurfaceProbe>();
+
             var placement = new GameObject("PlacementController");
             placement.transform.SetParent(originGo.transform);
             placement.AddComponent<Gibi.Gameplay.PlacementController>();
+
+            // Without these two the scene renders a camera feed and nothing else — no
+            // pet is ever requested and no tap is ever read.
+            var session = new GameObject("P0Session");
+            session.transform.SetParent(originGo.transform);
+            session.AddComponent<Gibi.Gameplay.P0SessionDriver>();
+
+            var input = new GameObject("TapToPlace");
+            input.transform.SetParent(originGo.transform);
+            input.AddComponent<Gibi.UI.TapToPlace>();
 
             EditorSceneManager.SaveScene(scene, SceneValidator.ARWorldScene);
         }
