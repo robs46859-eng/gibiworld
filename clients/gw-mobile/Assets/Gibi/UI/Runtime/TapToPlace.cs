@@ -94,7 +94,7 @@ namespace Gibi.UI
                 if (code != _lastStatusCode)
                 {
                     _lastStatusCode = code;
-                    Debug.Log($"[GibiWorld] placement: {code} ({status.LocalizationKey})");
+                    Debug.Log($"[GibiWorld] placement: {code} | {session.LastMeasurements}");
                 }
             }
         }

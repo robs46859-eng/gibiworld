@@ -39,6 +39,30 @@ namespace Gibi.Spatial
         public float LastPoseJumpM { get; private set; }
 
         /// <summary>
+        /// ARCore's OWN explanation for why tracking has not established, mapped to a
+        /// localisation key. Section 13.3 requires lighting confidence be part of
+        /// on-device validation, and section 5.3 requires status be communicated -- so a
+        /// dark room must read as coaching, not as a broken app.
+        ///
+        /// These are provider facts we cannot tune away: ARCore needs visual texture and
+        /// contrast, and ordinary indoor evening light is often marginal. Telling the
+        /// player what to change is the only useful response.
+        /// </summary>
+        public string NotTrackingCoachingKey => ARSession.notTrackingReason switch
+        {
+            NotTrackingReason.InsufficientLight    => "coach.more_light",
+            NotTrackingReason.InsufficientFeatures => "coach.point_at_texture",
+            NotTrackingReason.ExcessiveMotion      => "coach.move_slower",
+            NotTrackingReason.Relocalizing         => "coach.relocalizing",
+            NotTrackingReason.Initializing         => "coach.initializing",
+            NotTrackingReason.CameraUnavailable    => "coach.camera_unavailable",
+            _ => null
+        };
+
+        /// <summary>Raw reason, for diagnostics only — never shown to a player.</summary>
+        public NotTrackingReason RawNotTrackingReason => ARSession.notTrackingReason;
+
+        /// <summary>
         /// The tracked anchor this session is scoring against. Null means local play.
         /// Assigned when a VPS site anchor is resolved.
         /// </summary>

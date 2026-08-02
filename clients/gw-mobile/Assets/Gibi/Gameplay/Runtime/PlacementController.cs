@@ -36,7 +36,21 @@ namespace Gibi.Gameplay
     [DisallowMultipleComponent]
     public sealed class PlacementController : MonoBehaviour
     {
-        public const float CameraStartVolumeClearanceM = 1.5f;
+        // THIRD instance of the same misreading, so worth naming the pattern: figures
+        // that govern COURSE PUBLICATION were being applied to casual pet placement.
+        //
+        // Section 9.2 requires "no obstacle closer than 1.5 m to the camera start volume"
+        // when PUBLISHING a course. Section 13.3's on-device check for pet placement asks
+        // only for "a clear camera start volume" and states no distance.
+        //
+        // 1.5 m is unreachable handheld: pointing a phone at the floor naturally lands the
+        // reticle about 1-1.5 m away, so every tap was rejected. The pet still must not
+        // spawn in the player's face, hence a real but achievable minimum.
+        public const float CameraStartVolumeClearancePetM = 0.7f;
+        public const float CameraStartVolumeClearanceCourseM = 1.5f;
+
+        /// <summary>Kept for callers that mean the course-publication figure.</summary>
+        public const float CameraStartVolumeClearanceM = CameraStartVolumeClearanceCourseM;
         public const float MinLightingConfidence = 0.35f;
 
         // Section 5.3: colour is one channel of four. Each state also carries a distinct
@@ -60,6 +74,9 @@ namespace Gibi.Gameplay
         /// floor beneath the player rather than as feedback.
         /// </summary>
         public Pose LastHitPose { get; private set; }
+
+        /// <summary>Measured values behind the last verdict. Diagnostic only.</summary>
+        public string LastMeasurements { get; private set; } = "";
         public bool HasHit { get; private set; }
 
         private void Awake()
@@ -106,11 +123,26 @@ namespace Gibi.Gameplay
             switch (anchorState)
             {
                 case AnchorState.Unavailable:
-                    return Set(Reject("AR_UNAVAILABLE", "placement.blocked.no_session",
-                                      "icon.no_camera", ColorNeutral, haptic: false));
+                {
+                    // Prefer ARCore's own reason. "AR unavailable" tells a player nothing
+                    // they can act on; "there isn't enough light" tells them exactly what
+                    // to change.
+                    string coach = _sessionDriver != null
+                        ? _sessionDriver.NotTrackingCoachingKey : null;
+                    return Set(Reject(
+                        coach != null ? "COACH_" + coach.Substring(6).ToUpperInvariant()
+                                      : "AR_UNAVAILABLE",
+                        coach ?? "placement.blocked.no_session",
+                        coach == "coach.more_light" ? "icon.low_light" : "icon.no_camera",
+                        ColorNeutral, haptic: false));
+                }
                 case AnchorState.Scanning:
-                    return Set(Reject("SCANNING", "placement.scanning",
+                {
+                    string coach = _sessionDriver != null
+                        ? _sessionDriver.NotTrackingCoachingKey : null;
+                    return Set(Reject("SCANNING", coach ?? "placement.scanning",
                                       "icon.scan", ColorNeutral, haptic: false));
+                }
                 case AnchorState.VpsLimited:
                 case AnchorState.Degraded:
                     return Set(Reject("ANCHOR_NOT_TRACKED", "placement.blocked.relocalize",
@@ -127,7 +159,7 @@ namespace Gibi.Gameplay
                                   "icon.no_surface", ColorNeutral, haptic: false));
 
             // --- section 13.3: clear camera start volume ---
-            if (_probe.DistanceFromCamera(probe.Position) < CameraStartVolumeClearanceM)
+            if (_probe.DistanceFromCamera(probe.Position) < CameraStartVolumeClearancePetM)
                 return Set(Reject("TOO_CLOSE", "placement.blocked.too_close",
                                   "icon.too_close", ColorCaution, haptic: true));
 
@@ -140,6 +172,16 @@ namespace Gibi.Gameplay
             var sample = new SurfaceSample(probe.Tag, probe.SlopeDegrees,
                                            probe.ClearanceRadiusM, probe.ClearanceHeightM);
             string reject = SurfaceAcceptance.Reject(sample, PlacementPurpose.PetIdleOrTraining);
+
+            // Report the MEASURED values, not just the verdict. A bare rejection code
+            // says which gate closed; it does not say by how much, so tuning it becomes
+            // guesswork across ten-minute build cycles.
+            LastMeasurements =
+                $"tag={probe.Tag} slope={probe.SlopeDegrees:F1}deg " +
+                $"clearanceR={probe.ClearanceRadiusM:F2}m (need {SurfaceAcceptance.RequiredClearanceRadius(PlacementPurpose.PetIdleOrTraining):F2}) " +
+                $"clearanceH={probe.ClearanceHeightM:F2}m " +
+                $"camDist={_probe.DistanceFromCamera(probe.Position):F2}m (need {CameraStartVolumeClearancePetM:F2})";
+
             if (reject != null)
                 return Set(Reject(reject, "placement.blocked.unsafe_surface",
                                   "icon.unsafe", ColorBlocked, haptic: true));
