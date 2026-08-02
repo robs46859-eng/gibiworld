@@ -12,7 +12,10 @@
     "Gibi.Telemetry",
     "Gibi.UI",
     "Unity.XR.ARFoundation",
-    "Unity.XR.CoreUtils"
+    "Unity.XR.CoreUtils",
+    "Unity.RenderPipelines.Universal.Runtime",
+    "Unity.RenderPipelines.Universal.Editor",
+    "Unity.RenderPipelines.Core.Runtime"
   ],
   "includePlatforms": [
     "Editor"
