@@ -46,19 +46,27 @@ namespace Gibi.UI
             // leaving it at 0 means the passenger-safe gate cannot trip on device.
             const float playerSpeedMps = 0f;
 
-            Vector2 point;
+            // The RETICLE is the aim; the tap only confirms it.
+            //
+            // Placing at the raw touch point looks reasonable and is wrong: the player
+            // sees a green ring at screen centre, taps it, and the pet is placed wherever
+            // their finger landed instead — typically low on the screen, which aims at the
+            // floor by their feet and trips section 13.3's 1.5 m camera clearance. The ring
+            // then reads as a liar. Centre-reticle plus confirm is the standard AR
+            // placement idiom for exactly this reason.
+            var reticle = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
             bool tapped = false;
 
             foreach (var touch in Touch.activeTouches)
             {
                 if (touch.phase != UnityEngine.InputSystem.TouchPhase.Began) continue;
-                point = touch.screenPosition;
                 tapped = true;
-                Debug.Log($"[GibiWorld] tap at {point}");
-                bool placed = await session.TryPlaceAt(point, playerSpeedMps);
+                Debug.Log($"[GibiWorld] tap confirmed at reticle {reticle} " +
+                          $"(finger was at {touch.screenPosition})");
+                bool placed = await session.TryPlaceAt(reticle, playerSpeedMps);
                 Debug.Log(placed
                     ? "[GibiWorld] PET PLACED"
-                    : $"[GibiWorld] tap rejected: {session.LastFailureCode}");
+                    : $"[GibiWorld] placement rejected: {session.LastFailureCode}");
                 break;
             }
 
@@ -66,8 +74,7 @@ namespace Gibi.UI
             // tap -- section 5.3 requires the status be visible before committing.
             if (!tapped && ring != null)
             {
-                var centre = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-                var status = session.PreviewAt(centre, playerSpeedMps);
+                var status = session.PreviewAt(reticle, playerSpeedMps);
                 ring.SetPose(session.CandidatePose);
                 ring.Apply(status, hapticsSupported: SystemInfo.supportsVibration);
 
