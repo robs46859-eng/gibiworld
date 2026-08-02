@@ -129,6 +129,42 @@ jobs:
             echo "applying $f"
             psql -h localhost -U postgres -d gibiworld -v ON_ERROR_STOP=1 -f "$f"
           done
+      - name: Under-13 cannot be ACTIVE without consent (section 0)
+        env: { PGPASSWORD: ci }
+        run: |
+          # The trigger must REFUSE this insert. If it succeeds, the age gate is broken
+          # and no under-13 protection exists at the storage layer.
+          if psql -h localhost -U postgres -d gibiworld -v ON_ERROR_STOP=1 -c "
+            INSERT INTO users (user_id, auth_subject, birth_band, status)
+            VALUES ('user_01J8ZQK5T7VN2MXR4WD6GHYAB3','test-subject','UNDER_13','ACTIVE');
+          " 2>/dev/null; then
+            echo "::error::Section 0 VIOLATED — an under-13 account activated without consent."
+            exit 1
+          fi
+          echo "under-13 activation correctly refused without consent."
+
+      - name: Withdrawing consent disables the account (ADR-010)
+        env: { PGPASSWORD: ci }
+        run: |
+          psql -h localhost -U postgres -d gibiworld -v ON_ERROR_STOP=1 -c "
+            INSERT INTO users (user_id, auth_subject, birth_band, status)
+            VALUES ('user_01J8ZQK5T7VN2MXR4WD6GHYAB4','s2','UNDER_13','DISABLED');
+            INSERT INTO guardian_consents (consent_id, child_user_id, guardian_contact,
+                                           status, method, document_version, granted_at)
+            VALUES ('cons_01J8ZQK5T7VN2MXR4WD6GHYAB5','user_01J8ZQK5T7VN2MXR4WD6GHYAB4',
+                    'g@example.test','GRANTED','CARD_MICROTRANSACTION','consent-v0.1-draft', now());
+            UPDATE users SET status='ACTIVE' WHERE user_id='user_01J8ZQK5T7VN2MXR4WD6GHYAB4';
+            UPDATE guardian_consents SET status='WITHDRAWN', withdrawn_at=now()
+             WHERE consent_id='cons_01J8ZQK5T7VN2MXR4WD6GHYAB5';
+          "
+          RES=$(psql -h localhost -U postgres -d gibiworld -tAc "
+            SELECT status FROM users WHERE user_id='user_01J8ZQK5T7VN2MXR4WD6GHYAB4';")
+          if [ "$RES" != "DISABLED" ]; then
+            echo "::error::Consent withdrawal did not disable the account (got '$RES')."
+            exit 1
+          fi
+          echo "consent withdrawal correctly disabled the account."
+
       - name: Course versions are immutable (GW-GAME-007)
         env: { PGPASSWORD: ci }
         run: |

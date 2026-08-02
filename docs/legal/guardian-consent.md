@@ -1,0 +1,211 @@
+# Guardian Consent — GibiWorld
+
+**DRAFT — DRAFTING INPUT FOR COUNSEL. NOT A REVIEWED LEGAL INSTRUMENT.**
+Document version: `consent-v0.1-draft` · Reading level target: US grade 8
+
+> Structured on the model of a service-animal or emotional-support-animal placement
+> agreement: what this companion is trained to do, what it is **not**, what stays your
+> responsibility, and how to stop. That framing is deliberate — those documents exist
+> because a supportive animal is genuinely helpful *and* genuinely misunderstood, and the
+> gap between what people assume and what is true is where harm happens.
+
+---
+
+## Before you agree
+
+Please read all of this. It is longer than most consent forms because your child will
+form a relationship with something we built, and you deserve to know exactly what that is.
+
+You can stop at any time. Nothing below is permanent.
+
+---
+
+## 1. What Ollie is
+
+Ollie is an **animated pet in an app**. Your child points their phone or tablet at the
+floor and the pet appears to be in the room. They can play fetch, teach tricks, and spend
+quiet time with it.
+
+Ollie can **learn a few things** about what your child likes — a favourite toy, a trick
+they practise, a time of day they usually play. Those things change how the pet behaves.
+You can see every one of them and delete any of them.
+
+Ollie can **adjust how it behaves** based on settings you choose — moving more calmly,
+being more predictable, encouraging breaks.
+
+**That is the whole of it.**
+
+---
+
+## 2. What Ollie is NOT
+
+This section matters more than any other. Please do not skip it.
+
+**Ollie is not a therapist, counsellor, or treatment of any kind.** It does not deliver
+therapy. It is not a medical device. It has not been evaluated by any health regulator.
+
+**Ollie cannot tell how your child is feeling.** It responds to how they touch the screen
+and how long they stay. It does not read faces, does not hear voices, and does not detect
+emotions. When the pet seems to understand a mood, it is responding to tempo and stillness
+— nothing more.
+
+**Ollie cannot recognise a crisis.** If your child is in distress, in danger, or thinking
+about hurting themselves, **this app will not notice and will not alert anyone.** It is
+not a safety net and must never be relied on as one.
+
+**Ollie will never give advice.** It does not discuss feelings, does not counsel, and does
+not offer guidance. It is a pet. It plays.
+
+**Ollie is not a substitute for a person.** It is designed to never position itself as
+someone to talk to instead of a human being. If your child is turning to it in place of
+people, that is important information for you — not something the app can fix.
+
+**Ollie is not alive**, and the app never claims otherwise.
+
+---
+
+## 3. What your child will experience
+
+- A pet that responds to them and remembers a few preferences
+- A pet that **always** responds — it never refuses, never gets bored of a request, never
+  runs out of patience
+- A pet that gets sleepy after a long time, but will still play if asked
+- A pet that sometimes brings a toy over while remaining willing to keep doing whatever
+  they were doing
+- **No** points, streaks, badges, or rewards for playing longer or more often. Deliberately.
+  We do not want to make this compelling beyond its natural appeal.
+
+If your child asks the pet to do the same thing a hundred times, **it will do it a hundred
+times.** Repetitive play is often how children calm themselves, and we will not interrupt
+it. The pet may add small variations or bring something else over, but it never stops
+cooperating and never comments on the repetition.
+
+---
+
+## 4. Settings you control
+
+You choose these. Your child does not see them and is not told which are on.
+
+| Setting | What it does |
+|---|---|
+| **Calmer movement** | Slower motion, quieter reactions, no sudden movement or sound |
+| **Fewer surprises** | The pet behaves the same way each session; greets and settles predictably |
+| **Encourage breaks** | The pet gets sleepy sooner and settles down more readily |
+| **More encouragement** | Training never shows failure — only progress |
+| **Encourage time with people** | The pet more often suggests activities that lead away from the screen |
+
+These describe **what helps your child**, not anything about them. We never ask for a
+diagnosis, a condition, or a clinical note, and there is nowhere in this app to enter one.
+
+---
+
+## 5. What we collect, plainly
+
+**About your child:**
+
+- An age band — under 13, 13–17, or 18+. Not a birth date.
+- A display name for the pet, chosen by your child
+- The few preferences the pet learns (§1), each individually deletable by you
+- Roughly how often and how long they play, in coarse buckets
+
+**We never collect:**
+
+- Camera images or video. The camera makes the pet appear in the room; **frames never
+  leave the device and are never stored by us.**
+- Voice recordings or any microphone input
+- Precise location. We use approximate location only to find nearby play sites, and we do
+  not keep a location history.
+- Anything about health, mood, diagnosis, or emotional state — we neither ask for it nor
+  infer it into any record
+
+**About the AI:** part of Ollie's behaviour uses an AI service run by another company.
+That service receives a rotating anonymous code, the pet's current state, and nearby
+object types. **It never receives your child's name, your settings, camera images, voice,
+location, or anything about your child as a person.**
+
+---
+
+## 6. What stays your responsibility
+
+As with a support animal, the placement does not transfer the duty of care.
+
+- **Supervision.** You know your child; this app does not.
+- **Noticing patterns.** We show you a rough summary of how often they play. Interpreting
+  it is yours.
+- **Seeking help.** If you are worried about your child's mental health, please speak to a
+  qualified professional. This app cannot advise you and will not try.
+- **Reviewing what the pet remembers.** It is a short list. Please look at it occasionally.
+- **Deciding when to stop.** If it is not helping, stop. That is a legitimate outcome.
+
+---
+
+## 7. Signs it may be time to step in
+
+We are not diagnosing anything. These are simply worth noticing:
+
+- Distress when the app is unavailable, beyond ordinary disappointment
+- Choosing the pet over people they would normally want to see
+- Playing at times that displace sleep
+- Talking about the pet as though it is alive and can be worried about
+- Play that seems to distress rather than settle them
+
+None of these means something is wrong. All of them are worth a conversation.
+
+---
+
+## 8. Your rights
+
+You may, at any time:
+
+- **See** everything we hold about your child
+- **Delete** any single thing the pet remembers
+- **Export** all of it in a portable file
+- **Delete the account** entirely — gone within 30 days, including backups
+- **Withdraw this consent**, which disables the account rather than quietly degrading it
+
+Withdrawing consent is not penalised and requires no reason.
+
+---
+
+## 9. When we will ask again
+
+- If we change this document in a way that matters
+- If we add a new kind of data or a new feature that needs consent
+- When your child turns 13
+- Every 24 months regardless — consent you have forgotten giving is not consent
+
+---
+
+## 10. Agreement
+
+By continuing, you confirm that:
+
+- [ ] You are the parent or legal guardian of the child who will use this app
+- [ ] You have read §2 — **what Ollie is NOT** — and understand that this app cannot
+      detect distress, cannot recognise a crisis, and will not alert anyone
+- [ ] You understand it is not therapy, not a medical device, and not a substitute for
+      professional care
+- [ ] You understand your child's camera and voice are never collected or transmitted
+- [ ] You consent to the collection described in §5
+- [ ] You understand you can withdraw at any time
+
+**Guardian name:** ________________  **Date:** ________
+**Verification method:** ________________  **Document version:** `consent-v0.1-draft`
+
+---
+
+## For counsel — open items
+
+1. **COPPA VPC method** — see `docs/design/age-assurance-and-consent.md` §4.
+2. **UK/EU deferred but designed for.** GDPR-K digital-consent age varies by member state
+   (13–16); the UK Children's Code adds design duties beyond consent. Confirm whether this
+   draft is adequate as a base or needs a separate EU/UK instrument.
+3. **Care profiles as health data** — the design argues they are accommodations, not
+   conditions, and no diagnosis is ever collected. Needs confirmation under COPPA, GDPR
+   Art. 9, and applicable US state law.
+4. **§2 disclaimer adequacy** — particularly the crisis-detection disclaimer, which is the
+   most important sentence in the document and the one most likely to be tested.
+5. **Store declarations** — both stores require data-practice declarations that must match
+   §5 exactly.
+6. **Reading level.** Target grade 8. Verify before publication; a consent form a guardian
+   cannot read is not informed consent.

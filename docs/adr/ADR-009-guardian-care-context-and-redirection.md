@@ -1,6 +1,7 @@
 # ADR-009: Guardian care context and positive redirection
 
-- **Status:** PROPOSED — requires a §8 amendment, clinical review, and legal confirmation
+- **Status:** PROPOSED — requires a §8 amendment and legal confirmation
+- **Clinical authority:** Robert Smith (trained in child psychology); thresholds are his to set
 - **Date:** 2026-08-01
 - **Design:** `docs/design/pet-brain-and-care-context.md`
 
@@ -75,8 +76,10 @@ incident.
 
 ## Open questions blocking ACCEPTED status
 
-1. **Clinical review by a child psychologist.** Non-negotiable. The thresholds in the
-   design document are engineering guesses.
+1. ~~**Clinical review by a child psychologist.**~~ **RESOLVED 2026-08-01.** Robert is
+   trained in child psychology and owns the guardrails. The thresholds in the design
+   document are engineering placeholders and are his to set; treat every numeric
+   threshold in section 4, 6, and 6a as provisional until he replaces it.
 2. **Whether care profiles constitute health data** under COPPA / GDPR-K. The design
    argues not, because they encode accommodations rather than conditions. That needs legal
    confirmation, not an architect's opinion.
