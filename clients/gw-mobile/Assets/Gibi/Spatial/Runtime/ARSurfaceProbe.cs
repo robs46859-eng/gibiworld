@@ -83,17 +83,28 @@ namespace Gibi.Spatial
         {
             if (plane == null) return SemanticTag.Unknown;
 
-            return plane.classifications switch
-            {
-                var c when (c & PlaneClassifications.Floor) != 0   => SemanticTag.Floor,
-                var c when (c & PlaneClassifications.Table) != 0   => SemanticTag.Unknown,
-                var c when (c & PlaneClassifications.Seat) != 0    => SemanticTag.Unknown,
-                var c when (c & PlaneClassifications.WallFace) != 0=> SemanticTag.Unknown,
-                var c when (c & PlaneClassifications.Ceiling) != 0 => SemanticTag.Unknown,
-                _ => plane.alignment == PlaneAlignment.HorizontalUp
-                        ? SemanticTag.Ground
-                        : SemanticTag.Unknown
-            };
+            // Section 5.3 names the hazard set exactly: "sky, person, vehicle, water,
+            // road, rail, and unknown hazard regions". TABLE AND SEAT ARE NOT ON IT.
+            //
+            // Mapping them to Unknown made them hazards via the fail-closed rule, and
+            // ARCore routinely classifies ordinary floor patches as Table -- so a correct
+            // floor was being rejected as dangerous. Being stricter than the spec is still
+            // being wrong about the spec.
+            //
+            // Vertical surfaces stay Unknown, but they are already excluded by the
+            // HorizontalUp alignment check, so that costs nothing.
+            if ((plane.classifications & PlaneClassifications.Floor) != 0)
+                return SemanticTag.Floor;
+
+            if ((plane.classifications & (PlaneClassifications.WallFace |
+                                          PlaneClassifications.Ceiling)) != 0)
+                return SemanticTag.Unknown;
+
+            // Table, Seat, Other, or unclassified: placeable if it is a floor-facing
+            // horizontal surface. Section 5.3's allowlist includes "indoor".
+            return plane.alignment == PlaneAlignment.HorizontalUp
+                ? SemanticTag.Indoor
+                : SemanticTag.Unknown;
         }
     }
 }
