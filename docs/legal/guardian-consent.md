@@ -49,9 +49,9 @@ and how long they stay. It does not read faces, does not hear voices, and does n
 emotions. When the pet seems to understand a mood, it is responding to tempo and stillness
 — nothing more.
 
-**Ollie cannot recognise a crisis.** If your child is in distress, in danger, or thinking
-about hurting themselves, **this app will not notice and will not alert anyone.** It is
-not a safety net and must never be relied on as one.
+**GibiWorld is a gaming app for all ages.** This app cannot create emergency alerts or
+provide crisis-intervention. GibiWorld is indemnified from responsibility in any uses
+outside of the creator's intended use of this app.
 
 **Ollie will never give advice.** It does not discuss feelings, does not counsel, and does
 not offer guidance. It is a pet. It plays.
@@ -190,7 +190,7 @@ By continuing, you confirm that:
 
 - [ ] You are the parent or legal guardian of the child who will use this app
 - [ ] You have read §2 — **what Ollie is NOT** — and understand that this app cannot
-      detect distress, cannot recognise a crisis, and will not alert anyone
+      create emergency alerts or provide crisis-intervention
 - [ ] You understand it is not therapy, not a medical device, and not a substitute for
       professional care
 - [ ] You understand your child's camera and voice are never collected or transmitted
@@ -223,6 +223,41 @@ The legitimate underlying need — that a guardian stays involved and seeks prof
 if worried — is met by §6 (*What stays your responsibility*) and §7 (*Getting the most out
 of it*), without either implying a capability we do not have or priming a guardian to look
 for pathology.
+
+---
+
+## For counsel — priority flag on §2 wording
+
+The final sentence of §2 currently reads:
+
+> "GibiWorld is indemnified from responsibility in any uses outside of the creator's
+> intended use of this app."
+
+**Two problems, raised for review rather than silently corrected.**
+
+**1. Terminology.** *Indemnification* means one party compensates another for a loss. A
+company is not "indemnified from responsibility" by its own document. The concepts
+intended here are probably **disclaimer of warranty**, **limitation of liability**, and
+possibly a **user indemnity running toward** GibiWorld. Those are three separate clauses
+with different drafting and different enforceability, and they normally live in the Terms
+of Service rather than a consent form.
+
+**2. Function and enforceability.** The sentence it replaced was a *safety statement to
+the guardian*; this one is a *liability position for the company*. That changes what §2 is
+for. Specific concerns:
+
+- Pre-injury liability waivers signed by a parent **on behalf of a minor** are void or
+  heavily restricted in many US states.
+- A liability disclaimer sitting inside a consent form may weaken the form's standing as
+  informed consent, because a regulator assessing whether disclosure was clear and in the
+  consumer's interest will notice the shift in purpose.
+- Placement matters: consent forms and liability terms are usually separate instruments
+  precisely so that one does not contaminate the other.
+
+**What is preserved either way:** the capability disclosure survives in the preceding
+sentence — the app "cannot create emergency alerts or provide crisis-intervention." That
+is the statement that must remain accurate and prominent regardless of how the liability
+language is resolved.
 
 ---
 

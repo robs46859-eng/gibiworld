@@ -3,7 +3,9 @@
   "rootNamespace": "Gibi.AssetRuntime",
   "references": [
     "Gibi.Core",
-    "GLTFast"
+    "glTFast",
+    "Unity.Collections",
+    "Unity.Mathematics"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

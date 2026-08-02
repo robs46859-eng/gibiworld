@@ -24,7 +24,7 @@ NAMESPACE_ASSEMBLY = {
     "UnityEngine.XR.ARFoundation": ("Unity.XR.ARFoundation", "Gibi.Spatial"),
     "UnityEngine.XR.ARSubsystems": ("Unity.XR.ARSubsystems", "Gibi.Spatial"),
     "Unity.XR.CoreUtils":          ("Unity.XR.CoreUtils",    "Gibi.Spatial"),
-    "GLTFast":                     ("GLTFast",               "Gibi.AssetRuntime"),
+    "GLTFast":                     ("glTFast",               "Gibi.AssetRuntime"),
     "UnityEngine.Animations.Rigging": ("Unity.Animation.Rigging", "Gibi.Pets"),
     "UnityEngine.InputSystem":     ("Unity.InputSystem",     "Gibi.UI"),
 }
