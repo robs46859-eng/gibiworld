@@ -47,12 +47,40 @@ namespace Gibi.Tests.EditMode
         }
 
         [Test]
-        public void Care_context_needs_consent_for_teens_too_not_just_under_13()
+        public void Teens_need_no_guardian_consent_for_base_play()
         {
-            Assert.IsFalse(AgeAssurance.MayEnableCareContext(BirthBand.Teen13To17, ConsentStatus.None),
-                "A guardian observing a 16-year-old's play rhythm still requires consent.");
-            Assert.IsTrue(AgeAssurance.MayEnableCareContext(BirthBand.Teen13To17, ConsentStatus.Granted));
-            Assert.IsTrue(AgeAssurance.MayEnableCareContext(BirthBand.Adult18Plus, ConsentStatus.None));
+            // COPPA reaches under-13 only. A 13-17 account plays without any guardian.
+            Assert.IsTrue(AgeAssurance.MayActivate(BirthBand.Teen13To17, ConsentStatus.None));
+        }
+
+        [Test]
+        public void Teen_care_context_gates_on_the_teen_knowing_not_on_guardian_consent()
+        {
+            // The concern is transparency to the minor, not ceremony from the adult:
+            // requiring a guardian to consent to their own settings is circular.
+            Assert.IsFalse(AgeAssurance.MayEnableCareContext(
+                BirthBand.Teen13To17, ConsentStatus.None, guardianLinkAcknowledgedByTeen: false),
+                "A teen must know an adult can see their play rhythm.");
+
+            Assert.IsTrue(AgeAssurance.MayEnableCareContext(
+                BirthBand.Teen13To17, ConsentStatus.None, guardianLinkAcknowledgedByTeen: true),
+                "Acknowledged link is sufficient — no consent artifact required.");
+        }
+
+        [Test]
+        public void Under_13_care_context_still_requires_verifiable_consent()
+        {
+            Assert.IsFalse(AgeAssurance.MayEnableCareContext(
+                BirthBand.Under13, ConsentStatus.None, guardianLinkAcknowledgedByTeen: true));
+            Assert.IsTrue(AgeAssurance.MayEnableCareContext(
+                BirthBand.Under13, ConsentStatus.Granted, guardianLinkAcknowledgedByTeen: true));
+        }
+
+        [Test]
+        public void Adults_need_nothing()
+        {
+            Assert.IsTrue(AgeAssurance.MayEnableCareContext(
+                BirthBand.Adult18Plus, ConsentStatus.None, guardianLinkAcknowledgedByTeen: false));
         }
 
         [Test]

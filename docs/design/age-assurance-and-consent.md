@@ -34,13 +34,29 @@ controls, child privacy review, and store declarations." This design is that wor
 | Tier | Who | Requirement |
 |---|---|---|
 | **A — Adult** | 18+ | Self-declared date of birth. Full features. |
-| **B — Teen** | 13–17 | Self-declared DOB **plus** guardian consent for the care-context features. Base play needs no consent. |
+| **B — Teen** | 13–17 | Self-declared DOB. **No guardian consent at all.** Care-context features require an acknowledged guardian link — see below. |
 | **C — Child** | Under 13 | **Verifiable** guardian consent before any account exists. No account, no play. |
 
-**Care-context features (ADR-009) require guardian consent at every tier below 18.** A
-16-year-old can play without a guardian; a guardian must consent before behavioural
-accommodations and rhythm summaries are enabled, because those involve an adult observing
-a minor.
+### Teens do not need guardian consent
+
+COPPA reaches **under-13 only**; the federal threshold remains 13. The US state laws that
+require parental consent for minors (UT, TX, LA, AR, FL) target **social media accounts**,
+which GibiWorld is not. So a 13–17 account plays with no guardian involved.
+
+**Care context is gated on the teen knowing, not on the guardian consenting.**
+
+An earlier draft required guardian consent here. That was circular: it asked a guardian to
+consent to their own configuration of their own teen's settings, which is ceremony rather
+than protection. The substantive concern is different — a 15-year-old should not have an
+adult watching their play rhythm **without being aware of it**.
+
+So for a teen, care context requires an **acknowledged guardian link**: a guardian is
+linked to the account, and the teen has been shown, in plain language, exactly what that
+guardian can see. Transparency to the minor replaces consent from the adult. If no
+guardian is linked — the common case for a teen who set the account up themselves — the
+features simply do not appear.
+
+Under-13 is unchanged: verifiable consent, because the account itself cannot exist without it.
 
 ---
 

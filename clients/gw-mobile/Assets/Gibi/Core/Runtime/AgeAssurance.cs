@@ -57,12 +57,29 @@ namespace Gibi.Core
             };
 
         /// <summary>
-        /// Care-context features (ADR-009) require guardian consent for ANY minor, not
-        /// just under-13: they involve an adult observing a minor's play rhythm, which
-        /// warrants consent at 16 as much as at 11.
+        /// Care-context features (ADR-009).
+        ///
+        /// For 13-17 the gate is NOT guardian consent. Requiring a guardian to consent to
+        /// their own configuration of their own teen's settings is circular ceremony, and
+        /// COPPA does not reach 13-17 (the US state laws that do target social media
+        /// accounts, which this is not).
+        ///
+        /// The substantive concern is whether the TEEN KNOWS an adult can see their play
+        /// rhythm. So the gate for a teen is an ACKNOWLEDGED GUARDIAN LINK: a guardian must
+        /// be linked, and the teen must have been shown what that guardian can see.
+        /// Transparency to the minor, not consent from the adult.
+        ///
+        /// Under-13 is unchanged: verifiable consent, because the account itself requires it.
         /// </summary>
-        public static bool MayEnableCareContext(BirthBand band, ConsentStatus consent)
-            => band == BirthBand.Adult18Plus || consent == ConsentStatus.Granted;
+        public static bool MayEnableCareContext(BirthBand band, ConsentStatus consent,
+                                                bool guardianLinkAcknowledgedByTeen)
+            => band switch
+            {
+                BirthBand.Adult18Plus => true,
+                BirthBand.Teen13To17  => guardianLinkAcknowledgedByTeen,
+                BirthBand.Under13     => consent == ConsentStatus.Granted,
+                _                     => false   // fails closed
+            };
 
         /// <summary>Consent is re-sought when stale; forgotten consent is not consent.</summary>
         public const int ConsentValidityMonths = 24;

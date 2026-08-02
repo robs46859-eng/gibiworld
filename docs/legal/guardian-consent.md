@@ -139,19 +139,20 @@ As with a support animal, the placement does not transfer the duty of care.
 
 ---
 
-## 7. Signs it may be time to step in
+## 7. Getting the most out of it
 
-We are not diagnosing anything. These are simply worth noticing:
+Ollie works best when it is part of your child's world rather than a separate one.
 
-- Distress when the app is unavailable, beyond ordinary disappointment
-- Choosing the pet over people they would normally want to see
-- Playing at times that displace sleep
-- Talking about the pet as though it is alive and can be worried about
-- Play that seems to distress rather than settle them
+- **Play together sometimes.** Teaching the pet a trick is more fun with two people, and
+  it tells you more about how your child is enjoying it than any summary we could show you.
+- **Ask about the pet.** What it likes, what they have taught it, what it did today.
+- **Look at what it remembers together.** The list is short and it is in your settings.
+  Deleting something can be a nice moment rather than a correction — your child chooses
+  what their pet knows about them.
+- **Take it outside.** The pet works best with room to move.
 
-None of these means something is wrong. All of them are worth a conversation.
-
----
+If you are ever unsure whether this is a good fit for your child, trust your read of your
+own child over anything this app shows you. You know them; it does not.
 
 ## 8. Your rights
 
@@ -191,6 +192,30 @@ By continuing, you confirm that:
 
 **Guardian name:** ________________  **Date:** ________
 **Verification method:** ________________  **Document version:** `consent-v0.1-draft`
+
+---
+
+## Deliberately absent — do not reinstate
+
+An earlier draft carried a section headed *"Signs it may be time to step in"*, listing
+behaviours a guardian should watch for. It was removed on clinical advice and should not
+come back. Two independent reasons:
+
+**Clinical.** A symptom checklist in a consent form puts a guardian into surveillance
+posture toward their own child before the app is ever opened, and guardian anxiety
+transfers to the child. Several items were also simply wrong — a child talking about a pet
+as though it were alive is what children do with stuffed animals, not a warning sign.
+
+**Legal.** Publishing a watchlist invites the reading that we hold ourselves out as able to
+recognise those signs, and that a guardian may rely on us to surface them. §2 says the
+opposite in the strongest terms available: this app cannot recognise distress or a crisis
+and will not alert anyone. A watchlist undercuts the single most important disclaimer in
+the document.
+
+The legitimate underlying need — that a guardian stays involved and seeks professional help
+if worried — is met by §6 (*What stays your responsibility*) and §7 (*Getting the most out
+of it*), without either implying a capability we do not have or priming a guardian to look
+for pathology.
 
 ---
 

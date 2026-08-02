@@ -23,8 +23,15 @@ App stores also enforce data declarations independently of law.
 **2. Three tiers.** Adult 18+ (self-declared DOB); Teen 13–17 (DOB, plus guardian consent
 for care-context features); Child under-13 (verifiable consent before an account exists).
 
-**3. Care-context consent is required for ALL minors**, not just under-13. A guardian
-observing a 16-year-old's play rhythm warrants consent as much as at 11.
+**3. Teens (13–17) require NO guardian consent.** COPPA reaches under-13 only, and the US
+state laws that reach teens target social media accounts, which this is not.
+
+Care context for a teen is gated on an **acknowledged guardian link**, not consent. An
+earlier draft of this ADR required guardian consent and was wrong twice over: it exceeded
+any legal requirement, and it was circular — asking a guardian to consent to their own
+configuration of their own teen's settings. The real concern is that the teen **knows** an
+adult can see their play rhythm, which transparency addresses and a consent artifact does
+not. Under-13 is unchanged.
 
 **4. Neutral age screen.** A date field, never "are you over 13?" A binary question with a
 visible consequence teaches a child which answer unlocks the app. Store the **band**, never
@@ -58,6 +65,8 @@ has been actively misled by our silence.
   migration 0001's CHECK-based age gate with a cross-table trigger.
 - `Gibi.Core.AgeAssurance` mirrors the rule client-side so the UI never offers a path the
   server refuses. Unknown age **fails closed**.
+- `MayEnableCareContext` takes `guardianLinkAcknowledgedByTeen` rather than treating
+  consent as the teen gate.
 - Six new EditMode tests, mostly negative assertions — the failure mode is the system
   *allowing* something it must not.
 - Two new CI gates asserting the database refuses an unconsented under-13 activation and
@@ -71,7 +80,12 @@ has been actively misled by our silence.
    lowest friction at acceptable privacy cost, no biometrics, processor absorbs the
    sensitive data. Robert's decision.
 2. **UK/EU.** Deferred but designed for. GDPR-K digital-consent age varies 13–16 by member
-   state; the UK Children's Code adds design duties beyond consent.
+   state, so the teen position above would need revisiting before an EU launch.
+6. **Shared sessions and state social-media laws.** §12 allows up to 8 players in a shared
+   AR room with preset emotes and no voice. The UT/TX/LA/AR/FL statutes target social
+   media; confirm §12 does not bring GibiWorld within their definitions.
+7. **South Carolina AADC** (effective Feb 2026) imposes design duties for services likely
+   to be accessed by minors — duties, not consent. Confirm applicability.
 3. **Care profiles as health data** under COPPA, GDPR Art. 9, and US state law. The design
    argues accommodations are not conditions and no diagnosis is ever collected.
 4. **Adequacy of the §2 crisis disclaimer** — the sentence most likely to be tested.
