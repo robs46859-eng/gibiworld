@@ -134,7 +134,7 @@ namespace Gibi.AssetRuntime
         /// re-serialised in sorted order with minimal separators. A general-purpose JCS
         /// implementation is unnecessary here and would be more to get wrong.
         /// </summary>
-        internal static byte[] CanonicalizeExcludingSignature(string manifestJson)
+        public static byte[] CanonicalizeExcludingSignature(string manifestJson)
         {
             var fields = new System.Collections.Generic.SortedDictionary<string, string>(
                 StringComparer.Ordinal);

@@ -169,8 +169,16 @@ def main():
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     stem = a.pet_asset_id
+    # Write the manifest in CANONICAL form (sorted keys, no whitespace), not pretty.
+    #
+    # The signature covers RFC 8785 canonical bytes. A pretty-printed file forces the
+    # client to re-canonicalise nested values, and any difference in how it re-emits them
+    # -- a space, a newline, a float format -- changes the hash and fails verification.
+    # Writing canonical bytes in the first place means the client only has to drop the
+    # signature field, never reformat anything it did not produce.
     (out / f'{stem}.manifest.json').write_bytes(
-        json.dumps(signed, indent=2).encode('utf-8'))
+        json.dumps(signed, sort_keys=True, separators=(',', ':'),
+                   ensure_ascii=False).encode('utf-8'))
     (out / f'{stem}.glb').write_bytes(glb.read_bytes())
 
     pub = priv.public_key().public_bytes(
