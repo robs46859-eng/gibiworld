@@ -57,6 +57,16 @@ namespace Gibi.Core
             Services.Seal();
             IsReady = true;
             Debug.Log("[GibiWorld] Bootstrap complete.");
+
+            // Camera permission MUST be resolved before ARWorld loads. Starting an
+            // ARSession against a denied camera yields a black screen and a misleading
+            // camera-disabled error rather than a permission prompt.
+            yield return RequestCameraPermission();
+
+            // Section 4.1: Bootstrap owns app lifecycle, which includes deciding when the
+            // AR scene begins. Bootstrap holds no camera and no trackables of its own, so
+            // without this transition the app renders nothing at all.
+            EnterARWorld();
         }
 
         /// <summary>
