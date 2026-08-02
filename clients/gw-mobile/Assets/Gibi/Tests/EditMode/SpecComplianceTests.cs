@@ -144,11 +144,34 @@ namespace Gibi.Tests.EditMode
         }
 
         [Test]
-        public void Clearance_below_published_minimums_rejects()
+        public void Clearance_requirement_depends_on_purpose()
         {
+            // Section 5.3's 1.5 m clearanceRadius belongs to the SPATIAL OBJECT contract,
+            // which governs course content published at a VPS site. Section 13.3's
+            // on-device validation for PET placement never restates it.
+            //
+            // Applying the course figure to pet placement made indoor play impossible:
+            // 1.5 m radius is 3 m of clear floor, and ARCore fragments floors into many
+            // smaller planes, so no single plane ever qualifies in a room.
+            Assert.IsNull(
+                SurfaceAcceptance.Reject(new SurfaceSample(SemanticTag.Floor, 0f, 0.6f, 3f),
+                                         PlacementPurpose.PetIdleOrTraining),
+                "A 0.6 m clearance is ample for a 0.5 m dog.");
+
             Assert.AreEqual("CLEARANCE_RADIUS",
-                SurfaceAcceptance.Reject(new SurfaceSample(SemanticTag.Floor, 0f, 1.4f, 3f),
-                                         PlacementPurpose.PetIdleOrTraining));
+                SurfaceAcceptance.Reject(new SurfaceSample(SemanticTag.Floor, 0f, 0.6f, 3f),
+                                         PlacementPurpose.RankedGate),
+                "A ranked gate still requires the full section 5.3 course-object clearance.");
+
+            Assert.AreEqual("CLEARANCE_RADIUS",
+                SurfaceAcceptance.Reject(new SurfaceSample(SemanticTag.Floor, 0f, 0.2f, 3f),
+                                         PlacementPurpose.PetIdleOrTraining),
+                "Even a pet needs more room than its own footprint.");
+        }
+
+        [Test]
+        public void Clearance_height_is_unchanged_by_purpose()
+        {
             Assert.AreEqual("CLEARANCE_HEIGHT",
                 SurfaceAcceptance.Reject(new SurfaceSample(SemanticTag.Floor, 0f, 2f, 1.9f),
                                          PlacementPurpose.PetIdleOrTraining));

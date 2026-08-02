@@ -99,6 +99,10 @@ namespace Gibi.Editor
             cam.farClipPlane = 80f;   // section 5.1 caps course objects at 75 m
             origin.Camera = cam;
 
+            // Without this the origin defaults to Device, so world content is positioned
+            // relative to where the phone was at start rather than to the detected floor.
+            origin.RequestedTrackingOriginMode = Unity.XR.CoreUtils.XROrigin.TrackingOriginMode.Floor;
+
             camGo.AddComponent<ARCameraManager>();
             camGo.AddComponent<ARCameraBackground>();
             // Depth occlusion where supported (section 7).

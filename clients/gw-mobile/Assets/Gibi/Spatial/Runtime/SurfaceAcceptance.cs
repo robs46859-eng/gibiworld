@@ -35,8 +35,31 @@ namespace Gibi.Spatial
     {
         public const float MaxSlopeIdleTrainingDeg = 12f;
         public const float MaxSlopeRankedGateDeg   = 7f;
-        public const float MinClearanceRadiusM     = 1.5f;
-        public const float MinClearanceHeightM     = 2.0f;
+
+        // Clearance is PURPOSE-DEPENDENT, and conflating the two was a misreading.
+        //
+        // Section 5.3's clearanceRadiusM: 1.5 appears inside the SPATIAL OBJECT contract,
+        // which governs course content published at a VPS site. A 1.5 m radius is 3 m of
+        // clear floor -- correct for an agility gate in a park.
+        //
+        // Section 13.3's on-device validation for PET placement requires only "a clear
+        // camera start volume, traversable floor, acceptable slope, lighting confidence,
+        // and no currently detected person/vehicle intersection." It never restates 1.5 m.
+        //
+        // Applying the course-object figure to standing a 0.5 m dog on a living-room floor
+        // made placement impossible indoors: ARCore fragments floors, so no single plane
+        // ever reaches 3 m across.
+        public const float MinClearanceRadiusCourseObjectM = 1.5f;
+        public const float MinClearanceRadiusPetM          = 0.45f;  // ~ the pet's own footprint
+        public const float MinClearanceHeightM             = 2.0f;
+
+        /// <summary>Kept for callers that mean the course-object figure explicitly.</summary>
+        public const float MinClearanceRadiusM = MinClearanceRadiusCourseObjectM;
+
+        public static float RequiredClearanceRadius(PlacementPurpose purpose)
+            => purpose == PlacementPurpose.RankedGate
+                ? MinClearanceRadiusCourseObjectM
+                : MinClearanceRadiusPetM;
 
         /// <summary>
         /// Hazard set is an explicit allowlist inverse: anything not in the safe set is
@@ -64,7 +87,7 @@ namespace Gibi.Spatial
             // "unless the obstacle profile explicitly permits a ramp"
             if (!s.PermitsRamp && s.SlopeDegrees > maxSlope) return "SLOPE_EXCEEDED";
 
-            if (s.ClearanceRadiusM < MinClearanceRadiusM) return "CLEARANCE_RADIUS";
+            if (s.ClearanceRadiusM < RequiredClearanceRadius(purpose)) return "CLEARANCE_RADIUS";
             if (s.ClearanceHeightM < MinClearanceHeightM) return "CLEARANCE_HEIGHT";
 
             return null;

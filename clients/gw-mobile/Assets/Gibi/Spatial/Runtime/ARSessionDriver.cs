@@ -136,7 +136,8 @@ namespace Gibi.Spatial
                 if (plane.alignment != PlaneAlignment.HorizontalUp) continue;
 
                 float minExtent = Mathf.Min(plane.extents.x, plane.extents.y);
-                if (minExtent * 2f >= SurfaceAcceptance.MinClearanceRadiusM) return true;
+                // Pet placement, not course-object placement — see SurfaceAcceptance.
+                if (minExtent * 2f >= SurfaceAcceptance.MinClearanceRadiusPetM) return true;
             }
             return false;
         }
