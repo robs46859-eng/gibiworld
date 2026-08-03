@@ -32,36 +32,40 @@ namespace Gibi.Pets
     public static class LocalBehaviorLibrary
     {
         /// <summary>Every intent the pet can ever express. The AI selects FROM this set — never beyond it.</summary>
-        public static readonly string[] AllIntents =
-        {
-            "CALM_IDLE", "GREET", "INSPECT_TOY", "SEEK_SHADE",
-            "INVITE_PLAY", "SETTLE", "FOLLOW_GAZE", "CURIOUS_SNIFF"
-        };
+        // Catalog revision 2 (GW-ARCH-002 step 6). This was eight hardcoded strings and was
+        // a SECOND source of truth for what the pet could do -- exactly the drift pattern
+        // that produced every finding in GW-ARCH-002 section 1.4. It now delegates, so the
+        // catalog cannot grow without this agreeing.
+        public static string[] AllIntents => IntentCatalog.AllIds();
 
         /// <summary>
-        /// Choose an intent with no network, no waiting, and no randomness that would
-        /// break determinism. Seeded by the pet's personality and current state so the
-        /// same pet in the same situation behaves the same way.
+        /// Compatibility shim over <see cref="IntentPolicy.Select"/>. Prefer the policy
+        /// directly: it returns the modifiers too, and the modifiers are where the pet's
+        /// sense of life actually lives. This overload throws that away and keeps only the
+        /// intent id, which is why the old eight-intent version felt mechanical.
         /// </summary>
         public static string Choose(long personalitySeed, int bond, int energy,
                                     float settling, long tickIndex)
         {
-            if (settling > 0.6f) return "SETTLE";
-            if (energy < 25) return "CALM_IDLE";
+            var engagement = new EngagementEstimate(
+                arousal: 0.5f, perseveration: 0f, settling: settling, fatigue: 0f);
 
-            // Deterministic rotation weighted by bond. Higher bond favours social intents.
-            // unchecked cast: the golden-ratio constant exceeds long.MaxValue as a literal.
-            long mix = personalitySeed ^ (tickIndex * unchecked((long)0x9E3779B97F4A7C15UL));
-            int idx = (int)(((mix >> 17) & 0x7FFFFFFF) % AllIntents.Length);
+            var ctx = new PolicyContext(
+                personalitySeed: personalitySeed,
+                bond: bond,
+                energy: energy,
+                engagement: engagement,
+                care: CareProfile.None,
+                targets: new AvailableTargets(toys: 1, spatialObjects: 1, pets: 0),
+                localHourOfDay: 14,
+                tickIndex: tickIndex,
+                lastIntentIndex: -1,
+                repeatRunLength: 0);
 
-            if (bond > 60 && (idx == 0))
-                return "INVITE_PLAY";
-
-            return AllIntents[idx];
+            return IntentPolicy.Select(in ctx).IntentId;
         }
 
-        public static bool IsKnownIntent(string intent)
-            => Array.IndexOf(AllIntents, intent) >= 0;
+        public static bool IsKnownIntent(string intent) => IntentCatalog.IsKnown(intent);
     }
 
     /// <summary>

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.gibiworld.com/intent-catalog/v2.json",
+  "title": "GibiWorld Intent Catalog",
+  "catalogRevision": 2,
+  "_note": "SINGLE SOURCE OF TRUTH for pet behaviour. GW-ARCH-002 step 6 decision: architecture B (intents + modifiers, no language model). Gibi.Pets/IntentCatalog.cs mirrors this file and IntentCatalogParityTests asserts they agree. Edit here first.",
+  "_designNote": "Expressive life comes from the MODIFIERS, not the intent count. Latency and intensity variance read as interiority; category variance reads as randomness. A pet that hesitates 400 ms before coming feels alive. A pet that picks from 26 categories instead of 8 feels the same as before.",
+
+  "modifiers": {
+    "intensity":     { "type": "number", "minimum": 0.0, "maximum": 1.0, "note": "amplitude of the motion, not its speed" },
+    "latencyMs":     { "type": "integer", "minimum": 0, "maximum": 2000, "note": "hesitation before the action begins. THE primary source of felt life." },
+    "durationScale": { "type": "number", "minimum": 0.5, "maximum": 2.0 },
+    "approach":      { "enum": ["DIRECT", "ARC_LEFT", "ARC_RIGHT", "HESITANT"] },
+    "persistence":   { "enum": ["ONCE", "UNTIL_INTERRUPTED"] }
+  },
+
+  "groups": ["SELF", "PLAYER", "OBJECT", "ENVIRONMENT", "COMFORT", "TRAINING"],
+
+  "_intentFields": {
+    "id": "SCREAMING_SNAKE, stable, never renamed once published",
+    "group": "one of groups",
+    "target": "NONE | OPTIONAL | REQUIRED",
+    "targetKinds": "subset of [toy, spo, pet]",
+    "baseWeight": "integer 0..100, pre-context",
+    "maxIntensity": "cap; SETTLE cannot be intense",
+    "maxDurationMs": "arbiter lockout ceiling",
+    "interruptible": "false only where a partial action would read as broken",
+    "clipKey": "client-side animation binding. Section 8.2 forbids an EXTERNAL source naming a clip; the local deterministic mapping is explicitly permitted."
+  },
+
+  "intents": [
+    { "id": "CALM_IDLE",        "group": "SELF",        "target": "NONE",     "targetKinds": [],              "baseWeight": 40, "maxIntensity": 0.4, "maxDurationMs": 6000, "interruptible": true,  "clipKey": "idle_a" },
+    { "id": "SETTLE",           "group": "SELF",        "target": "NONE",     "targetKinds": [],              "baseWeight": 25, "maxIntensity": 0.3, "maxDurationMs": 8000, "interruptible": true,  "clipKey": "down" },
+    { "id": "REST",             "group": "SELF",        "target": "NONE",     "targetKinds": [],              "baseWeight": 15, "maxIntensity": 0.2, "maxDurationMs": 8000, "interruptible": true,  "clipKey": "down_idle" },
+    { "id": "STRETCH",          "group": "SELF",        "target": "NONE",     "targetKinds": [],              "baseWeight": 10, "maxIntensity": 0.7, "maxDurationMs": 2500, "interruptible": false, "clipKey": "rise" },
+    { "id": "SHAKE_OFF",        "group": "SELF",        "target": "NONE",     "targetKinds": [],              "baseWeight":  8, "maxIntensity": 1.0, "maxDurationMs": 1200, "interruptible": false, "clipKey": "shake" },
+    { "id": "SCAN_AROUND",      "group": "SELF",        "target": "NONE",     "targetKinds": [],              "baseWeight": 18, "maxIntensity": 0.6, "maxDurationMs": 3000, "interruptible": true,  "clipKey": "idle_b" },
+    { "id": "YAWN",             "group": "SELF",        "target": "NONE",     "targetKinds": [],              "baseWeight":  6, "maxIntensity": 0.5, "maxDurationMs": 1800, "interruptible": false, "clipKey": "yawn" },
+
+    { "id": "GREET",            "group": "PLAYER",      "target": "NONE",     "targetKinds": [],              "baseWeight": 30, "maxIntensity": 1.0, "maxDurationMs": 3000, "interruptible": true,  "clipKey": "greet" },
+    { "id": "SEEK_PROXIMITY",   "group": "PLAYER",      "target": "NONE",     "targetKinds": [],              "baseWeight": 22, "maxIntensity": 0.8, "maxDurationMs": 5000, "interruptible": true,  "clipKey": "walk" },
+    { "id": "INVITE_PLAY",      "group": "PLAYER",      "target": "OPTIONAL", "targetKinds": ["toy"],         "baseWeight": 26, "maxIntensity": 1.0, "maxDurationMs": 4000, "interruptible": true,  "clipKey": "play_bow" },
+    { "id": "FOLLOW_GAZE",      "group": "PLAYER",      "target": "OPTIONAL", "targetKinds": ["toy","spo"],   "baseWeight": 20, "maxIntensity": 0.5, "maxDurationMs": 2500, "interruptible": true,  "clipKey": "idle_a" },
+    { "id": "LEAN_IN",          "group": "PLAYER",      "target": "NONE",     "targetKinds": [],              "baseWeight": 14, "maxIntensity": 0.4, "maxDurationMs": 4000, "interruptible": true,  "clipKey": "pet_react" },
+    { "id": "CHECK_IN",         "group": "PLAYER",      "target": "NONE",     "targetKinds": [],              "baseWeight": 16, "maxIntensity": 0.4, "maxDurationMs": 1500, "interruptible": true,  "clipKey": "idle_b" },
+    { "id": "PRESENT_ITEM",     "group": "PLAYER",      "target": "REQUIRED", "targetKinds": ["toy"],         "baseWeight": 18, "maxIntensity": 0.8, "maxDurationMs": 4000, "interruptible": true,  "clipKey": "carry" },
+
+    { "id": "INSPECT_OBJECT",   "group": "OBJECT",      "target": "REQUIRED", "targetKinds": ["toy","spo"],   "baseWeight": 20, "maxIntensity": 0.6, "maxDurationMs": 4000, "interruptible": true,  "clipKey": "idle_b" },
+    { "id": "CURIOUS_SNIFF",    "group": "OBJECT",      "target": "OPTIONAL", "targetKinds": ["toy","spo"],   "baseWeight": 22, "maxIntensity": 0.5, "maxDurationMs": 3500, "interruptible": true,  "clipKey": "sniff" },
+    { "id": "NUDGE_OBJECT",     "group": "OBJECT",      "target": "REQUIRED", "targetKinds": ["toy"],         "baseWeight": 14, "maxIntensity": 0.9, "maxDurationMs": 2000, "interruptible": true,  "clipKey": "nudge" },
+    { "id": "RETRIEVE",         "group": "OBJECT",      "target": "REQUIRED", "targetKinds": ["toy"],         "baseWeight": 24, "maxIntensity": 1.0, "maxDurationMs": 8000, "interruptible": true,  "clipKey": "pickup" },
+    { "id": "GUARD_ITEM",       "group": "OBJECT",      "target": "REQUIRED", "targetKinds": ["toy"],         "baseWeight":  8, "maxIntensity": 0.5, "maxDurationMs": 5000, "interruptible": true,  "clipKey": "down_idle", "_note": "soft and playful only. Section 1.2 excludes possessive or punishing mechanics." },
+    { "id": "ABANDON_ITEM",     "group": "OBJECT",      "target": "OPTIONAL", "targetKinds": ["toy"],         "baseWeight": 10, "maxIntensity": 0.4, "maxDurationMs": 1500, "interruptible": true,  "clipKey": "drop" },
+
+    { "id": "SEEK_SHADE",       "group": "ENVIRONMENT", "target": "OPTIONAL", "targetKinds": ["spo"],         "baseWeight": 10, "maxIntensity": 0.6, "maxDurationMs": 6000, "interruptible": true,  "clipKey": "walk" },
+    { "id": "AVOID_SURFACE",    "group": "ENVIRONMENT", "target": "NONE",     "targetKinds": [],              "baseWeight": 12, "maxIntensity": 0.7, "maxDurationMs": 2500, "interruptible": true,  "clipKey": "turn_l_90" },
+    { "id": "ORIENT_TO_SOUND",  "group": "ENVIRONMENT", "target": "NONE",     "targetKinds": [],              "baseWeight": 14, "maxIntensity": 0.5, "maxDurationMs": 2000, "interruptible": true,  "clipKey": "idle_b" },
+
+    { "id": "SOFTEN",           "group": "COMFORT",     "target": "NONE",     "targetKinds": [],              "baseWeight": 20, "maxIntensity": 0.25,"maxDurationMs": 6000, "interruptible": true,  "clipKey": "idle_a" },
+    { "id": "LIE_NEAR",         "group": "COMFORT",     "target": "NONE",     "targetKinds": [],              "baseWeight": 22, "maxIntensity": 0.2, "maxDurationMs": 8000, "interruptible": true,  "clipKey": "down" },
+    { "id": "REST_HEAD",        "group": "COMFORT",     "target": "NONE",     "targetKinds": [],              "baseWeight": 16, "maxIntensity": 0.15,"maxDurationMs": 8000, "interruptible": true,  "clipKey": "sleep" },
+
+    { "id": "ANTICIPATE_CUE",   "group": "TRAINING",    "target": "NONE",     "targetKinds": [],              "baseWeight": 18, "maxIntensity": 0.7, "maxDurationMs": 3000, "interruptible": true,  "clipKey": "sit_idle" },
+    { "id": "OFFER_KNOWN_TRICK","group": "TRAINING",    "target": "NONE",     "targetKinds": [],              "baseWeight": 14, "maxIntensity": 0.8, "maxDurationMs": 4000, "interruptible": true,  "clipKey": "sit" },
+    { "id": "RESET_POSTURE",    "group": "TRAINING",    "target": "NONE",     "targetKinds": [],              "baseWeight": 12, "maxIntensity": 0.5, "maxDurationMs": 2000, "interruptible": true,  "clipKey": "stand" }
+  ],
+
+  "careProfiles": {
+    "_note": "Accommodations, never diagnoses. Multiple profiles compose by taking the MOST CONSERVATIVE value for every parameter. A profile may only narrow; it may never widen.",
+    "GENTLE_SENSORY":      { "maxIntensity": 0.5, "minLatencyMs": 250, "minDurationScale": 1.2, "removeIntents": ["SHAKE_OFF", "NUDGE_OBJECT"] },
+    "PREDICTABLE":         { "maxIntensity": 0.8, "minLatencyMs": 0,   "minDurationScale": 1.0, "removeIntents": ["CURIOUS_SNIFF", "SEEK_SHADE", "ORIENT_TO_SOUND"] },
+    "GENTLE_PACING":       { "maxIntensity": 0.7, "minLatencyMs": 150, "minDurationScale": 1.15, "removeIntents": [] },
+    "EXTRA_ENCOURAGEMENT": { "maxIntensity": 1.0, "minLatencyMs": 0,   "minDurationScale": 1.0, "removeIntents": [], "boostIntents": ["OFFER_KNOWN_TRICK", "GREET", "CHECK_IN"] },
+    "COMPANION_BALANCE":   { "maxIntensity": 1.0, "minLatencyMs": 0,   "minDurationScale": 1.0, "removeIntents": [], "boostIntents": ["PRESENT_ITEM", "CHECK_IN"] }
+  },
+
+  "invariants": [
+    "energy modulates HOW the pet responds, never WHETHER. No intent may become unavailable because energy is low.",
+    "the catalog is never empty after care-profile filtering: SELF and COMFORT intents are unremovable.",
+    "identical inputs and seed produce an identical intent and identical modifiers.",
+    "no intent implies refusal, punishment, injury, deprivation, or shame.",
+    "repetition is never extinguished; micro-variation is applied through modifiers instead."
+  ]
+}

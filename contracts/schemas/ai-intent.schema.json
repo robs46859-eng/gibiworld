@@ -1,20 +1,49 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.gibiworld.com/ai-intent/v1.json",
-  "title": "GibiWorld AI Intent Response",
-  "description": "GW-ARCH-001 section 8.2. AI SHALL NOT output animation clip names, coordinates, physics forces, prices, inventory grants, leaderboard scores, moderation results, or executable text (GW-AI-002). additionalProperties:false enforces this structurally.",
+  "$id": "https://schemas.gibiworld.com/ai-intent/v2.json",
+  "title": "GibiWorld Intent Envelope",
+  "description": "GW-ARCH-002 section 7. The contract for ANY priority-3 intent source. GW-ARCH-002 step 6 selected architecture B: no language model ships, and the local deterministic policy is priority 4/5, not 3. This envelope therefore has no producer today and exists so a future remote or local source can slot in without redesign. additionalProperties:false keeps GW-AI-002 structural: a source cannot name an animation, coordinate, force, price, score, or moderation result because there is nowhere to put one.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion","requestId","petId","contextRevision","intent","expiresAt"],
+  "catalogRevision": 2,
+  "required": ["schemaVersion","requestId","petId","contextRevision","catalogRevision","intent","expiresAt"],
   "properties": {
-    "schemaVersion": { "const": 1 },
+    "schemaVersion": { "const": 2 },
     "requestId": { "type": "string", "pattern": "^req_[0-9A-HJKMNP-TV-Z]{26}$" },
     "petId": { "type": "string", "pattern": "^pet_[0-9A-HJKMNP-TV-Z]{26}$" },
     "contextRevision": { "type": "integer", "minimum": 0 },
-    "intent": {
-      "enum": ["GREET","INSPECT_TOY","SEEK_SHADE","INVITE_PLAY","SETTLE","FOLLOW_GAZE","CURIOUS_SNIFF","CALM_IDLE"]
+    "catalogRevision": {
+      "const": 2,
+      "description": "MUST match the catalog the client compiled against. A mismatch is rejected rather than reconciled: a source tuned against a different intent set will fight the arbiter."
     },
-    "targetId": { "type": "string", "pattern": "^(toy|spo|pet)_[0-9A-HJKMNP-TV-Z]{26}$" },
+    "intent": {
+      "description": "Mirrors contracts/schemas/intent-catalog.json. IntentCatalogParityTests asserts this enum and the C# catalog agree exactly.",
+      "enum": [
+        "CALM_IDLE","SETTLE","REST","STRETCH","SHAKE_OFF","SCAN_AROUND","YAWN",
+        "GREET","SEEK_PROXIMITY","INVITE_PLAY","FOLLOW_GAZE","LEAN_IN","CHECK_IN","PRESENT_ITEM",
+        "INSPECT_OBJECT","CURIOUS_SNIFF","NUDGE_OBJECT","RETRIEVE","GUARD_ITEM","ABANDON_ITEM",
+        "SEEK_SHADE","AVOID_SURFACE","ORIENT_TO_SOUND",
+        "SOFTEN","LIE_NEAR","REST_HEAD",
+        "ANTICIPATE_CUE","OFFER_KNOWN_TRICK","RESET_POSTURE"
+      ]
+    },
+    "targetId": {
+      "type": "string",
+      "pattern": "^(toy|spo|pet)_[0-9A-HJKMNP-TV-Z]{26}$",
+      "description": "SHALL be present in the submitted context. A source cannot name an object that was not offered to it."
+    },
+    "modifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "How the action is performed. This is where felt life comes from; the client clamps every value against the catalog cap for the chosen intent and against the active care profile, so an out-of-range request is narrowed, never honoured.",
+      "properties": {
+        "intensity":     { "type": "number",  "minimum": 0.0, "maximum": 1.0 },
+        "latencyMs":     { "type": "integer", "minimum": 0,   "maximum": 2000 },
+        "durationScale": { "type": "number",  "minimum": 0.5, "maximum": 2.0 },
+        "approach":      { "enum": ["DIRECT","ARC_LEFT","ARC_RIGHT","HESITANT"] },
+        "persistence":   { "enum": ["ONCE","UNTIL_INTERRUPTED"] }
+      }
+    },
     "emotion": {
       "type": "object", "additionalProperties": false,
       "required": ["valence","arousal"],
@@ -23,7 +52,11 @@
         "arousal": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
       }
     },
-    "utteranceKey": { "type": "string", "pattern": "^pet\\.[a-z_]{1,32}\\.[0-9]{2}$" },
+    "utteranceKey": {
+      "type": "string",
+      "pattern": "^pet\\.[a-z_]{1,32}\\.[0-9]{2}$",
+      "description": "A localization key, never prose. No token produced by any source reaches a player as text."
+    },
     "memoryProposals": {
       "type": "array", "maxItems": 3,
       "items": {
