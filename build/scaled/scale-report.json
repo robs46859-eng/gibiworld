@@ -201,6 +201,31 @@
       "targetM": 1.2,
       "constrainAxis": "Z"
     },
+    "luxurydoghouse.glb": {
+      "boundsBefore": [
+        0.998,
+        0.9434,
+        0.7832
+      ],
+      "boundsAfter": [
+        1.1469,
+        1.084,
+        0.9
+      ],
+      "scaleFactor": 1.14913,
+      "residualObjectScales": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ]
+      ],
+      "outputBytes": 987116,
+      "outputSha256": "6c5f258f626c92be73e70db939142a8625a4522ebc381d5dce01fbb895725ea5",
+      "catalogType": "SHELTER",
+      "targetM": 0.9,
+      "constrainAxis": "Z"
+    },
     "toyball-930.glb": {
       "boundsBefore": [
         0.9797,
@@ -225,29 +250,6 @@
       "catalogType": "TOY",
       "targetM": 0.067,
       "constrainAxis": "MAX"
-    },
-    "randy11_LOD0.glb": {
-      "boundsBefore": [
-        1.0184,
-        0.4951,
-        0.6807
-      ],
-      "boundsAfter": [
-        1.1113,
-        0.5403,
-        0.7428
-      ],
-      "scaleFactor": 1.09123,
-      "residualObjectScales": [
-        [
-          1.0,
-          1.0,
-          1.0
-        ]
-      ],
-      "outputBytes": 1794844,
-      "outputSha256": "2da0409ca54e2016807a0bccb096468e2f57ab659c73ee85559044db8b53543d",
-      "catalogType": "PET"
     }
   }
 }

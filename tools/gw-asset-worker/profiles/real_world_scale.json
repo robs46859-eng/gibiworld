@@ -141,6 +141,34 @@
       "uniformScaleFactor": 1.2024,
       "specCheck": "Typical cat tree 0.8-1.5 m. NOTE: first CAT asset in the set. Species 'cat' is allowed by section 6.2 and is ADR-005 primary, but no cat MODEL exists yet."
     },
+    "luxurydoghouse.glb": {
+      "catalogType": "SHELTER",
+      "identified": "Pitched-roof kennel with a single front entry.",
+      "constrainAxis": "Z",
+      "currentM": [
+        0.998,
+        0.9434,
+        0.7832
+      ],
+      "targetM": 0.9,
+      "uniformScaleFactor": 1.14913,
+      "resultM": [
+        1.1468,
+        1.0841,
+        0.9
+      ],
+      "specCheck": "Sized from the 0.50 m reference dog (shoulder 0.50 m; bounds 1.11 L x 0.54 W x 0.74 H). Exterior 0.90 m tall, footprint 1.147 x 1.084 m. IMPORTANT: a shelter entry is deliberately narrow and MUST NOT be validated against the section 9.2 course corridor minimum of 0.8 x 1.5 m. Those figures govern ranked course geometry, not casual props - applying them here is the same class of error that made indoor placement impossible.",
+      "affordance": "REST",
+      "measuredApertureM": {
+        "widthM": 0.2939,
+        "heightM": 0.4464,
+        "sillM": 0.0575,
+        "headM": 0.5039,
+        "centreXM": 0.0287,
+        "method": "tools/gw-asset-worker/validator/measure_aperture.py, 160x160 ray grid, wall plane by median first-hit depth, largest connected cluster"
+      },
+      "apertureFinding": "THE DOG DOES NOT FIT. Door is 0.294 W x 0.446 H against a dog measuring 0.54 W x 0.74 H. This is a generated decorative opening whose proportions were never driven by an occupant. Scaling the house until the door admits the dog requires factor ~2.1, producing a 2.42 m shed. DO NOT do that. Runtime therefore treats the entry as a THRESHOLD marker, not a traversable aperture: the pet paths to the sill, then is hidden and held at an interior rest anchor. Because the shell is opaque, hiding reads as entry and avoids the wall clipping that a literal walk-through would show. A future revision may widen the arch in Blender or regenerate the source with an explicit large-opening prompt."
+    },
     "toyball-930.glb": {
       "catalogType": "TOY",
       "identified": "Decimated toyball - 2,272 tris, down from 4,837.",

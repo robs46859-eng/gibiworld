@@ -238,10 +238,17 @@ namespace Gibi.Pets
 
             // Jitter is seeded on the tick, so a repeated intent is never byte-identical
             // while remaining perfectly reproducible for replay and test.
-            long h = Mix(ctx.PersonalitySeed ^ (ctx.TickIndex * 0x2545F4914F6CDD1DL) ^ index);
+            // unchecked casts: these constants exceed long.MaxValue, so C# types the
+            // literals as ulong regardless of the L suffix and '^' has no long/ulong
+            // overload. Same trap the original LocalBehaviorLibrary already documented.
+            const long GoldenGamma = unchecked((long)0x9E3779B97F4A7C15UL);
+            const long MixSaltA    = unchecked((long)0xC2B2AE3D27D4EB4FUL);
+            const long TickStride  = 0x2545F4914F6CDD1DL;
+
+            long h = Mix(ctx.PersonalitySeed ^ (ctx.TickIndex * TickStride) ^ index);
             float j0 = Unit(h);
-            float j1 = Unit(Mix(h ^ 0x9E3779B97F4A7C15L));
-            float j2 = Unit(Mix(h ^ 0xC2B2AE3D27D4EB4FL));
+            float j1 = Unit(Mix(h ^ GoldenGamma));
+            float j2 = Unit(Mix(h ^ MixSaltA));
 
             // Intensity: arousal and energy raise it, fatigue and settling lower it.
             float intensity = 0.35f
