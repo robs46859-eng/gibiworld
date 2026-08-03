@@ -24,7 +24,7 @@ reactive, owned elsewhere, and gating engineering on them produces false blocker
 | **B2** | CI pipeline completeness (§16) | `PART` |
 | **B3** | Test coverage | `PART` |
 | **B4** | AR runtime completeness | `PART` |
-| **B5** | Asset pipeline | `PART` |
+| **B5** | Asset pipeline tooling | `PART` |
 | **B6** | Backend services | `PART` |
 | **B7** | Security controls in code | `PART` |
 | **B8** | Requirement traceability | `PART` |
@@ -116,23 +116,20 @@ The P0 loop works end to end. These are the gates it does not actually enforce y
 
 ---
 
-## B5 — Asset pipeline  `PART`
+## B5 — Asset pipeline tooling  `PART`
+
+Tooling only. The assets themselves are tracked in `docs/ASSET_PRODUCTION.md`.
 
 - `PASS` — Ed25519 verification in-client, constant-time digest compare, atomic
   digest-keyed promotion
 - `PASS` — §6.2 budgets re-enforced client-side after parse
-- `PASS` — `randy11` remediated: four LODs within budget, zero scale curves, zero root
-  motion, SHA-256 provenance
-- `PASS` — Headless Blender worker and structural GLB validator, both CI-runnable
+- `PASS` — Headless Blender worker (`--factory-startup`) and structural GLB validator,
+  both CI-runnable with no Blender dependency in the validator path
+- `PASS` — Container-level scale-channel stripping (`glb_strip_scale.py`) — required
+  because Blender's exporter re-emits curves regardless of scene state
 - `OPEN` — **Signing service + pinned key distribution.** Signing is manual today; this is
   the last hand-operated step in the supply chain
-- `BLOCK` — **15 animation clips unauthored.** Art production. Needs an owner: in-house,
-  contractor, or a reduced launch set
-- `BLOCK` — **Rig repair on `randy11`** — re-skin to 4 influences, subdivide `spine`,
-  insert `clavicle_l/r` and `hock_l/r`. Hand work; correct dog gait is impossible without
-  hocks
-- `BLOCK` — **Rescale all 5 props.** Tripo normalised everything to a ~1 m cube;
-  `startgate` is 0.42 m against a §9.2 corridor minimum of 1.5 m. One size decision per prop
+- `OPEN` — Prop rescale automation, once the target sizes are decided
 
 ---
 
@@ -197,20 +194,18 @@ grep -oE '\| (IMPL|PART|TODO) \|$' docs/TRACEABILITY.md | sort | uniq -c
 B1 (toolchain) ─→ B2 (CI) ─→ B3 (tests) ─┐
                                           ├─→ B8 (traceability closes)
 B1 ─→ B4 (AR runtime)  ───────────────────┤
-      B5 (assets) ──────────────────────  ┤
+      B5 (pipeline tooling) ────────────  ┤
       B6 (backend) ─→ B7 (security code) ─┘
 ```
 
-B1 is upstream of everything. B5's art production and B6's service work run in parallel
-and share no dependency.
+B1 is upstream of everything. B5's tooling and B6's service work run in parallel and share
+no dependency. Asset production is tracked separately and blocks neither.
 
 ## Blocked on you
 
 1. **Unity `6000.0.74f1` install** — B1, and B2's Unity jobs are meaningless without it
 2. **NSDK credentials** — B1, plus the segmentation work in B4
-3. **Who authors the 15 animation clips** — B5
-4. **Real-world size per prop** — B5
-5. **Auth provider choice** — B6, B7
+3. **Auth provider choice** — B6, B7
 
 ---
 
@@ -226,6 +221,7 @@ Not engineering gates. Tracked separately, handled reactively:
 | Accessibility conformance statement, caption audit | Compliance |
 | SLO definitions, dashboards, runbooks | Ops |
 | App-store privacy declarations, age ratings | Release/legal |
+| Rigging, animation clips, prop scale | `docs/ASSET_PRODUCTION.md` |
 
 The *code* behind several of these stays in scope — the age gate lives in B6, the
 redaction and egress controls in B7, the four-channel accessible status encoding in B4.
