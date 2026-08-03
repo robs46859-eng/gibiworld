@@ -52,3 +52,7 @@ secrets/
 **/*AccessToken*
 **/*.token
 tools/gw-signing/*.pem
+
+# Unity Android/Gradle build intermediates (CMake, ninja, .o). 8 MB of machine-local
+# absolute paths and NDK versions; regenerated on every build.
+clients/gw-mobile/.utmp/
