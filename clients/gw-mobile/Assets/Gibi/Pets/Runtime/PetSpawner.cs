@@ -79,6 +79,12 @@ namespace Gibi.Pets
             }
 
             var controller = petRoot.AddComponent<PetController>();
+
+            // Hand the controller the instantiated asset so it can bind the Animation
+            // component glTFast attached. Without this the pet loads, verifies, renders --
+            // and stands perfectly still, which is exactly how it shipped until now.
+            controller.AttachVerifiedAsset(result.Instance);
+
             return new PetSpawnResult { Success = true, Pet = controller };
         }
     }
