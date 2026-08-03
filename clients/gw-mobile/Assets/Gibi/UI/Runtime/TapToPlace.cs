@@ -4,6 +4,7 @@
 // because Both is unsupported on Android. EnhancedTouch is enabled explicitly, since it
 // is opt-in and silently reports nothing otherwise.
 using Gibi.Gameplay;
+using Gibi.Spatial;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -16,6 +17,7 @@ namespace Gibi.UI
     {
         [SerializeField] private P0SessionDriver session;
         [SerializeField] private PlacementRing ring;
+        [SerializeField] private ARSessionDriver arSession;
 
         private void OnEnable()
         {
@@ -35,11 +37,17 @@ namespace Gibi.UI
         {
             if (session == null) session = FindAnyObjectByType<P0SessionDriver>();
             if (ring == null) ring = FindAnyObjectByType<PlacementRing>();
+            if (arSession == null) arSession = FindAnyObjectByType<ARSessionDriver>();
         }
 
         private async void Update()
         {
             if (session == null) return;
+            if (session.PetIsPlaced)
+            {
+                ring?.Hide();
+                return;
+            }
 
             // Section 13.3 wants real device speed; P0 has no locomotion source yet, so
             // it reports stationary. Wiring this to actual movement is a P1 task, and
@@ -64,6 +72,7 @@ namespace Gibi.UI
                 Debug.Log($"[GibiWorld] tap confirmed at reticle {reticle} " +
                           $"(finger was at {touch.screenPosition})");
                 bool placed = await session.TryPlaceAt(reticle, playerSpeedMps);
+                if (placed) arSession?.SetPlaneVisualizationVisible(false);
                 Debug.Log(placed
                     ? "[GibiWorld] PET PLACED"
                     : $"[GibiWorld] placement rejected: {session.LastFailureCode}");
@@ -96,6 +105,17 @@ namespace Gibi.UI
                     _lastStatusCode = code;
                     Debug.Log($"[GibiWorld] placement: {code} | {session.LastMeasurements}");
                 }
+            }
+        }
+
+        /// <summary>UI button seam for an explicit reset; ordinary taps never relocate.</summary>
+        public void ResetPlacement()
+        {
+            if (session != null && session.ResetPlacedWorld())
+            {
+                _lastStatusCode = null;
+                arSession?.SetPlaneVisualizationVisible(true);
+                ring?.Hide();
             }
         }
     }

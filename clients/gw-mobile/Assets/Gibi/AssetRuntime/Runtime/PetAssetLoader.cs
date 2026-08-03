@@ -132,18 +132,56 @@ namespace Gibi.AssetRuntime
                     var src = originals[i];
                     if (src != null)
                     {
-                        if (src.HasProperty("_BaseMap") && safe.HasProperty("_BaseMap"))
-                            safe.SetTexture("_BaseMap", src.GetTexture("_BaseMap"));
-                        else if (src.HasProperty("_MainTex") && safe.HasProperty("_BaseMap"))
-                            safe.SetTexture("_BaseMap", src.GetTexture("_MainTex"));
-
-                        if (src.HasProperty("_BaseColor") && safe.HasProperty("_BaseColor"))
-                            safe.SetColor("_BaseColor", src.GetColor("_BaseColor"));
+                        safe.name = $"{src.name}_ApprovedURP";
+                        CopyBaseSurface(src, safe);
                     }
                     replaced[i] = safe;
                 }
                 renderer.sharedMaterials = replaced;
             }
+        }
+
+        /// <summary>
+        /// glTFast's Shader Graph materials expose glTF property names such as
+        /// baseColorTexture/baseColorFactor, not URP Lit's _BaseMap/_BaseColor names.
+        /// Accept only those inert surface values, then copy them onto the approved URP
+        /// shader. The asset still cannot choose a shader or execute material code.
+        /// </summary>
+        private static void CopyBaseSurface(Material source, Material destination)
+        {
+            if (source == null || destination == null) return;
+
+            string textureProperty = FirstTextureProperty(
+                source, "_BaseMap", "_MainTex", "baseColorTexture");
+            if (textureProperty != null && destination.HasProperty("_BaseMap"))
+            {
+                destination.SetTexture("_BaseMap", source.GetTexture(textureProperty));
+                destination.SetTextureScale("_BaseMap", source.GetTextureScale(textureProperty));
+                destination.SetTextureOffset("_BaseMap", source.GetTextureOffset(textureProperty));
+            }
+
+            string colorProperty = FirstColorProperty(
+                source, "_BaseColor", "_Color", "baseColorFactor");
+            if (colorProperty != null && destination.HasProperty("_BaseColor"))
+                destination.SetColor("_BaseColor", source.GetColor(colorProperty));
+        }
+
+        private static string FirstTextureProperty(Material material, params string[] names)
+        {
+            for (int i = 0; i < names.Length; i++)
+            {
+                string name = names[i];
+                if (material.HasProperty(name) && material.GetTexture(name) != null)
+                    return name;
+            }
+            return null;
+        }
+
+        private static string FirstColorProperty(Material material, params string[] names)
+        {
+            for (int i = 0; i < names.Length; i++)
+                if (material.HasProperty(names[i])) return names[i];
+            return null;
         }
 
         /// <summary>

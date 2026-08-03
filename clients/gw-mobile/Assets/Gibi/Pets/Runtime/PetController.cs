@@ -30,6 +30,13 @@ namespace Gibi.Pets
         private IMonotonicClock _clock;
         private PetAnimator _animator;
         private PetBiometrics _biometrics;
+        private PetAnimationProfile _animationProfile;
+        private Transform _mouthSocket;
+        private FetchSequence _fetchSequence;
+        private FetchToy _fetchToy;
+        private SandboxBoundary _sandboxBoundary;
+        private Vector3 _fetchReturnPosition;
+        private bool _postFetchCelebration;
 
         private Vector3 _targetPosition;
         private bool _hasTarget;
@@ -46,6 +53,12 @@ namespace Gibi.Pets
         public Gait CurrentGait => _motion?.CurrentGait ?? Gait.Idle;
         public BiometricState Biometrics => _biometrics?.State ?? default;
         public bool IsEngaged => _engagedAffordance != null;
+        public Transform MouthSocket => _mouthSocket;
+        public FetchStage CurrentFetchStage => _fetchSequence?.Stage ?? FetchStage.Idle;
+        public int CompletedFetches => _fetchSequence?.CompletedCount ?? 0;
+        public bool HasNavigationTarget => _hasTarget;
+        public Vector3 NavigationTarget => _targetPosition;
+        public double NavigationHeadingDeg => _motion?.HeadingDeg ?? 0.0;
 
         private void Awake()
         {
@@ -57,6 +70,7 @@ namespace Gibi.Pets
             _motion = new DeterministicMotion();
             _accumulator = new FixedStepAccumulator();
             _biometrics = new PetBiometrics();
+            _fetchSequence = new FetchSequence();
             _animator = gameObject.GetComponent<PetAnimator>() ?? gameObject.AddComponent<PetAnimator>();
 
             if (petAssetRoot == null) petAssetRoot = transform.Find("PetAssetRoot");
@@ -67,6 +81,7 @@ namespace Gibi.Pets
         private void Update()
         {
             _arbiter.Tick();
+            AdvanceFetchPresentation();
 
             long now = _clock.ElapsedMilliseconds;
             _biometrics.Tick(now, ExertionFromGait(), resting: _engagedAffordance != null);
@@ -137,6 +152,7 @@ namespace Gibi.Pets
             for (int i = 0; i < steps; i++)
             {
                 float yawCommand = 0f;
+                bool advance = true;
 
                 if (_hasTarget)
                 {
@@ -152,11 +168,15 @@ namespace Gibi.Pets
                         float desiredYaw = Mathf.Atan2(flat.x, flat.z) * Mathf.Rad2Deg;
                         float error = Mathf.DeltaAngle((float)_motion.HeadingDeg, desiredYaw);
                         yawCommand = Mathf.Clamp(error * 4f, -yawGainDegPerS, yawGainDegPerS);
+                        // Rotate in place until the target is broadly ahead. Advancing
+                        // through a 180-degree turn creates a large circle that can miss
+                        // nearby toys and shelter thresholds entirely.
+                        advance = Mathf.Abs(error) <= 25f;
                     }
                 }
 
                 double before = _motion.DistanceTravelledM;
-                _motion.Step(yawCommand);
+                _motion.Step(yawCommand, advance);
                 double advanced = _motion.DistanceTravelledM - before;
 
                 if (advanced > 0.0)
@@ -164,6 +184,9 @@ namespace Gibi.Pets
                     var heading = Quaternion.Euler(0f, (float)_motion.HeadingDeg, 0f);
                     transform.rotation = heading;
                     transform.position += heading * Vector3.forward * (float)advanced;
+                    if (_sandboxBoundary != null)
+                        transform.position = _sandboxBoundary.ClampWorld(
+                            transform.position, bodyCapsule != null ? bodyCapsule.radius : 0.15f);
                 }
             }
         }
@@ -173,27 +196,69 @@ namespace Gibi.Pets
         /// <summary>Direct player cue (priority 2). Interrupts AI and needs, not safety.</summary>
         public bool CueSit()
         {
+            CancelFetch(dropToy: true);
             _hasTarget = false;
             _motion.SetGait(Gait.Idle);
-            return _arbiter.Propose(BehaviorLayer.PlayerCue, "SIT", 4000, interruptible: false);
+            bool accepted = _arbiter.Propose(
+                BehaviorLayer.PlayerCue, "SIT", 4000, interruptible: false);
+            if (accepted) _animator?.PlayImmediate("sit", loop: true);
+            return accepted;
         }
 
         public bool CueCome(Vector3 playerPosition)
         {
+            CancelFetch(dropToy: true);
             if (!_arbiter.Propose(BehaviorLayer.PlayerCue, "COME", 8000)) return false;
             _targetPosition = playerPosition;
             _hasTarget = true;
             _motion.SetGait(Gait.Trot);
+            _animator?.PlayImmediate("walk", loop: true);
             return true;
         }
 
         /// <summary>Fetch: run out, pick up, carry back, drop. Uses the section 6.3 clip set.</summary>
         public bool CueFetch(Vector3 toyPosition)
         {
-            if (!_arbiter.Propose(BehaviorLayer.PlayerCue, "FETCH_OUTBOUND", 12000)) return false;
+            return CueFetchInternal(null, toyPosition, transform.position);
+        }
+
+        public bool CueFetch(FetchToy toy, Vector3 returnPosition)
+        {
+            if (toy == null) return false;
+            return CueFetchInternal(toy, toy.transform.position, returnPosition);
+        }
+
+        private bool CueFetchInternal(FetchToy toy, Vector3 toyPosition,
+                                      Vector3 returnPosition)
+        {
+            if (_fetchSequence.Stage != FetchStage.Idle) return false;
+            if (_engagedAffordance != null) ExitAffordance();
+            if (!_arbiter.Propose(BehaviorLayer.PlayerCue, "FETCH", 30000,
+                                  interruptible: false)) return false;
+            if (!_fetchSequence.Begin()) return false;
+
+            _fetchToy = toy;
+            _fetchReturnPosition = returnPosition;
+            _postFetchCelebration = false;
             _targetPosition = toyPosition;
             _hasTarget = true;
             _motion.SetGait(Gait.Run);
+            _animator?.PlayImmediate("run", loop: true);
+            return true;
+        }
+
+        public bool CueRest(RestAffordance shelter)
+        {
+            if (shelter == null || !shelter.IsAvailable) return false;
+            CancelFetch(dropToy: true);
+            if (_engagedAffordance != null) ExitAffordance();
+            if (!_arbiter.Propose(BehaviorLayer.PlayerCue, "SEEK_REST", 20000)) return false;
+
+            _seekingAffordance = shelter;
+            _targetPosition = shelter.ApproachPointWorld;
+            _hasTarget = true;
+            _motion.SetGait(Gait.Walk);
+            _animator?.PlayImmediate("walk", loop: true);
             return true;
         }
 
@@ -203,6 +268,7 @@ namespace Gibi.Pets
         /// </summary>
         public void SafetyStop(string reasonCode)
         {
+            CancelFetch(dropToy: true);
             _hasTarget = false;
             _motion.SetGait(Gait.Idle);
             _arbiter.ForceSafety("STOP", 3000);
@@ -214,16 +280,70 @@ namespace Gibi.Pets
             _hasTarget = false;
             _motion.SetGait(Gait.Idle);
 
+            FetchTransition fetch = _fetchSequence.ReachedTarget();
+            if (fetch == FetchTransition.StartPickup)
+            {
+                _animator?.PlayImmediate("pickup");
+                if (_fetchToy != null && !_fetchToy.AttachTo(_mouthSocket))
+                    Debug.LogWarning("[GibiWorld] Fetch toy could not attach to MouthSocket.");
+                return;
+            }
+            if (fetch == FetchTransition.StartDrop)
+            {
+                if (_fetchToy != null)
+                    _fetchToy.DropAt(transform.position + transform.forward * 0.30f);
+                _animator?.PlayImmediate("drop");
+                return;
+            }
+
             if (_seekingAffordance != null)
             {
                 EnterAffordance(_seekingAffordance);
                 return;
             }
 
-            if (_arbiter.CurrentActionKey == "FETCH_OUTBOUND")
-                _arbiter.Propose(BehaviorLayer.PlayerCue, "PICKUP", 2000, interruptible: false);
-            else
-                _animator?.PlayImmediate("idle_a", loop: true);
+            _animator?.PlayImmediate("idle_a", loop: true);
+        }
+
+        private void AdvanceFetchPresentation()
+        {
+            if (_fetchSequence == null || _animator == null) return;
+
+            if ((_fetchSequence.Stage == FetchStage.Pickup ||
+                 _fetchSequence.Stage == FetchStage.Drop) &&
+                _animator.IsIdleOrFinished())
+            {
+                FetchTransition transition = _fetchSequence.ActionFinished();
+                if (transition == FetchTransition.StartReturn)
+                {
+                    _targetPosition = _fetchReturnPosition;
+                    _hasTarget = true;
+                    _motion.SetGait(Gait.Walk);
+                    _animator.PlayImmediate("carry", loop: true);
+                }
+                else if (transition == FetchTransition.Completed)
+                {
+                    _fetchToy = null;
+                    _arbiter.CompleteIfCurrent("FETCH");
+                    _postFetchCelebration = true;
+                    _animator.PlayImmediate("success");
+                }
+            }
+            else if (_postFetchCelebration && _animator.IsIdleOrFinished())
+            {
+                _postFetchCelebration = false;
+                _animator.PlayImmediate("idle_a", loop: true);
+            }
+        }
+
+        private void CancelFetch(bool dropToy)
+        {
+            if (_fetchSequence == null || !_fetchSequence.Cancel()) return;
+            if (dropToy && _fetchToy != null && _fetchToy.IsHeld)
+                _fetchToy.DropAt(transform.position + transform.forward * 0.30f);
+            _fetchToy = null;
+            _postFetchCelebration = false;
+            _arbiter?.CompleteIfCurrent("FETCH");
         }
 
         // ---------------- affordance engagement ----------------
@@ -280,8 +400,13 @@ namespace Gibi.Pets
         {
             if (petAssetRoot == null || instantiated == null) return;
             instantiated.transform.SetParent(petAssetRoot, worldPositionStays: false);
-            instantiated.transform.localPosition = Vector3.zero;
-            instantiated.transform.localRotation = Quaternion.identity;
+            instantiated.transform.localPosition = _animationProfile != null
+                ? _animationProfile.AssetLocalPosition
+                : Vector3.zero;
+            instantiated.transform.localRotation = _animationProfile != null
+                ? _animationProfile.AssetLocalRotation
+                : Quaternion.identity;
+            instantiated.transform.localScale = Vector3.one;
 
             // Section 6.3: model mesh colliders are forbidden. Strip any the asset
             // shipped with rather than trusting it not to have them.
@@ -292,6 +417,8 @@ namespace Gibi.Pets
             // nothing and the pet would stay visible inside an opaque shell.
             _concealedRenderers = null;
 
+            CreateMouthSocket(instantiated.transform);
+
             if (_animator != null && _animator.Bind(instantiated))
             {
                 _animator.PlayImmediate("idle_a", loop: true);
@@ -301,6 +428,48 @@ namespace Gibi.Pets
             {
                 Debug.LogWarning("[GibiWorld] Asset carries no animation clips; pet will be static.");
             }
+        }
+
+        /// <summary>Called before attachment so presentation corrections are deterministic.</summary>
+        public void ConfigureProfile(PetAnimationProfile profile)
+        {
+            _animationProfile = profile;
+            _animator?.Configure(profile);
+        }
+
+        public void ConfigureBoundary(SandboxBoundary boundary)
+            => _sandboxBoundary = boundary;
+
+        private void CreateMouthSocket(Transform instantiatedRoot)
+        {
+            _mouthSocket = null;
+            if (_animationProfile == null || instantiatedRoot == null) return;
+
+            Transform mouthBone = FindDescendant(instantiatedRoot, _animationProfile.MouthBoneName);
+            if (mouthBone == null)
+            {
+                Debug.LogWarning($"[GibiWorld] Mouth bone '{_animationProfile.MouthBoneName}' " +
+                                 "was not found; toy attachment remains disabled.");
+                return;
+            }
+
+            var existing = mouthBone.Find("MouthSocket");
+            _mouthSocket = existing != null
+                ? existing
+                : new GameObject("MouthSocket").transform;
+            _mouthSocket.SetParent(mouthBone, worldPositionStays: false);
+            _mouthSocket.localPosition = _animationProfile.MouthSocketLocalPosition;
+            _mouthSocket.localRotation = _animationProfile.MouthSocketLocalRotation;
+            _mouthSocket.localScale = Vector3.one;
+        }
+
+        private static Transform FindDescendant(Transform root, string exactName)
+        {
+            if (root == null || string.IsNullOrEmpty(exactName)) return null;
+            var descendants = root.GetComponentsInChildren<Transform>(true);
+            for (int i = 0; i < descendants.Length; i++)
+                if (descendants[i].name == exactName) return descendants[i];
+            return null;
         }
     }
 }

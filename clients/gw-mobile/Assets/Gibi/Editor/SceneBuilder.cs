@@ -13,12 +13,26 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 namespace Gibi.Editor
 {
     public static class SceneBuilder
     {
         private const string SceneDir = "Assets/Scenes";
+        private const string RandyProfilePath =
+            "Assets/Gibi/Pets/Profiles/Randy11P0.asset";
+        private const string DogHouseAssetPath =
+            "Assets/Gibi/Art/P0/luxurydoghouse.glb";
+        private const string ToyAssetPath =
+            "Assets/Gibi/Art/P0/toyball-930.glb";
+
+        private sealed class SandboxComposition
+        {
+            public Transform Root;
+            public Gibi.Pets.SandboxBoundary Boundary;
+            public Gibi.Pets.SandboxDemoDirector Director;
+        }
 
         [MenuItem("GibiWorld/Build P0 Scenes")]
         public static void BuildAll()
@@ -112,12 +126,18 @@ namespace Gibi.Editor
             // and a second would silently degrade spatial audio.
 
             var planeManager = originGo.AddComponent<ARPlaneManager>();
+            // P0 places the complete dog sandbox on the floor. Asking ARCore for every
+            // plane orientation adds wall/ceiling noise without helping this flow and
+            // makes the first useful horizontal result slower and harder to recognize.
+            planeManager.requestedDetectionMode = PlaneDetectionMode.Horizontal;
             // Without a plane prefab, detected planes are INVISIBLE. AR then appears
             // broken even when tracking is perfect, because the player has no way to see
             // what the device has found or where it is safe to tap.
             planeManager.planePrefab = CreatePlaneVisualizerPrefab();
             originGo.AddComponent<ARRaycastManager>();
-            originGo.AddComponent<ARAnchorManager>();
+            var anchorManager = originGo.AddComponent<ARAnchorManager>();
+            var anchorHost = originGo.AddComponent<Gibi.Spatial.ARWorldAnchorHost>();
+            anchorHost.Configure(anchorManager);
 
             // ARMeshManager SHALL be a CHILD of the XR Origin, not a component on it.
             // It parents generated mesh GameObjects under its own transform, so AR
@@ -142,11 +162,19 @@ namespace Gibi.Editor
             placement.transform.SetParent(originGo.transform);
             placement.AddComponent<Gibi.Gameplay.PlacementController>();
 
+            // The complete sandbox moves as one placement unit. It is hidden until the
+            // first accepted tap, and ordinary later taps can no longer relocate it.
+            var sandbox = BuildSandboxComposition(originGo.transform, includeValidationFloor: false);
+            sandbox.Root.gameObject.SetActive(false);
+
             // Without these two the scene renders a camera feed and nothing else — no
             // pet is ever requested and no tap is ever read.
             var session = new GameObject("P0Session");
             session.transform.SetParent(originGo.transform);
-            session.AddComponent<Gibi.Gameplay.P0SessionDriver>();
+            var p0 = session.AddComponent<Gibi.Gameplay.P0SessionDriver>();
+            p0.ConfigureAnimationProfile(EnsureRandy11Profile());
+            p0.ConfigureWorld(sandbox.Root, sandbox.Boundary, sandbox.Director,
+                              autoSpawn: false, anchorHostBehaviour: anchorHost);
 
             // Section 5.3: the placement ring needs actual geometry to tint. A ring with
             // no renderer encodes status into nothing at all.
@@ -163,49 +191,165 @@ namespace Gibi.Editor
         }
 
         // ------------------------------------------------------------------
-        // PetSandbox: PetRoot, deterministic motion controller, animation graph,
-        // IK graph, interaction volumes, spatial audio emitter, effects pool.
+        // PetSandbox: the same composition used under AR placement, plus a visible
+        // validation floor/boundary and automatic verified-pet spawn.
         // ------------------------------------------------------------------
         private static void BuildPetSandbox()
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            var petRoot = new GameObject("PetRoot");
-            petRoot.AddComponent<Gibi.Pets.PetController>();
+            var sandbox = BuildSandboxComposition(null, includeValidationFloor: true);
 
-            // Section 6.3: "Pet colliders SHALL be authored runtime primitives.
-            // Model mesh colliders are forbidden."
-            var body = new GameObject("BodyCapsule");
-            body.transform.SetParent(petRoot.transform);
-            var capsule = body.AddComponent<CapsuleCollider>();
-            capsule.direction = 2;        // Z, along the spine
-            capsule.height = 0.90f;       // tuned to a 0.50 m-shoulder dog
-            capsule.radius = 0.13f;
-            capsule.center = new Vector3(0f, 0.28f, 0f);
+            var session = new GameObject("SandboxSession");
+            var p0 = session.AddComponent<Gibi.Gameplay.P0SessionDriver>();
+            p0.ConfigureAnimationProfile(EnsureRandy11Profile());
+            p0.ConfigureWorld(sandbox.Root, sandbox.Boundary, sandbox.Director,
+                              autoSpawn: true);
 
-            // Where the signed, verified GLB is instantiated at runtime.
-            var assetRoot = new GameObject("PetAssetRoot");
-            assetRoot.transform.SetParent(petRoot.transform);
-
-            var interaction = new GameObject("InteractionVolumes");
-            interaction.transform.SetParent(petRoot.transform);
-            var petZone = interaction.AddComponent<SphereCollider>();
-            petZone.isTrigger = true;
-            petZone.radius = 0.6f;
-
-            var audio = new GameObject("SpatialAudioEmitter");
-            audio.transform.SetParent(petRoot.transform);
-            var src = audio.AddComponent<AudioSource>();
-            src.spatialBlend = 1f;                       // fully spatialised
-            src.rolloffMode = AudioRolloffMode.Linear;
-            src.minDistance = 0.5f;                      // section 7
-            src.maxDistance = 8.0f;                      // section 7
-            src.playOnAwake = false;
-
-            var effects = new GameObject("EffectsPool");
-            effects.transform.SetParent(petRoot.transform);
+            BuildSandboxPreviewRig();
 
             EditorSceneManager.SaveScene(scene, SceneValidator.PetSandboxScene);
+        }
+
+        private static void BuildSandboxPreviewRig()
+        {
+            var cameraGo = new GameObject("ValidationCamera");
+            cameraGo.tag = "MainCamera";
+            cameraGo.transform.position = new Vector3(2.65f, 1.55f, -3.15f);
+            cameraGo.transform.rotation = Quaternion.LookRotation(
+                new Vector3(0f, 0.38f, 0.75f) - cameraGo.transform.position,
+                Vector3.up);
+            var camera = cameraGo.AddComponent<Camera>();
+            camera.fieldOfView = 52f;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = new Color(0.075f, 0.09f, 0.10f, 1f);
+            cameraGo.AddComponent<AudioListener>();
+
+            var lightGo = new GameObject("ValidationSun");
+            lightGo.transform.rotation = Quaternion.Euler(48f, -32f, 0f);
+            var light = lightGo.AddComponent<Light>();
+            light.type = LightType.Directional;
+            light.intensity = 1.25f;
+            light.color = new Color(1f, 0.94f, 0.84f);
+        }
+
+        private static SandboxComposition BuildSandboxComposition(
+            Transform parent, bool includeValidationFloor)
+        {
+            var rootGo = new GameObject("PlacedWorldRoot");
+            if (parent != null) rootGo.transform.SetParent(parent, worldPositionStays: false);
+
+            var boundary = rootGo.AddComponent<Gibi.Pets.SandboxBoundary>();
+            boundary.Configure(new Vector2(2.1f, 2.1f));
+
+            var content = new GameObject("SandboxContent");
+            content.transform.SetParent(rootGo.transform, false);
+
+            if (includeValidationFloor)
+                BuildValidationGroundAndBoundary(content.transform);
+
+            var returnPoint = new GameObject("FetchReturnPoint");
+            returnPoint.transform.SetParent(content.transform, false);
+            returnPoint.transform.localPosition = Vector3.zero;
+
+            var toy = InstantiateArtAsset(ToyAssetPath, "FetchToy", content.transform);
+            toy.transform.localPosition = new Vector3(0.85f, 0f, 0.30f);
+            toy.transform.localRotation = Quaternion.identity;
+            var fetchToy = toy.AddComponent<Gibi.Pets.FetchToy>();
+            // This GLB's pivot is already on the bottom of its measured 0.067 m bounds.
+            fetchToy.Configure(0f);
+
+            var house = new GameObject("DogHouse");
+            house.transform.SetParent(content.transform, false);
+            house.transform.localPosition = new Vector3(0f, 0f, 1.55f);
+
+            var houseVisual = InstantiateArtAsset(
+                DogHouseAssetPath, "DogHouseVisual", house.transform);
+            // Blender's -Y front exports to Unity +Z; rotate the visual so its entrance
+            // faces the dog and the affordance's local -Z threshold.
+            houseVisual.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+
+            var rest = house.AddComponent<Gibi.Pets.RestAffordance>();
+            // Measured: centre X 0.0287 m; Unity depth 1.084 m.
+            rest.ConfigureVisibleThresholdRest(0.0287f, 1.084f);
+
+            var directorGo = new GameObject("SandboxDemoDirector");
+            directorGo.transform.SetParent(content.transform, false);
+            var director = directorGo.AddComponent<Gibi.Pets.SandboxDemoDirector>();
+            director.Configure(fetchToy, rest, returnPoint.transform, shouldLoop: true);
+
+            return new SandboxComposition
+            {
+                Root = rootGo.transform,
+                Boundary = boundary,
+                Director = director,
+            };
+        }
+
+        private static GameObject InstantiateArtAsset(
+            string assetPath, string instanceName, Transform parent)
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+            if (asset == null)
+                throw new FileNotFoundException(
+                    $"Required sandbox art did not import as a GameObject: {assetPath}");
+
+            var instance = PrefabUtility.InstantiatePrefab(asset) as GameObject;
+            if (instance == null) instance = Object.Instantiate(asset);
+            instance.name = instanceName;
+            instance.transform.SetParent(parent, worldPositionStays: false);
+            instance.transform.localPosition = Vector3.zero;
+            instance.transform.localRotation = Quaternion.identity;
+            instance.transform.localScale = Vector3.one;
+            return instance;
+        }
+
+        private static void BuildValidationGroundAndBoundary(Transform parent)
+        {
+            var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            ground.name = "ValidationGround";
+            ground.transform.SetParent(parent, false);
+            ground.transform.localScale = new Vector3(0.42f, 1f, 0.42f);
+
+            var groundMat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            groundMat.name = "ValidationGroundMaterial";
+            if (groundMat.HasProperty("_BaseColor"))
+                groundMat.SetColor("_BaseColor", new Color(0.16f, 0.20f, 0.18f, 1f));
+            ground.GetComponent<MeshRenderer>().sharedMaterial = groundMat;
+
+            BuildBoundaryRail(parent, "BoundaryNorth", new Vector3(0f, 0.06f, 2.1f),
+                              new Vector3(4.2f, 0.12f, 0.04f));
+            BuildBoundaryRail(parent, "BoundarySouth", new Vector3(0f, 0.06f, -2.1f),
+                              new Vector3(4.2f, 0.12f, 0.04f));
+            BuildBoundaryRail(parent, "BoundaryEast", new Vector3(2.1f, 0.06f, 0f),
+                              new Vector3(0.04f, 0.12f, 4.2f));
+            BuildBoundaryRail(parent, "BoundaryWest", new Vector3(-2.1f, 0.06f, 0f),
+                              new Vector3(0.04f, 0.12f, 4.2f));
+        }
+
+        private static void BuildBoundaryRail(
+            Transform parent, string name, Vector3 position, Vector3 scale)
+        {
+            var rail = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            rail.name = name;
+            rail.transform.SetParent(parent, false);
+            rail.transform.localPosition = position;
+            rail.transform.localScale = scale;
+            var renderer = rail.GetComponent<MeshRenderer>();
+            if (renderer != null) renderer.enabled = false;
+        }
+
+        private static Gibi.Pets.PetAnimationProfile EnsureRandy11Profile()
+        {
+            var profile = AssetDatabase.LoadAssetAtPath<Gibi.Pets.PetAnimationProfile>(
+                RandyProfilePath);
+            if (profile != null) return profile;
+
+            Directory.CreateDirectory(Path.GetDirectoryName(RandyProfilePath));
+            profile = ScriptableObject.CreateInstance<Gibi.Pets.PetAnimationProfile>();
+            profile.ApplyRandy11P0Defaults();
+            AssetDatabase.CreateAsset(profile, RandyProfilePath);
+            return profile;
         }
     
         /// <summary>
@@ -216,10 +360,20 @@ namespace Gibi.Editor
         {
             const string dir = "Assets/Prefabs";
             const string path = dir + "/ARPlaneVisualizer.prefab";
+            var planeColor = new Color(0.12f, 0.85f, 0.95f, 0.45f);
             Directory.CreateDirectory(dir);
 
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (existing != null) return existing;
+            if (existing != null)
+            {
+                var existingRenderer = existing.GetComponent<MeshRenderer>();
+                if (existingRenderer != null && existingRenderer.sharedMaterial != null)
+                {
+                    SetTransparent(existingRenderer.sharedMaterial, planeColor);
+                    EditorUtility.SetDirty(existingRenderer.sharedMaterial);
+                }
+                return existing;
+            }
 
             var go = new GameObject("ARPlaneVisualizer");
             go.AddComponent<ARPlane>();
@@ -230,7 +384,7 @@ namespace Gibi.Editor
 
             var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
             mat.name = "ARPlaneMaterial";
-            SetTransparent(mat, new Color(0.30f, 0.65f, 1f, 0.28f));
+            SetTransparent(mat, planeColor);
             AssetDatabase.CreateAsset(mat, dir + "/ARPlaneMaterial.mat");
             mr.sharedMaterial = mat;
 
@@ -271,6 +425,9 @@ namespace Gibi.Editor
             m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
             m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
             m.SetInt("_ZWrite", 0);
+            // AR provider mesh winding is an implementation detail. Rendering both
+            // sides keeps the discovered floor visible from above on every provider.
+            if (m.HasProperty("_Cull")) m.SetFloat("_Cull", 0f);
             m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
             m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
             if (m.HasProperty("_BaseColor")) m.SetColor("_BaseColor", c);

@@ -22,10 +22,12 @@ namespace Gibi.Pets
     public sealed class PetAnimator : MonoBehaviour
     {
         private Animation _animation;
+        private PetAnimationProfile _profile;
         private readonly List<string> _available = new();
         private string _currentClip;
         private float _pendingLatencyS;
-        private string _pendingClip;
+        private PetClipResolution _pendingResolution;
+        private bool _hasPendingResolution;
         private float _pendingSpeed = 1f;
         private bool _pendingLoop;
 
@@ -33,6 +35,8 @@ namespace Gibi.Pets
         public IReadOnlyList<string> AvailableClips => _available;
         public string CurrentClip => _currentClip;
         public bool IsBound => _animation != null && _available.Count > 0;
+
+        public void Configure(PetAnimationProfile profile) => _profile = profile;
 
         /// <summary>
         /// Discover the Animation component glTFast attached and enumerate its clips.
@@ -59,7 +63,12 @@ namespace Gibi.Pets
             }
 
             _animation.playAutomatically = false;
-            _animation.cullingType = AnimationCullingType.BasedOnRenderers;
+            // Fetch and rest presentation advance their gameplay state when a one-shot
+            // clip completes. Culling the Animation when the pet leaves the camera view
+            // would therefore freeze gameplay (and also stalls headless PlayMode tests).
+            // Keep this lightweight single-pet P0 actor evaluating off-screen; revisit
+            // with an explicit simulation/presentation split before scaling pet count.
+            _animation.cullingType = AnimationCullingType.AlwaysAnimate;
             return _available.Count > 0;
         }
 
@@ -72,8 +81,8 @@ namespace Gibi.Pets
         {
             if (!IsBound) return;
 
-            string resolved = ClipResolver.Resolve(clipKey, _available);
-            if (resolved == null) return;
+            var resolved = Resolve(clipKey);
+            if (!resolved.IsValid) return;
 
             // Intensity scales playback speed within a narrow, readable band. Below ~0.75
             // a quadruped gait reads as slow-motion rather than as calm, and above ~1.25
@@ -85,7 +94,8 @@ namespace Gibi.Pets
             {
                 // Hesitation before acting. This is the single field that makes the pet
                 // read as having decided something rather than having been triggered.
-                _pendingClip = resolved;
+                _pendingResolution = resolved;
+                _hasPendingResolution = true;
                 _pendingLatencyS = mods.LatencyMs / 1000f;
                 _pendingSpeed = speed;
                 _pendingLoop = loop;
@@ -99,35 +109,51 @@ namespace Gibi.Pets
         public void PlayImmediate(string clipKey, bool loop = false)
         {
             if (!IsBound) return;
-            string resolved = ClipResolver.Resolve(clipKey, _available);
-            if (resolved == null) return;
-            _pendingClip = null;
+            var resolved = Resolve(clipKey);
+            if (!resolved.IsValid) return;
+            _hasPendingResolution = false;
             Begin(resolved, 1f, loop);
         }
 
-        private void Begin(string clip, float speed, bool loop)
+        private PetClipResolution Resolve(string clipKey)
         {
-            var state = _animation[clip];
+            if (_profile != null && _profile.TryResolve(clipKey, _available, out var profiled))
+                return profiled;
+
+            string fallback = ClipResolver.Resolve(clipKey, _available);
+            return fallback == null
+                ? default
+                : new PetClipResolution(clipKey, fallback);
+        }
+
+        private void Begin(in PetClipResolution resolution, float speed, bool loop)
+        {
+            var state = _animation[resolution.ClipName];
             if (state == null) return;
 
-            state.speed = speed;
+            state.speed = speed * resolution.SpeedMultiplier;
             state.wrapMode = loop ? WrapMode.Loop : WrapMode.Once;
+
+            // A reversed one-shot must begin at the end of the authored clip. The only
+            // P0 use is rise <- reversed sleep until native transition art arrives.
+            if (state.speed < 0f && !loop)
+                state.time = state.length;
 
             // CrossFade rather than Play: section 6.3 requires blends of at least 100 ms
             // and forbids snapping. 0.15 s sits above that floor with margin.
-            _animation.CrossFade(clip, 0.15f);
-            _currentClip = clip;
+            _animation.CrossFade(resolution.ClipName, 0.15f);
+            _currentClip = resolution.ClipName;
         }
 
         private void Update()
         {
-            if (_pendingClip == null) return;
+            if (!_hasPendingResolution) return;
 
             _pendingLatencyS -= Time.deltaTime;
             if (_pendingLatencyS > 0f) return;
 
-            Begin(_pendingClip, _pendingSpeed, _pendingLoop);
-            _pendingClip = null;
+            Begin(_pendingResolution, _pendingSpeed, _pendingLoop);
+            _hasPendingResolution = false;
         }
 
         /// <summary>True once the current non-looping clip has finished.</summary>

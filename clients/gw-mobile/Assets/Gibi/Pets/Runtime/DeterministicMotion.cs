@@ -45,14 +45,15 @@ namespace Gibi.Pets
         /// Advance exactly one 50 Hz simulation step. Called from FixedUpdate, never
         /// from Update. Accumulates in float64 so that a long course does not drift.
         /// </summary>
-        public void Step(float yawCommandDeg)
+        public void Step(float yawCommandDeg, bool advance = true)
         {
             _stepCount++;
 
             double yawDelta = Math.Clamp(yawCommandDeg, -MaxYawRateDegPerS, MaxYawRateDegPerS) * FixedDeltaS;
             HeadingDeg = Wrap360(HeadingDeg + yawDelta);
 
-            DistanceTravelledM += (double)SpeedFor(CurrentGait) * FixedDeltaS;
+            if (advance)
+                DistanceTravelledM += (double)SpeedFor(CurrentGait) * FixedDeltaS;
         }
 
         /// <summary>Steps consumed so far — used by the frame-rate variance test.</summary>

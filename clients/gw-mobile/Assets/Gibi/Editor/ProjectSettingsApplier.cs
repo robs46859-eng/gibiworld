@@ -16,6 +16,17 @@ namespace Gibi.Editor
         [MenuItem("GibiWorld/Apply Required Project Settings")]
         public static void Apply()
         {
+            // --- section 8.2.1: stable application identity ---
+            // Never let Unity synthesize com.DefaultCompany.* from placeholder fields.
+            // Besides being unsuitable for distribution, changing this implicitly later
+            // breaks Android update identity and ARCore/Play release continuity.
+            PlayerSettings.companyName = "GibiWorld";
+            PlayerSettings.productName = "GibiWorld";
+            PlayerSettings.SetApplicationIdentifier(
+                NamedBuildTarget.Android, "com.gibiworld.mobile");
+            PlayerSettings.SetApplicationIdentifier(
+                NamedBuildTarget.iOS, "com.gibiworld.mobile");
+
             // --- section 3.1: IL2CPP ---
             // Unity 6 exposes a single ApiCompatibilityLevel.NET_Standard member;
             // the versioned NET_Standard_2_1 name was removed.
@@ -29,9 +40,9 @@ namespace Gibi.Editor
             PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.iOS, ManagedStrippingLevel.Low);
             PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.Android, ManagedStrippingLevel.Low);
 
-            // NSDK setup docs (Android): "enable both ARMv7 and ARM64".
-            PlayerSettings.Android.targetArchitectures =
-                AndroidArchitecture.ARMv7 | AndroidArchitecture.ARM64;
+            // The shipping variant is ARM64. A separate compatibility build may opt
+            // into ARMv7, but must not silently turn this release into a fat APK.
+            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
 
             // --- section 7: URP requires linear ---
             PlayerSettings.colorSpace = ColorSpace.Linear;
@@ -96,6 +107,11 @@ namespace Gibi.Editor
             // Section 7 draw-call budget: dynamic batching helps, static batching bloats
             // the build for scenes that are almost entirely runtime-instantiated.
             PlayerSettings.bakeCollisionMeshes = false;
+
+            // ADR-012: the local P0 uses standard ARCore. NSDK remains installed for
+            // future authenticated services but its 4.1.0 loader is not device-safe on
+            // the Pixel 9a due to its zNear=0 native projection loop.
+            AndroidXrProviderConfigurator.ApplyArCoreP0();
 
             AssetDatabase.SaveAssets();
             Debug.Log("[GibiWorld] Required project settings applied. See ProjectSettings/GibiBuildSettings.md");

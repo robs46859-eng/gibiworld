@@ -31,6 +31,7 @@ namespace Gibi.Spatial
         private int _lastPlaneCount = -1;
         private Vector3 _lastAnchorPosition;
         private bool _hasLastAnchorPosition;
+        private bool _planeVisualsVisible = true;
 
         /// <summary>Current per-anchor state. Read by placement, scoring, and UI.</summary>
         public AnchorState State => _eligibility?.State ?? AnchorState.Unavailable;
@@ -114,6 +115,10 @@ namespace Gibi.Spatial
                     if (pl.alignment == PlaneAlignment.HorizontalUp) horizontal++;
                 Debug.Log($"[GibiWorld] planes = {_lastPlaneCount} " +
                           $"({horizontal} horizontal-up, which is what section 5.3 accepts)");
+
+                // A provider can add planes after placement. Keep later visualizers in
+                // the same state without disabling tracking or disturbing the anchor.
+                if (!_planeVisualsVisible) ApplyPlaneVisualizationVisibility();
             }
 
             bool surfaceAccepted = HasAcceptedSurface();
@@ -164,6 +169,29 @@ namespace Gibi.Spatial
                 if (minExtent * 2f >= SurfaceAcceptance.MinClearanceRadiusPetM) return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Keeps tracked planes available for AR state and raycasts while hiding only
+        /// their cyan coaching mesh after the world has been placed.
+        /// </summary>
+        public void SetPlaneVisualizationVisible(bool visible)
+        {
+            _planeVisualsVisible = visible;
+            ApplyPlaneVisualizationVisibility();
+        }
+
+        private void ApplyPlaneVisualizationVisibility()
+        {
+            if (planeManager == null) return;
+            foreach (var plane in planeManager.trackables)
+            {
+                var meshVisualizer = plane.GetComponent<ARPlaneMeshVisualizer>();
+                if (meshVisualizer != null) meshVisualizer.enabled = _planeVisualsVisible;
+
+                var meshRenderer = plane.GetComponent<MeshRenderer>();
+                if (meshRenderer != null) meshRenderer.enabled = _planeVisualsVisible;
+            }
         }
 
         /// <summary>Section 7: reduce hidden-geometry interactions when depth is unavailable.</summary>

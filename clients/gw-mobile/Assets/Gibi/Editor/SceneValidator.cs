@@ -50,6 +50,7 @@ namespace Gibi.Editor
         {
             var errors = new List<string>();
             errors.AddRange(ValidateARWorld());
+            errors.AddRange(ValidatePetSandbox());
             errors.AddRange(ValidateBootstrap());
             return errors;
         }
@@ -83,10 +84,92 @@ namespace Gibi.Editor
             RequireManager<ARAnchorManager>(roots, errors);
             RequireManager<ARMeshManager>(roots, errors);
 
+            int anchorHosts = roots.Sum(r =>
+                r.GetComponentsInChildren<Gibi.Spatial.ARWorldAnchorHost>(true).Length);
+            if (anchorHosts != 1)
+                errors.Add($"P0 AR contract: expected one ARWorldAnchorHost; found {anchorHosts}.");
+
             // A second audio listener silently halves spatial audio quality (section 7).
             int listeners = roots.Sum(r => r.GetComponentsInChildren<AudioListener>(true).Length);
             if (listeners > 1)
                 errors.Add($"ARWorld contains {listeners} AudioListeners; at most 1 permitted.");
+
+            var placedRoots = roots.SelectMany(r => r.GetComponentsInChildren<Transform>(true))
+                                   .Where(t => t.name == "PlacedWorldRoot").ToArray();
+            if (placedRoots.Length != 1)
+            {
+                errors.Add($"P0 AR contract: ARWorld has {placedRoots.Length} PlacedWorldRoot objects; exactly 1 required.");
+            }
+            else
+            {
+                var placed = placedRoots[0];
+                if (placed.gameObject.activeSelf)
+                    errors.Add("P0 AR contract: PlacedWorldRoot must start inactive until placement is accepted.");
+                RequireUnder<Gibi.Pets.SandboxBoundary>(placed, "P0 AR contract", errors);
+                RequireUnder<Gibi.Pets.FetchToy>(placed, "P0 AR contract", errors);
+                RequireUnder<Gibi.Pets.RestAffordance>(placed, "P0 AR contract", errors);
+                RequireUnder<Gibi.Pets.SandboxDemoDirector>(placed, "P0 AR contract", errors);
+            }
+
+            return errors;
+        }
+
+        private static List<string> ValidatePetSandbox()
+        {
+            var errors = new List<string>();
+            if (!System.IO.File.Exists(PetSandboxScene))
+            {
+                errors.Add($"P0 sandbox contract: {PetSandboxScene} does not exist.");
+                return errors;
+            }
+
+            var scene = EditorSceneManager.OpenScene(PetSandboxScene, OpenSceneMode.Single);
+            var roots = scene.GetRootGameObjects();
+            var placedRoots = roots.Where(r => r.name == "PlacedWorldRoot").ToArray();
+            if (placedRoots.Length != 1)
+            {
+                errors.Add($"P0 sandbox contract: scene has {placedRoots.Length} PlacedWorldRoot objects; exactly 1 required.");
+                return errors;
+            }
+
+            Transform placed = placedRoots[0].transform;
+            if (!placed.gameObject.activeSelf)
+                errors.Add("P0 sandbox contract: validation PlacedWorldRoot must start active.");
+
+            RequireUnder<Gibi.Pets.SandboxBoundary>(placed, "P0 sandbox contract", errors);
+            RequireUnder<Gibi.Pets.FetchToy>(placed, "P0 sandbox contract", errors);
+            RequireUnder<Gibi.Pets.RestAffordance>(placed, "P0 sandbox contract", errors);
+            RequireUnder<Gibi.Pets.SandboxDemoDirector>(placed, "P0 sandbox contract", errors);
+
+            if (placed.GetComponentsInChildren<MeshRenderer>(true).Length < 3)
+                errors.Add("P0 sandbox contract: expected rendered ground, dog house, and toy geometry.");
+
+            string[] requiredNames =
+            {
+                "ValidationGround", "BoundaryNorth", "BoundarySouth",
+                "BoundaryEast", "BoundaryWest", "DogHouse", "FetchToy",
+                "FetchReturnPoint", "SandboxDemoDirector",
+            };
+            foreach (string required in requiredNames)
+            {
+                int count = placed.GetComponentsInChildren<Transform>(true)
+                                  .Count(t => t.name == required);
+                if (count != 1)
+                    errors.Add($"P0 sandbox contract: expected exactly one {required}; found {count}.");
+            }
+
+            int sessions = roots.Sum(r =>
+                r.GetComponentsInChildren<Gibi.Gameplay.P0SessionDriver>(true).Length);
+            if (sessions != 1)
+                errors.Add($"P0 sandbox contract: expected one P0SessionDriver; found {sessions}.");
+
+            int cameras = roots.Sum(r => r.GetComponentsInChildren<Camera>(true).Length);
+            if (cameras != 1)
+                errors.Add($"P0 sandbox contract: expected one validation Camera; found {cameras}.");
+
+            int lights = roots.Sum(r => r.GetComponentsInChildren<Light>(true).Length);
+            if (lights != 1)
+                errors.Add($"P0 sandbox contract: expected one validation Light; found {lights}.");
 
             return errors;
         }
@@ -99,6 +182,14 @@ namespace Gibi.Editor
                 errors.Add($"Section 4.1: ARWorld is missing {typeof(T).Name}.");
             else if (n > 1)
                 errors.Add($"Section 4.1: ARWorld has {n} {typeof(T).Name}; exactly 1 expected.");
+        }
+
+        private static void RequireUnder<T>(Transform root, string contract,
+                                            List<string> errors) where T : Component
+        {
+            int count = root.GetComponentsInChildren<T>(true).Length;
+            if (count != 1)
+                errors.Add($"{contract}: expected one {typeof(T).Name} under {root.name}; found {count}.");
         }
 
         private static List<string> ValidateBootstrap()

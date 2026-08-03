@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ceec14d1f0d407b87d9345a81db1590, type: 3}
+  m_Name: Randy11P0
+  m_EditorClassIdentifier: 
+  petAssetId: asset_01J8ZQK5T7VN2MXR4WD6GHYAB3
+  assetLocalPosition: {x: 0, y: 0.514626, z: 0}
+  assetLocalEuler: {x: 0, y: -90, z: 0}
+  mouthBoneName: jaw
+  mouthSocketLocalPosition: {x: 0, y: 0, z: 0}
+  mouthSocketLocalEuler: {x: 0, y: 0, z: 0}
+  clipBindings:
+  - canonicalKey: down
+    options:
+    - clipName: down
+      speedMultiplier: 1
+    - clipName: sit
+      speedMultiplier: 1
+    - clipName: idle_a
+      speedMultiplier: 1
+  - canonicalKey: rise
+    options:
+    - clipName: rise
+      speedMultiplier: 1
+    - clipName: stand
+      speedMultiplier: 1
+    - clipName: sit
+      speedMultiplier: -1
+    - clipName: idle_a
+      speedMultiplier: 1
+  - canonicalKey: sleep
+    options:
+    - clipName: sit
+      speedMultiplier: 1
+    - clipName: idle_a
+      speedMultiplier: 1
+  - canonicalKey: pickup
+    options:
+    - clipName: pickup
+      speedMultiplier: 1
+    - clipName: pet_react
+      speedMultiplier: 1
+    - clipName: sit
+      speedMultiplier: 1
+    - clipName: idle_a
+      speedMultiplier: 1
+  - canonicalKey: carry
+    options:
+    - clipName: carry
+      speedMultiplier: 1
+    - clipName: walk
+      speedMultiplier: 1
+    - clipName: run
+      speedMultiplier: 1
+    - clipName: idle_a
+      speedMultiplier: 1
+  - canonicalKey: drop
+    options:
+    - clipName: drop
+      speedMultiplier: 1
+    - clipName: pet_react
+      speedMultiplier: 1
+    - clipName: sit
+      speedMultiplier: 1
+    - clipName: idle_a
+      speedMultiplier: 1

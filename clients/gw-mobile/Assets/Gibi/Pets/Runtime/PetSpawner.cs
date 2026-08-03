@@ -28,6 +28,7 @@ namespace Gibi.Pets
         private readonly PresetCatalog _catalog;
         private readonly PetAssetLoader _loader;
         private readonly IEntitlementGate _entitlement;
+        private readonly PetAnimationProfile _animationProfile;
 
         /// <summary>
         /// P0 constructor. Takes no AssetRuntime types, because Gibi.Gameplay may not
@@ -36,15 +37,17 @@ namespace Gibi.Pets
         /// nominal — a signature that mentioned IEntitlementGate would force Gameplay to
         /// reference AssetRuntime just to compile.
         /// </summary>
-        public PetSpawner(Shader petShader)
-            : this(petShader, new PresetShippedEntitlement(), new DebugAssetTelemetry()) { }
+        public PetSpawner(Shader petShader, PetAnimationProfile animationProfile = null)
+            : this(petShader, new PresetShippedEntitlement(), new DebugAssetTelemetry(),
+                   animationProfile) { }
 
         internal PetSpawner(Shader petShader, IEntitlementGate entitlement,
-                            IAssetTelemetry telemetry)
+                            IAssetTelemetry telemetry, PetAnimationProfile animationProfile = null)
         {
             _catalog = new PresetCatalog(telemetry);
             _loader = new PetAssetLoader(telemetry, petShader);
             _entitlement = entitlement;
+            _animationProfile = animationProfile ?? PetAnimationProfile.CreateRandy11P0Runtime();
         }
 
         public Task<int> LoadTrustedKeysAsync(CancellationToken ct)
@@ -64,6 +67,24 @@ namespace Gibi.Pets
             capsule.radius = 0.13f;
             capsule.center = new Vector3(0f, 0.28f, 0f);
 
+            var interaction = new GameObject("InteractionVolumes");
+            interaction.transform.SetParent(petRoot.transform, worldPositionStays: false);
+            var petZone = interaction.AddComponent<SphereCollider>();
+            petZone.isTrigger = true;
+            petZone.radius = 0.6f;
+
+            var audio = new GameObject("SpatialAudioEmitter");
+            audio.transform.SetParent(petRoot.transform, worldPositionStays: false);
+            var source = audio.AddComponent<AudioSource>();
+            source.spatialBlend = 1f;
+            source.rolloffMode = AudioRolloffMode.Linear;
+            source.minDistance = 0.5f;
+            source.maxDistance = 8.0f;
+            source.playOnAwake = false;
+
+            var effects = new GameObject("EffectsPool");
+            effects.transform.SetParent(petRoot.transform, worldPositionStays: false);
+
             var assetRoot = new GameObject("PetAssetRoot");
             assetRoot.transform.SetParent(petRoot.transform, worldPositionStays: false);
 
@@ -79,6 +100,9 @@ namespace Gibi.Pets
             }
 
             var controller = petRoot.AddComponent<PetController>();
+
+            if (_animationProfile != null && _animationProfile.Supports(presetAssetId))
+                controller.ConfigureProfile(_animationProfile);
 
             // Hand the controller the instantiated asset so it can bind the Animation
             // component glTFast attached. Without this the pet loads, verifies, renders --

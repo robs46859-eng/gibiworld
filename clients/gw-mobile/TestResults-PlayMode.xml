@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-08-03 18:44:59Z" end-time="2026-08-03 18:45:04Z" duration="4.191869">
+  <test-suite type="TestSuite" id="1015" name="GibiWorld" fullname="GibiWorld" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-08-03 18:44:59Z" end-time="2026-08-03 18:45:04Z" duration="4.191869" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1003" name="Gibi.Tests.PlayMode.dll" fullname="/Users/robert/gibiworld/clients/gw-mobile/Library/ScriptAssemblies/Gibi.Tests.PlayMode.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:00Z" end-time="2026-08-03 18:45:04Z" duration="4.183964" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="13628" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1004" name="Gibi" fullname="Gibi" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:00Z" end-time="2026-08-03 18:45:04Z" duration="4.183605" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1005" name="Tests" fullname="Gibi.Tests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:00Z" end-time="2026-08-03 18:45:04Z" duration="4.183388" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="SandboxVerticalSliceTests" fullname="Gibi.Tests.SandboxVerticalSliceTests" classname="Gibi.Tests.SandboxVerticalSliceTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:00Z" end-time="2026-08-03 18:45:04Z" duration="4.182769" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1002" name="Verified_dog_fetches_real_toy_contract_then_rests_at_house_threshold" fullname="Gibi.Tests.SandboxVerticalSliceTests.Verified_dog_fetches_real_toy_contract_then_rests_at_house_threshold" methodname="Verified_dog_fetches_real_toy_contract_then_rests_at_house_threshold" classname="Gibi.Tests.SandboxVerticalSliceTests" runstate="Runnable" seed="1758804295" result="Passed" start-time="2026-08-03 18:45:00Z" end-time="2026-08-03 18:45:04Z" duration="4.176517" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[There are no audio listeners in the scene. Please ensure there is always one audio listener in the scene
+[GibiWorld] PetAnimator: 8 clips present, 17 catalog clips served by substitution
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1011" name="UnitySkills.Tests.Runtime.dll" fullname="/Users/robert/gibiworld/clients/gw-mobile/Library/ScriptAssemblies/UnitySkills.Tests.Runtime.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:04Z" end-time="2026-08-03 18:45:04Z" duration="0.003620" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="13628" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1012" name="UnitySkills" fullname="UnitySkills" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:04Z" end-time="2026-08-03 18:45:04Z" duration="0.003440" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1013" name="Tests" fullname="UnitySkills.Tests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:04Z" end-time="2026-08-03 18:45:04Z" duration="0.003211" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1014" name="Runtime" fullname="UnitySkills.Tests.Runtime" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:04Z" end-time="2026-08-03 18:45:04Z" duration="0.003006" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1009" name="PlayModeRecoveryTests" fullname="UnitySkills.Tests.Runtime.PlayModeRecoveryTests" classname="UnitySkills.Tests.Runtime.PlayModeRecoveryTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-08-03 18:45:04Z" end-time="2026-08-03 18:45:04Z" duration="0.002757" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1010" name="TestRunnerJob_CompletesAcrossPlayModeReloads" fullname="UnitySkills.Tests.Runtime.PlayModeRecoveryTests.TestRunnerJob_CompletesAcrossPlayModeReloads" methodname="TestRunnerJob_CompletesAcrossPlayModeReloads" classname="UnitySkills.Tests.Runtime.PlayModeRecoveryTests" runstate="Runnable" seed="1627939694" result="Passed" start-time="2026-08-03 18:45:04Z" end-time="2026-08-03 18:45:04Z" duration="0.002249" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <reason>
+                  <message><![CDATA[]]></message>
+                </reason>
+                <output><![CDATA[Saving results to: /Users/robert/Library/Application Support/GibiWorld/GibiWorld/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

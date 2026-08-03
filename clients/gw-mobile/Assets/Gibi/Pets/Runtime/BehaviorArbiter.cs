@@ -114,6 +114,21 @@ namespace Gibi.Pets
             return true;
         }
 
+        /// <summary>
+        /// Complete only the action that still owns the arbiter. A stale fetch callback
+        /// cannot clear a safety action that preempted it in the meantime.
+        /// </summary>
+        public bool CompleteIfCurrent(string expectedActionKey)
+        {
+            if (!_current.HasValue ||
+                !string.Equals(_current.Value.ActionKey, expectedActionKey,
+                               StringComparison.Ordinal))
+                return false;
+
+            _current = null;
+            return true;
+        }
+
         /// <summary>Advance the 10 Hz cadence. Returns true when a tick was consumed.</summary>
         public bool Tick()
         {

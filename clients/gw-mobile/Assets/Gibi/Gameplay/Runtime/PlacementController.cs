@@ -63,6 +63,7 @@ namespace Gibi.Gameplay
         private ISurfaceProbe _probe;
         private ARSessionDriver _sessionDriver;
         private PlayerSafetyGate _safetyGate;
+        private AnchorState? _testAnchorState;
 
         public PlacementStatus Status { get; private set; }
         public Pose CandidatePose { get; private set; }
@@ -104,10 +105,12 @@ namespace Gibi.Gameplay
         }
 
         /// <summary>Test seam — inject a FakeSurfaceProbe in EditMode.</summary>
-        public void ConfigureForTest(ISurfaceProbe probe, IMonotonicClock clock)
+        public void ConfigureForTest(ISurfaceProbe probe, IMonotonicClock clock,
+                                     AnchorState? anchorState = null)
         {
             _probe = probe;
             _safetyGate = new PlayerSafetyGate(clock);
+            _testAnchorState = anchorState;
         }
 
         /// <param name="playerSpeedMps">Device speed; section 13.3 pauses AR above 4.5 m/s.</param>
@@ -119,7 +122,10 @@ namespace Gibi.Gameplay
                                   "icon.motion", ColorCaution, haptic: true));
 
             // --- section 5.2: anchor state gate ---
-            var anchorState = _sessionDriver != null ? _sessionDriver.State : AnchorState.Unavailable;
+            var anchorState = _testAnchorState ??
+                              (_sessionDriver != null
+                                  ? _sessionDriver.State
+                                  : AnchorState.Unavailable);
             switch (anchorState)
             {
                 case AnchorState.Unavailable:
