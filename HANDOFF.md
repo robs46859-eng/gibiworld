@@ -20,7 +20,9 @@ placement pose, then disappeared when the phone moved because the virtual camera
 not following the handheld pose. The scene builder now configures the same handheld
 position/rotation bindings as AR Foundation's official Mobile AR origin, and the scene
 validator requires exactly one tracked-pose driver. The corrected APK is installed and
-its cold-start log no longer contains the missing-driver warning.
+its cold-start log no longer contains the missing-driver warning. A fresh physical scan
+and tap then placed the composition on the rug at 1.89 m, kept all three renderers visible
+after the Pixel moved, and hid the cyan coaching planes. The device goal is now PASS.
 
 The dog-house opening is physically smaller than this dog. The accepted P0 behavior is
 therefore a visible upright rest across the measured doorway threshold, not mesh
@@ -33,17 +35,25 @@ clipping through the solid decorative shell.
 - Depth-hit `HAZARD_UNKNOWN` / `clearanceR=0.00`: eliminated in the fresh run
 - Readiness/final-placement clearance parity: PASS
 - Lower reticle live distance: PASS (1.70-2.08 m versus former 3.54 m)
-- Correct-size signed dog and house rendered: PASS for the placement frame
-- Cyan plane coaching mesh hidden after placement: PASS
-- Camera pose-driver scene contract: PASS locally; missing-driver warning absent on Pixel
+- Correct-size signed dog and house rendered: PASS (`3/3` renderers)
+- Cyan plane coaching mesh hidden after placement: PASS in every post-placement capture
+- Camera pose-driver scene contract and movement persistence: PASS on Pixel
+- Fresh accepted placement: PASS at 1.89 m on a 1.03 m-clearance plane
+- Runtime behavior after placement: PASS through repeated fetch/rest loops
+- Fresh runtime audit: zero `HAZARD_UNKNOWN`, `clearanceR=0.00`, missing-driver
+  warnings, exceptions, null references, or OpenGL native errors
 - EditMode: 340/340 passed
 - PlayMode vertical slice: 2/2 passed
 - Final persistence-after-camera-movement check on the newly installed pose-driver APK:
-  **PENDING PHYSICAL RESCAN AND TAP**. Do not call the overall device goal complete until
-  the dog/house remain in the rug view after moving the Pixel.
+  PASS; the dog and house remained registered and visible after the camera pose changed.
 
 Evidence is under `docs/device-evidence/`, especially:
 
+- `pixel9a-tracked-pose-placed-2026-08-04.png` (successful floor placement)
+- `pixel9a-tracked-pose-after-move-2026-08-04.png` (visible after camera movement)
+- `pixel9a-tracked-pose-final-2026-08-04.png` (final visible state, cyan hidden)
+- `pixel9a-tracked-pose-stability-2026-08-04.mp4` (8-second stability capture)
+- `pixel9a-tracked-pose-logcat-2026-08-04.txt` (fresh post-placement behavior log)
 - `pixel9a-reticle035-placed-2026-08-04.png` (correct-size placement frame)
 - `pixel9a-reticle035-current-after-placement-2026-08-04.png` (pre-fix camera-pose loss)
 - `pixel9a-reticle035-logcat-2026-08-04.txt`
@@ -92,9 +102,8 @@ and `docs/adr/ADR-012-arcore-provider-for-p0-android.md`.
 1. Author a larger doorway or a dog-specific house so rest can move fully inside.
 2. Replace Randy11 clip substitutions with native down/rise/pickup/carry/drop/rest clips.
 3. Add the production build manifest/BuildGuard before promoting beyond development.
-4. After the tracked-camera device pass, tune the serialized 0.35 reticle only if a
-   second representative room requires it; do not change verified asset scale to mask
-   an aiming or tracking defect.
+4. Tune the serialized 0.35 reticle only if a second representative room requires it;
+   do not change verified asset scale to mask an aiming or tracking defect.
 
 ## Git handoff
 

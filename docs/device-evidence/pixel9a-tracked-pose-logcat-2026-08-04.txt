@@ -1,0 +1,218 @@
+--------- beginning of main
+08-04 09:31:59.210 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:31:59.210 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:31:59.210 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:31:59.210 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:31:59.210 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:31:59.210 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:31:59.210 I/Unity   (18534):
+08-04 09:32:00.210 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:32:00.210 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:00.210 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:00.210 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:00.210 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:00.210 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:32:00.210 I/Unity   (18534):
+08-04 09:32:01.313 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:32:01.313 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:01.313 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:01.313 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:01.313 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:01.313 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:32:01.313 I/Unity   (18534):
+08-04 09:32:06.345 I/Unity   (18534): [GibiWorld] demo: FETCH_STARTED
+08-04 09:32:06.345 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:06.345 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:06.345 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:06.345 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:06.345 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 09:32:06.345 I/Unity   (18534):
+08-04 09:32:09.516 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:32:09.516 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:09.516 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:09.516 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:09.516 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:09.516 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:32:09.516 I/Unity   (18534):
+08-04 09:32:10.530 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:32:10.530 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:10.530 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:10.530 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:10.530 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:10.530 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:32:10.530 I/Unity   (18534):
+08-04 09:32:11.634 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:32:11.634 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:11.634 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:11.634 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:11.634 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:11.634 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:32:11.634 I/Unity   (18534):
+08-04 09:32:16.654 I/Unity   (18534): [GibiWorld] demo: FETCH_STARTED
+08-04 09:32:16.654 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:16.654 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:16.654 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:16.654 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:16.654 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 09:32:16.654 I/Unity   (18534):
+08-04 09:32:19.870 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:32:19.870 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:19.870 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:19.870 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:19.870 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:19.870 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:32:19.870 I/Unity   (18534):
+08-04 09:32:20.872 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:32:20.872 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:20.872 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:20.872 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:20.872 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:20.872 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:32:20.872 I/Unity   (18534):
+08-04 09:32:21.979 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:32:21.979 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:21.979 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:21.979 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:21.979 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:21.979 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:32:21.979 I/Unity   (18534):
+08-04 09:32:27.003 I/Unity   (18534): [GibiWorld] demo: FETCH_STARTED
+08-04 09:32:27.003 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:27.003 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:27.003 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:27.003 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:27.003 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 09:32:27.003 I/Unity   (18534):
+08-04 09:32:30.215 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:32:30.215 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:30.215 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:30.215 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:30.215 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:30.215 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:32:30.215 I/Unity   (18534):
+08-04 09:32:31.218 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:32:31.218 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:31.218 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:31.218 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:31.218 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:31.218 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:32:31.218 I/Unity   (18534):
+08-04 09:32:32.326 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:32:32.326 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:32.326 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:32.326 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:32.326 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:32.326 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:32:32.326 I/Unity   (18534):
+08-04 09:32:37.348 I/Unity   (18534): [GibiWorld] demo: FETCH_STARTED
+08-04 09:32:37.348 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:37.348 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:37.348 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:37.348 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:37.348 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 09:32:37.348 I/Unity   (18534):
+08-04 09:32:40.562 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:32:40.562 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:40.562 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:40.562 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:40.562 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:40.562 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:32:40.562 I/Unity   (18534):
+08-04 09:32:41.564 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:32:41.564 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:41.564 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:41.564 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:41.564 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:41.564 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:32:41.564 I/Unity   (18534):
+08-04 09:32:42.672 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:32:42.672 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:42.672 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:42.672 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:42.672 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:42.672 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:32:42.672 I/Unity   (18534):
+08-04 09:32:47.690 I/Unity   (18534): [GibiWorld] demo: FETCH_STARTED
+08-04 09:32:47.690 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:47.690 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:47.690 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:47.690 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:47.690 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 09:32:47.690 I/Unity   (18534):
+08-04 09:32:50.906 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:32:50.906 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:50.906 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:50.906 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:50.906 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:50.906 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:32:50.906 I/Unity   (18534):
+08-04 09:32:51.919 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:32:51.919 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:51.919 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:51.919 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:51.919 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:51.919 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:32:51.919 I/Unity   (18534):
+08-04 09:32:53.025 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:32:53.025 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:53.025 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:53.025 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:53.025 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:53.025 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:32:53.025 I/Unity   (18534):
+08-04 09:32:58.042 I/Unity   (18534): [GibiWorld] demo: FETCH_STARTED
+08-04 09:32:58.042 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:32:58.042 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:32:58.042 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:32:58.042 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:32:58.042 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 09:32:58.042 I/Unity   (18534):
+08-04 09:33:01.254 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:33:01.254 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:33:01.254 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:33:01.254 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:33:01.254 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:33:01.254 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:33:01.254 I/Unity   (18534):
+08-04 09:33:02.257 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:33:02.257 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:33:02.257 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:33:02.257 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:33:02.257 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:33:02.257 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:33:02.257 I/Unity   (18534):
+08-04 09:33:03.361 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:33:03.361 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:33:03.361 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:33:03.361 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:33:03.361 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:33:03.361 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:33:03.361 I/Unity   (18534):
+08-04 09:33:08.386 I/Unity   (18534): [GibiWorld] demo: FETCH_STARTED
+08-04 09:33:08.386 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:33:08.386 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:33:08.386 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:33:08.386 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:33:08.386 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 09:33:08.386 I/Unity   (18534):
+08-04 09:33:11.609 I/Unity   (18534): [GibiWorld] demo: FETCH_COMPLETED
+08-04 09:33:11.609 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:33:11.609 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:33:11.609 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:33:11.609 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:33:11.609 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 09:33:11.609 I/Unity   (18534):
+08-04 09:33:12.605 I/Unity   (18534): [GibiWorld] demo: REST_STARTED
+08-04 09:33:12.605 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:33:12.605 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:33:12.605 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:33:12.605 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:33:12.605 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 09:33:12.605 I/Unity   (18534):
+08-04 09:33:13.709 I/Unity   (18534): [GibiWorld] demo: REST_ENGAGED
+08-04 09:33:13.709 I/Unity   (18534): UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 09:33:13.709 I/Unity   (18534): UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 09:33:13.709 I/Unity   (18534): UnityEngine.Logger:Log(LogType, Object)
+08-04 09:33:13.709 I/Unity   (18534): UnityEngine.Debug:Log(Object)
+08-04 09:33:13.709 I/Unity   (18534): Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 09:33:13.709 I/Unity   (18534):
