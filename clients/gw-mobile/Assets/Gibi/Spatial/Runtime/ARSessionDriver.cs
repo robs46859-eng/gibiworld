@@ -151,9 +151,8 @@ namespace Gibi.Spatial
         }
 
         /// <summary>
-        /// A plane counts only once it is large enough to stand a pet on. Section 5.3
-        /// requires a 1.5 m clearance radius, so a 0.3 m table top is not an accepted
-        /// surface even though the provider reports it as a tracked plane.
+        /// A plane counts only once its available radius is large enough for pet placement.
+        /// This readiness check must use the same purpose-specific gate as the final tap.
         /// </summary>
         private bool HasAcceptedSurface()
         {
@@ -164,9 +163,12 @@ namespace Gibi.Spatial
                 if (plane.trackingState != TrackingState.Tracking) continue;
                 if (plane.alignment != PlaneAlignment.HorizontalUp) continue;
 
-                float minExtent = Mathf.Min(plane.extents.x, plane.extents.y);
-                // Pet placement, not course-object placement — see SurfaceAcceptance.
-                if (minExtent * 2f >= SurfaceAcceptance.MinClearanceRadiusPetM) return true;
+                // ARPlane.extents are half-dimensions, so the smaller extent is already
+                // the available radius. Keep readiness identical to the final tap gate.
+                float clearanceRadius = Mathf.Min(plane.extents.x, plane.extents.y);
+                if (SurfaceAcceptance.HasRequiredClearanceRadius(
+                        clearanceRadius, PlacementPurpose.PetIdleOrTraining))
+                    return true;
             }
             return false;
         }

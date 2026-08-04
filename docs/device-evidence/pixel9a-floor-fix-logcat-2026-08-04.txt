@@ -1,0 +1,152 @@
+--------- beginning of main
+08-04 08:55:11.702 13894 13996 D Unity   : Requested framebuffer: resolution[1080x2424], rgba[8/8/8/8], depth+stencil[on], samples[1]
+08-04 08:55:11.702 13894 13996 D Unity   : Created framebuffer: resolution[1080x2424], rgba[8/8/8/8], depth+stencil[24/8], samples[0]
+08-04 08:55:12.975 13894 13935 I Unity   : [GibiWorld] planes = 26 (26 horizontal-up, which is what section 5.3 accepts)
+08-04 08:55:12.975 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:12.975 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:12.975 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:12.975 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:12.975 13894 13935 I Unity   : Gibi.Spatial.ARSessionDriver:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Spatial/Runtime/ARSessionDriver.cs:116)
+08-04 08:55:12.975 13894 13935 I Unity   :
+08-04 08:55:13.141 13894 13935 I Unity   : [GibiWorld] planes = 27 (27 horizontal-up, which is what section 5.3 accepts)
+08-04 08:55:13.141 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:13.141 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:13.141 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:13.141 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:13.141 13894 13935 I Unity   : Gibi.Spatial.ARSessionDriver:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Spatial/Runtime/ARSessionDriver.cs:116)
+08-04 08:55:13.141 13894 13935 I Unity   :
+08-04 08:55:13.844 13894 13935 I Unity   : [GibiWorld] planes = 28 (28 horizontal-up, which is what section 5.3 accepts)
+08-04 08:55:13.844 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:13.844 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:13.844 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:13.844 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:13.844 13894 13935 I Unity   : Gibi.Spatial.ARSessionDriver:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Spatial/Runtime/ARSessionDriver.cs:116)
+08-04 08:55:13.844 13894 13935 I Unity   :
+08-04 08:55:14.684 13894 13935 I Unity   : [GibiWorld] demo: FETCH_STARTED
+08-04 08:55:14.684 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:14.684 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:14.684 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:14.684 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:14.684 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 08:55:14.684 13894 13935 I Unity   :
+08-04 08:55:14.847 13894 13935 I Unity   : [GibiWorld] planes = 29 (29 horizontal-up, which is what section 5.3 accepts)
+08-04 08:55:14.847 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:14.847 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:14.847 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:14.847 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:14.847 13894 13935 I Unity   : Gibi.Spatial.ARSessionDriver:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Spatial/Runtime/ARSessionDriver.cs:116)
+08-04 08:55:14.847 13894 13935 I Unity   :
+08-04 08:55:15.046 13894 13935 I Unity   : [GibiWorld] planes = 30 (30 horizontal-up, which is what section 5.3 accepts)
+08-04 08:55:15.046 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:15.046 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:15.046 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:15.046 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:15.046 13894 13935 I Unity   : Gibi.Spatial.ARSessionDriver:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Spatial/Runtime/ARSessionDriver.cs:116)
+08-04 08:55:15.046 13894 13935 I Unity   :
+08-04 08:55:15.215 13894 13935 I Unity   : [GibiWorld] planes = 31 (31 horizontal-up, which is what section 5.3 accepts)
+08-04 08:55:15.215 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:15.215 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:15.215 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:15.215 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:15.215 13894 13935 I Unity   : Gibi.Spatial.ARSessionDriver:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Spatial/Runtime/ARSessionDriver.cs:116)
+08-04 08:55:15.215 13894 13935 I Unity   :
+08-04 08:55:17.087 13894 13935 I Unity   : [GibiWorld] planes = 32 (32 horizontal-up, which is what section 5.3 accepts)
+08-04 08:55:17.087 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:17.087 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:17.087 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:17.087 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:17.087 13894 13935 I Unity   : Gibi.Spatial.ARSessionDriver:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Spatial/Runtime/ARSessionDriver.cs:116)
+08-04 08:55:17.087 13894 13935 I Unity   :
+08-04 08:55:17.892 13894 13935 I Unity   : [GibiWorld] demo: FETCH_COMPLETED
+08-04 08:55:17.892 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:17.892 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:17.892 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:17.892 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:17.892 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 08:55:17.892 13894 13935 I Unity   :
+08-04 08:55:18.131 13894 13935 D Unity   : Changing screen orientation to LandscapeLeft.
+08-04 08:55:18.201 13894 13894 I Unity   : onConfigurationChanged
+08-04 08:55:18.201 13894 13935 I Unity   : Handle cmd APP_CMD_CONFIG_CHANGED(9)
+08-04 08:55:18.242 13894 13935 I Unity   : Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+08-04 08:55:18.242 13894 13935 I Unity   : Handle cmd APP_CMD_WINDOW_RESIZED(3)
+08-04 08:55:18.250 13894 13935 D Unity   : NativeWindow resized 2424x1080
+08-04 08:55:18.252 13894 13996 D Unity   : Requested framebuffer: resolution[2424x1080], rgba[8/8/8/8], depth+stencil[on], samples[1]
+08-04 08:55:18.252 13894 13996 D Unity   : Created framebuffer: resolution[2424x1080], rgba[8/8/8/8], depth+stencil[24/8], samples[0]
+08-04 08:55:18.253 13894 13935 I Unity   : Handle cmd APP_CMD_WINDOW_REDRAW_NEEDED(4)
+08-04 08:55:18.253 13894 13935 I Unity   : Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+08-04 08:55:18.253 13894 13935 I Unity   : Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+08-04 08:55:18.253 13894 13935 I Unity   : Handle cmd APP_CMD_CONTENT_RECT_CHANGED(5)
+08-04 08:55:18.253 13894 13935 I Unity   : Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+08-04 08:55:18.253 13894 13935 I Unity   : Handle cmd APP_CMD_WINDOW_INSETS_CHANGED(17)
+08-04 08:55:18.254 13894 13935 D Unity   : ANativeWindow: (2424/1080) RequestedResolution: (0/0) RenderingResolution: (0/0) EGLSurface: (2424/1080)
+08-04 08:55:18.894 13894 13935 I Unity   : [GibiWorld] demo: REST_STARTED
+08-04 08:55:18.894 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:18.894 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:18.894 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:18.894 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:18.894 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 08:55:18.894 13894 13935 I Unity   :
+08-04 08:55:20.008 13894 13935 I Unity   : [GibiWorld] demo: REST_ENGAGED
+08-04 08:55:20.008 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:20.008 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:20.008 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:20.008 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:20.008 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 08:55:20.008 13894 13935 I Unity   :
+08-04 08:55:20.210 13894 13935 D Unity   : Changing screen orientation to LandscapeLeft.
+08-04 08:55:25.025 13894 13935 I Unity   : [GibiWorld] demo: FETCH_STARTED
+08-04 08:55:25.025 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:25.025 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:25.025 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:25.025 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:25.025 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 08:55:25.025 13894 13935 I Unity   :
+08-04 08:55:28.223 13894 13935 I Unity   : [GibiWorld] demo: FETCH_COMPLETED
+08-04 08:55:28.223 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:28.223 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:28.223 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:28.223 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:28.223 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 08:55:28.223 13894 13935 I Unity   :
+08-04 08:55:29.232 13894 13935 I Unity   : [GibiWorld] demo: REST_STARTED
+08-04 08:55:29.232 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:29.232 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:29.232 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:29.232 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:29.232 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 08:55:29.232 13894 13935 I Unity   :
+08-04 08:55:30.335 13894 13935 I Unity   : [GibiWorld] demo: REST_ENGAGED
+08-04 08:55:30.335 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:30.335 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:30.335 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:30.335 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:30.335 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 08:55:30.335 13894 13935 I Unity   :
+08-04 08:55:35.364 13894 13935 I Unity   : [GibiWorld] demo: FETCH_STARTED
+08-04 08:55:35.364 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:35.364 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:35.364 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:35.364 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:35.364 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:72)
+08-04 08:55:35.364 13894 13935 I Unity   :
+08-04 08:55:38.575 13894 13935 I Unity   : [GibiWorld] demo: FETCH_COMPLETED
+08-04 08:55:38.575 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:38.575 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:38.575 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:38.575 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:38.575 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:80)
+08-04 08:55:38.575 13894 13935 I Unity   :
+08-04 08:55:39.583 13894 13935 I Unity   : [GibiWorld] demo: REST_STARTED
+08-04 08:55:39.583 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:39.583 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:39.583 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:39.583 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:39.583 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:88)
+08-04 08:55:39.583 13894 13935 I Unity   :
+08-04 08:55:40.685 13894 13935 I Unity   : [GibiWorld] demo: REST_ENGAGED
+08-04 08:55:40.685 13894 13935 I Unity   : UnityEngine.DebugLogHandler:Internal_Log(LogType, LogOption, String, Object)
+08-04 08:55:40.685 13894 13935 I Unity   : UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+08-04 08:55:40.685 13894 13935 I Unity   : UnityEngine.Logger:Log(LogType, Object)
+08-04 08:55:40.685 13894 13935 I Unity   : UnityEngine.Debug:Log(Object)
+08-04 08:55:40.685 13894 13935 I Unity   : Gibi.Pets.SandboxDemoDirector:Update() (at /Users/robert/gibiworld/clients/gw-mobile/Assets/Gibi/Pets/Runtime/SandboxDemoDirector.cs:96)
+08-04 08:55:40.685 13894 13935 I Unity   :

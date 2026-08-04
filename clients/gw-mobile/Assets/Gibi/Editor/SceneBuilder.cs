@@ -12,6 +12,8 @@ using Unity.XR.CoreUtils;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -119,6 +121,23 @@ namespace Gibi.Editor
 
             camGo.AddComponent<ARCameraManager>();
             camGo.AddComponent<ARCameraBackground>();
+            // ARCameraBackground supplies pixels, but it does not drive the camera
+            // transform. Without this pose driver, anchors briefly render for the launch
+            // pose and disappear as soon as the phone moves because the virtual camera
+            // remains at its scene-authored origin.
+            var trackedPoseDriver = camGo.AddComponent<TrackedPoseDriver>();
+            var positionAction = new InputAction(
+                "Position",
+                binding: "<XRHMD>/centerEyePosition",
+                expectedControlType: "Vector3");
+            positionAction.AddBinding("<HandheldARInputDevice>/devicePosition");
+            var rotationAction = new InputAction(
+                "Rotation",
+                binding: "<XRHMD>/centerEyeRotation",
+                expectedControlType: "Quaternion");
+            rotationAction.AddBinding("<HandheldARInputDevice>/deviceRotation");
+            trackedPoseDriver.positionInput = new InputActionProperty(positionAction);
+            trackedPoseDriver.rotationInput = new InputActionProperty(rotationAction);
             // Depth occlusion where supported (section 7).
             camGo.AddComponent<AROcclusionManager>();
 

@@ -12,6 +12,7 @@ using Unity.XR.CoreUtils;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
 
@@ -78,6 +79,7 @@ namespace Gibi.Editor
 
             // Section 4.1 lists the managers the ARWorld scene SHALL contain.
             RequireManager<ARCameraManager>(roots, errors);
+            RequireManager<TrackedPoseDriver>(roots, errors);
             RequireManager<AROcclusionManager>(roots, errors);
             RequireManager<ARPlaneManager>(roots, errors);
             RequireManager<ARRaycastManager>(roots, errors);

@@ -15,6 +15,11 @@ namespace Gibi.UI
     [DisallowMultipleComponent]
     public sealed class TapToPlace : MonoBehaviour
     {
+        [Header("Aim")]
+        [Tooltip("Vertical screen position for the placement reticle, 0=bottom 1=top. " +
+                 "Lower values aim at the floor in front of the player instead of distant furniture.")]
+        [SerializeField] private float reticleVerticalRatio = 0.35f;
+
         [SerializeField] private P0SessionDriver session;
         [SerializeField] private PlacementRing ring;
         [SerializeField] private ARSessionDriver arSession;
@@ -54,15 +59,15 @@ namespace Gibi.UI
             // leaving it at 0 means the passenger-safe gate cannot trip on device.
             const float playerSpeedMps = 0f;
 
-            // The RETICLE is the aim; the tap only confirms it.
+            // The RING is the aim; the tap only confirms it.
             //
-            // Placing at the raw touch point looks reasonable and is wrong: the player
-            // sees a green ring at screen centre, taps it, and the pet is placed wherever
-            // their finger landed instead — typically low on the screen, which aims at the
-            // floor by their feet and trips section 13.3's 1.5 m camera clearance. The ring
-            // then reads as a liar. Centre-reticle plus confirm is the standard AR
-            // placement idiom for exactly this reason.
-            var reticle = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            // The original exact-centre aim passed through the coffee table in the live
+            // Pixel view and selected a floor point 3.54 m away. Plane raycasts do not
+            // know that furniture occludes that point. Aim at the visible lower-centre
+            // floor instead, while keeping preview and commit on the identical coordinate.
+            var reticle = new Vector2(
+                Screen.width * 0.5f,
+                Screen.height * reticleVerticalRatio);
             bool tapped = false;
 
             foreach (var touch in Touch.activeTouches)

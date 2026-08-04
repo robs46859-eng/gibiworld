@@ -30,9 +30,10 @@ namespace Gibi.Spatial
             if (raycastManager == null) return SurfaceProbeResult.Miss;
 
             _hits.Clear();
-            // Depth is included where available; without it the runtime falls back to
-            // accepted planes only (section 7).
-            var types = TrackableType.PlaneWithinPolygon | TrackableType.Depth;
+            // Placement needs a tracked ARPlane for semantic classification and measured
+            // clearance. A nearer Depth hit has no ARPlane trackable, so mixing it into
+            // this query turns a valid floor into Unknown with zero clearance.
+            const TrackableType types = TrackableType.PlaneWithinPolygon;
             if (!raycastManager.Raycast(screenPoint, _hits, types))
                 return SurfaceProbeResult.Miss;
 

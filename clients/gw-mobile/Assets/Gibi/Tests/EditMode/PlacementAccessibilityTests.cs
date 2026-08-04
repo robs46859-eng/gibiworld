@@ -4,6 +4,8 @@ using Gibi.Core;
 using Gibi.Gameplay;
 using Gibi.Spatial;
 using Gibi.UI;
+using UnityEditor;
+using UnityEngine;
 
 namespace Gibi.Tests.EditMode
 {
@@ -14,8 +16,8 @@ namespace Gibi.Tests.EditMode
         {
             var go = new UnityEngine.GameObject("placement");
             var pc = go.AddComponent<PlacementController>();
-            fake = new FakeSurfaceProbe { NextResult = probe, CameraDistance = 2.5f };
-            pc.ConfigureForTest(fake, new FakeClock());
+            fake = new FakeSurfaceProbe { NextResult = probe, CameraDistance = 1.5f };
+            pc.ConfigureForTest(fake, new FakeClock(), AnchorState.LocalReady);
             return pc;
         }
 
@@ -64,5 +66,36 @@ namespace Gibi.Tests.EditMode
             Assert.IsNotEmpty(status.LocalizationKey,
                 "Section 14: player-visible strings use localisation keys, never raw text.");
         }
+
+        [Test]
+        public void Reticle_defaults_to_thirty_five_percent_screen_height()
+        {
+            var go = new GameObject("tap-to-place");
+            var tapToPlace = go.AddComponent<TapToPlace>();
+            var serialized = new SerializedObject(tapToPlace);
+
+            Assert.AreEqual(0.35f,
+                            serialized.FindProperty("reticleVerticalRatio").floatValue,
+                            0.0001f);
+
+            Object.DestroyImmediate(go);
+        }
+
+        [Test]
+        public void Camera_relative_yaw_flattens_pitch_and_ignores_probe_yaw()
+        {
+            Quaternion cameraRotation = Quaternion.Euler(25f, 42f, 0f);
+            Vector3 expectedForward = cameraRotation * Vector3.forward;
+            expectedForward.y = 0f;
+            expectedForward.Normalize();
+            Quaternion result = PlacementController.CameraRelativeYaw(
+                cameraRotation * Vector3.forward,
+                Quaternion.Euler(0f, 137f, 0f));
+
+            Assert.That(Vector3.Dot(result * Vector3.forward,
+                                    expectedForward),
+                        Is.GreaterThan(0.999f));
+        }
+
     }
 }

@@ -1,54 +1,60 @@
 # GibiWorld P0 AR Pixel handoff
 
-**Date:** 2026-08-03
+**Date:** 2026-08-04
 **Unity:** 6000.0.74f1
-**Source baseline before this checkpoint:** `c09b9a47a951109175e54be44d06cf83ef62296f`
+**Source baseline before this checkpoint:** `2d895a1a582e2f9018af25a1c04c6bc5e0214873`
 **Device:** Google Pixel 9a (`5A061JEBF20220`), Android API 37
 
 ## Outcome
 
-P0 device acceptance passed on the connected Pixel. The app cold-launched with the
-standard Unity ARCore loader, reached `SessionTracking`, detected horizontal floor
-planes, placed one anchored sandbox, rendered the signed Randy11 dog with its real
-brown/white texture, and ran the looping toy-fetch and dog-house-rest sequence.
+The August 4 floor-placement repair is implemented, tested, built, and installed on the
+connected Pixel. Plane-only placement eliminated the depth-hit `Unknown`/zero-clearance
+failure, the readiness and final-placement clearance checks now use the same radius
+contract, and the reticle moved from 50% to a serialized 35% screen height. In the live
+8 x 9 ft room this changed the accepted hit from 3.54 m behind furniture to 1.70-2.08 m
+on the open rug without changing real-world asset scale.
+
+The first 35% reticle run exposed a separate scene-contract defect: the AR camera had no
+Input System `TrackedPoseDriver`. The pet and house rendered at correct size for the
+placement pose, then disappeared when the phone moved because the virtual camera was
+not following the handheld pose. The scene builder now configures the same handheld
+position/rotation bindings as AR Foundation's official Mobile AR origin, and the scene
+validator requires exactly one tracked-pose driver. The corrected APK is installed and
+its cold-start log no longer contains the missing-driver warning.
 
 The dog-house opening is physically smaller than this dog. The accepted P0 behavior is
 therefore a visible upright rest across the measured doorway threshold, not mesh
 clipping through the solid decorative shell.
 
-## Acceptance evidence
+## Acceptance evidence and current boundary
 
 - ARCore tracking: PASS
-- Horizontal planes: PASS (2 initially, then up to 5)
-- Anchored placement: PASS
-- Textured signed dog: PASS
-- Toy fetch/carry/drop: PASS
-- Upright dog-house threshold rest: PASS
+- Horizontal plane-only probing: PASS
+- Depth-hit `HAZARD_UNKNOWN` / `clearanceR=0.00`: eliminated in the fresh run
+- Readiness/final-placement clearance parity: PASS
+- Lower reticle live distance: PASS (1.70-2.08 m versus former 3.54 m)
+- Correct-size signed dog and house rendered: PASS for the placement frame
 - Cyan plane coaching mesh hidden after placement: PASS
-- `OPENGL NATIVE PLUG-IN ERROR`: 0 on the final run
-- invalid near-zero projection errors: 0 on the final run
-- Unity runtime exceptions: 0 on the final run
-- EditMode: 337/337 passed
+- Camera pose-driver scene contract: PASS locally; missing-driver warning absent on Pixel
+- EditMode: 340/340 passed
 - PlayMode vertical slice: 2/2 passed
-
-The final log contains two complete sequences of:
-
-`FETCH_STARTED -> FETCH_COMPLETED -> REST_STARTED -> REST_ENGAGED`
+- Final persistence-after-camera-movement check on the newly installed pose-driver APK:
+  **PENDING PHYSICAL RESCAN AND TAP**. Do not call the overall device goal complete until
+  the dog/house remain in the rug view after moving the Pixel.
 
 Evidence is under `docs/device-evidence/`, especially:
 
-- `pixel9a-final-composed-demo.mp4`
-- `pixel9a-final-composed-contact.png`
-- `pixel9a-final-current.png`
-- `pixel9a-final-logcat.txt`
-- `pixel9a-final-scan.mp4`
+- `pixel9a-reticle035-placed-2026-08-04.png` (correct-size placement frame)
+- `pixel9a-reticle035-current-after-placement-2026-08-04.png` (pre-fix camera-pose loss)
+- `pixel9a-reticle035-logcat-2026-08-04.txt`
+- `pixel9a-floor-fix-logcat-2026-08-04.txt`
 
 ## Android artifact
 
-- APK: `clients/gw-mobile/Builds/GibiWorld-c09b9a4.apk`
+- APK: `clients/gw-mobile/Builds/GibiWorld-2d895a1.apk`
 - Package: `com.gibiworld.mobile`
-- Bytes: `185969947`
-- SHA-256: `df3bdb9e496d5bf42c57c2608ed972cbe8ccf3445a4ebaff9aa9daaef6718357`
+- Bytes: `185975715`
+- SHA-256: `5bb29c05b369c0d8635938be85ecd7fde069dd0157c9da3f9afb11463bb5844d`
 - ABI: ARM64
 - Minimum/target SDK: 29/36
 
@@ -67,6 +73,14 @@ replacement did not fail. It can be removed later without affecting `com.gibiwor
   loop for P0 shelter rest.
 - The placement coaching plane remains tracked but its cyan renderer is hidden after a
   successful placement.
+- Placement raycasts use `PlaneWithinPolygon` only. Depth remains available for visual
+  occlusion but cannot win the placement pose/classification result.
+- `ARPlane.extents` is consistently treated as a clearance radius in both readiness and
+  final placement.
+- The placement reticle uses a serialized `reticleVerticalRatio = 0.35`, and final world
+  yaw uses the main camera's flattened forward direction instead of provider plane yaw.
+- ARWorld's Main Camera has an Input System `TrackedPoseDriver` bound to both XR HMD and
+  `HandheldARInputDevice` position/rotation controls.
 - Relevant Unity skills are installed locally, including the Unity-Technologies
   `unity-cli` and `unity-package-management` skills.
 
@@ -77,13 +91,13 @@ and `docs/adr/ADR-012-arcore-provider-for-p0-android.md`.
 
 1. Author a larger doorway or a dog-specific house so rest can move fully inside.
 2. Replace Randy11 clip substitutions with native down/rise/pickup/carry/drop/rest clips.
-3. Orient the placed composition toward the camera for more repeatable first-shot
-   framing; the current anchor is correct, but the provider's plane yaw can put the
-   house near a screen edge.
-4. Add the production build manifest/BuildGuard before promoting beyond development.
+3. Add the production build manifest/BuildGuard before promoting beyond development.
+4. After the tracked-camera device pass, tune the serialized 0.35 reticle only if a
+   second representative room requires it; do not change verified asset scale to mask
+   an aiming or tracking defect.
 
 ## Git handoff
 
-This file is part of the all-work checkpoint requested on 2026-08-03. Use `git log -1`
-for the checkpoint SHA. The private GitHub remote is
+This file was updated for the August 4 Pixel repair. Use `git log -1` for the pushed
+checkpoint SHA. The private GitHub remote is
 `https://github.com/robs46859-eng/gibiworld.git` (`origin`).

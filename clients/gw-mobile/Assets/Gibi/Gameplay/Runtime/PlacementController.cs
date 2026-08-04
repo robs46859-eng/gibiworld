@@ -164,8 +164,19 @@ namespace Gibi.Gameplay
                 return Set(Reject("NO_SURFACE", "placement.blocked.no_surface",
                                   "icon.no_surface", ColorNeutral, haptic: false));
 
+            float cameraDistanceM = _probe.DistanceFromCamera(probe.Position);
+
+            // Report the MEASURED values, not just the verdict. A bare rejection code
+            // says which gate closed; it does not say by how much, so tuning it becomes
+            // guesswork across ten-minute build cycles.
+            LastMeasurements =
+                $"tag={probe.Tag} slope={probe.SlopeDegrees:F1}deg " +
+                $"clearanceR={probe.ClearanceRadiusM:F2}m (need {SurfaceAcceptance.RequiredClearanceRadius(PlacementPurpose.PetIdleOrTraining):F2}) " +
+                $"clearanceH={probe.ClearanceHeightM:F2}m " +
+                $"camDist={cameraDistanceM:F2}m (need {CameraStartVolumeClearancePetM:F2})";
+
             // --- section 13.3: clear camera start volume ---
-            if (_probe.DistanceFromCamera(probe.Position) < CameraStartVolumeClearancePetM)
+            if (cameraDistanceM < CameraStartVolumeClearancePetM)
                 return Set(Reject("TOO_CLOSE", "placement.blocked.too_close",
                                   "icon.too_close", ColorCaution, haptic: true));
 
@@ -179,20 +190,18 @@ namespace Gibi.Gameplay
                                            probe.ClearanceRadiusM, probe.ClearanceHeightM);
             string reject = SurfaceAcceptance.Reject(sample, PlacementPurpose.PetIdleOrTraining);
 
-            // Report the MEASURED values, not just the verdict. A bare rejection code
-            // says which gate closed; it does not say by how much, so tuning it becomes
-            // guesswork across ten-minute build cycles.
-            LastMeasurements =
-                $"tag={probe.Tag} slope={probe.SlopeDegrees:F1}deg " +
-                $"clearanceR={probe.ClearanceRadiusM:F2}m (need {SurfaceAcceptance.RequiredClearanceRadius(PlacementPurpose.PetIdleOrTraining):F2}) " +
-                $"clearanceH={probe.ClearanceHeightM:F2}m " +
-                $"camDist={_probe.DistanceFromCamera(probe.Position):F2}m (need {CameraStartVolumeClearancePetM:F2})";
-
             if (reject != null)
                 return Set(Reject(reject, "placement.blocked.unsafe_surface",
                                   "icon.unsafe", ColorBlocked, haptic: true));
 
-            CandidatePose = new Pose(probe.Position, probe.Rotation);
+            // ARCore's plane yaw is an artifact of how its polygon was first detected;
+            // only the surface normal is meaningful. Use the camera's flattened forward
+            // direction so the authored pet/house composition has repeatable framing.
+            Vector3 cameraForward = Camera.main != null
+                ? Camera.main.transform.forward
+                : Vector3.forward;
+            Quaternion facingYaw = CameraRelativeYaw(cameraForward, probe.Rotation);
+            CandidatePose = new Pose(probe.Position, facingYaw);
             return Set(new PlacementStatus(
                 canPlace: true, rejection: null,
                 locKey: anchorState == AnchorState.LocalReady
@@ -204,6 +213,16 @@ namespace Gibi.Gameplay
         }
 
         private PlacementStatus Set(PlacementStatus s) { Status = s; return s; }
+
+        /// <summary>Pure yaw rule shared by runtime placement and EditMode coverage.</summary>
+        public static Quaternion CameraRelativeYaw(Vector3 cameraForward,
+                                                   Quaternion fallback)
+        {
+            cameraForward.y = 0f;
+            return cameraForward.sqrMagnitude > 0.0001f
+                ? Quaternion.LookRotation(cameraForward)
+                : fallback;
+        }
 
         private static PlacementStatus Reject(string code, string locKey, string icon,
                                               Color color, bool haptic)

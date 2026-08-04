@@ -62,6 +62,14 @@ namespace Gibi.Spatial
                 : MinClearanceRadiusPetM;
 
         /// <summary>
+        /// Shared by provider readiness and final placement so both gates interpret
+        /// clearanceRadiusM in the same units and cannot report ready at different sizes.
+        /// </summary>
+        public static bool HasRequiredClearanceRadius(float clearanceRadiusM,
+                                                      PlacementPurpose purpose)
+            => clearanceRadiusM >= RequiredClearanceRadius(purpose);
+
+        /// <summary>
         /// Hazard set is an explicit allowlist inverse: anything not in the safe set is
         /// treated as hazardous, so a newly added provider tag fails CLOSED.
         /// </summary>
@@ -87,7 +95,8 @@ namespace Gibi.Spatial
             // "unless the obstacle profile explicitly permits a ramp"
             if (!s.PermitsRamp && s.SlopeDegrees > maxSlope) return "SLOPE_EXCEEDED";
 
-            if (s.ClearanceRadiusM < RequiredClearanceRadius(purpose)) return "CLEARANCE_RADIUS";
+            if (!HasRequiredClearanceRadius(s.ClearanceRadiusM, purpose))
+                return "CLEARANCE_RADIUS";
             if (s.ClearanceHeightM < MinClearanceHeightM) return "CLEARANCE_HEIGHT";
 
             return null;

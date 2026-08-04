@@ -204,7 +204,45 @@ namespace Gibi.Gameplay
             demoDirector?.BindPet(_pet);
             LastFailureCode = null;
             Debug.Log($"[GibiWorld] Pet placed and verified at {pose.position}.");
+            LogPlacedWorldDiagnostics();
             return true;
+        }
+
+        private void LogPlacedWorldDiagnostics()
+        {
+            if (placedWorldRoot == null) return;
+
+            var renderers = placedWorldRoot.GetComponentsInChildren<Renderer>(true);
+            bool hasBounds = false;
+            Bounds worldBounds = default;
+            int visibleRendererCount = 0;
+            foreach (var renderer in renderers)
+            {
+                if (renderer == null || !renderer.enabled || !renderer.gameObject.activeInHierarchy)
+                    continue;
+
+                visibleRendererCount++;
+                if (!hasBounds)
+                {
+                    worldBounds = renderer.bounds;
+                    hasBounds = true;
+                }
+                else
+                {
+                    worldBounds.Encapsulate(renderer.bounds);
+                }
+            }
+
+            Camera camera = Camera.main;
+            Vector3 viewportCenter = camera != null && hasBounds
+                ? camera.WorldToViewportPoint(worldBounds.center)
+                : new Vector3(float.NaN, float.NaN, float.NaN);
+            Debug.Log(
+                $"[GibiWorld] placed world: root={placedWorldRoot.position} " +
+                $"forward={placedWorldRoot.forward} renderers={visibleRendererCount}/{renderers.Length} " +
+                $"boundsCenter={(hasBounds ? worldBounds.center : Vector3.zero)} " +
+                $"boundsSize={(hasBounds ? worldBounds.size : Vector3.zero)} " +
+                $"viewportCenter={viewportCenter}");
         }
 
         // ---- P0 player cues ----

@@ -170,6 +170,27 @@ namespace Gibi.Tests.EditMode
         }
 
         [Test]
+        public void Readiness_and_placement_share_the_same_clearance_radius_boundary()
+        {
+            float required = SurfaceAcceptance.RequiredClearanceRadius(
+                PlacementPurpose.PetIdleOrTraining);
+
+            Assert.IsFalse(SurfaceAcceptance.HasRequiredClearanceRadius(
+                required - 0.001f, PlacementPurpose.PetIdleOrTraining));
+            Assert.IsTrue(SurfaceAcceptance.HasRequiredClearanceRadius(
+                required, PlacementPurpose.PetIdleOrTraining));
+
+            Assert.AreEqual("CLEARANCE_RADIUS",
+                SurfaceAcceptance.Reject(
+                    new SurfaceSample(SemanticTag.Floor, 0f, required - 0.001f, 3f),
+                    PlacementPurpose.PetIdleOrTraining));
+            Assert.IsNull(
+                SurfaceAcceptance.Reject(
+                    new SurfaceSample(SemanticTag.Floor, 0f, required, 3f),
+                    PlacementPurpose.PetIdleOrTraining));
+        }
+
+        [Test]
         public void Clearance_height_is_unchanged_by_purpose()
         {
             Assert.AreEqual("CLEARANCE_HEIGHT",

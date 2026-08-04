@@ -16,6 +16,7 @@
     "Unity.XR.CoreUtils",
     "Unity.XR.Management",
     "Unity.XR.Management.Editor",
+    "Unity.InputSystem",
     "Unity.RenderPipelines.Universal.Runtime",
     "Unity.RenderPipelines.Universal.Editor",
     "Unity.RenderPipelines.Core.Runtime"
