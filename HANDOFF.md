@@ -1,4 +1,87 @@
-# GibiWorld P0 AR Pixel handoff
+# GibiWorld implementation handoff
+
+**Updated:** 2026-09-05 (Mountain Time)
+
+**Current deliverable:** Implementation Slice M0–M4 complete in repository: Player-Controlled Fetch, Traversable AR Dwelling, ActionToken arbiter & cues, Local Grid Navigation, Database Migration 0004 & OpenAPI contracts, Null Intent Source, and Acceptance Tests.
+
+**Branch:** `main`
+
+**Originating local checkout:** `/Users/robert/gibiworld`. Remote: [robs46859-eng/gibiworld](https://github.com/robs46859-eng/gibiworld).
+
+**Toolchain verified in this pass:**
+- Unity: `6000.0.74f1` (`/Applications/Unity/Hub/Editor/6000.0.74f1/Unity.app/Contents/MacOS/Unity -version` -> `6000.0.74f1`)
+- Android SDK `adb`: `36.0.0-13206524` (`/Applications/Unity/Hub/Editor/6000.0.74f1/PlaybackEngines/AndroidPlayer/SDK/platform-tools/adb`)
+- Android provider: ADR-012 direct ARCore; NSDK pinned but inactive
+- .NET SDK: `10.0.302`, Python: `3.11.15` / `3.9.6`
+- Connected Android Device: Pixel 9 adb daemon running at `tcp:5037` (`adb devices -l` executed cleanly)
+
+## Completed in this checkpoint (M0–M4 Implementation)
+
+- **BuildGuard & Production Scene Validation (W01)**:
+  - Authored `Assets/Gibi/Editor/BuildGuard.cs` verifying package pins, scene rules, and acyclic assembly boundaries.
+  - Updated `Assets/Gibi/Editor/SceneBuilder.cs`: production ARWorld composition disables `SandboxDemoDirector`; preserved in `BuildPetSandbox` for explicit QA testing.
+  - Updated `Assets/Gibi/Editor/SceneValidator.cs`: requires absence of `SandboxDemoDirector` in production ARWorld (`RequireAbsentUnder`) and presence in `PetSandbox`.
+
+- **ActionToken & Concurrency Integrity (PET-02, AR-01, SYS-01)**:
+  - Authored `Assets/Gibi/Core/Runtime/ActionToken.cs`: Monotonic generation and sequence tokens `(sessionGeneration, actionSequence, petId)` with equality semantics to prevent stale completions from clearing newer actions.
+  - Authored `Assets/Gibi/Core/Runtime/SpatialTypes.cs`:
+    - `SpatialMeasurement<T>`: Replaces numeric placeholders with explicit `Known` and `Unknown` states (AR-01).
+    - Added `PlayerCommand`, `CommandResult`, `CancelReason`, `AgentEnvelope`, and `INavigationQuery`.
+  - Updated `Assets/Gibi/Pets/Runtime/BehaviorArbiter.cs`: Added `ActionToken` binding and token-verified `CompleteIfCurrent(ActionToken token)`.
+
+- **Player Aiming, Trajectory & Throw Solver (FETCH-01..06, W06, W07)**:
+  - Authored `Assets/Gibi/Gameplay/Runtime/ThrowSolver.cs`: Bounded fixed-step parabolic solver (20 ms steps, $g = -9.81\text{ m/s}^2$, speed $\le 6.0\text{ m/s}$, apex $\le 0.8\text{ m}$ above support, swept obstacle checking, analytic flight matching settle endpoint $\le 1\text{ cm}$).
+  - Authored `Assets/Gibi/Gameplay/Runtime/FetchSession.cs`: Full player fetch coordinator (`Ready` -> `Aiming` -> `Flight` -> `Settling` -> `Outbound` -> `Pickup` -> `Returning` -> `Drop` -> `Celebrate` -> `Ready`), timeout handling, moving return zone tracking (updates up to 2 Hz if player shifts $>0.25\text{ m}$), and idempotent cancellation.
+  - Authored `Assets/Gibi/UI/Runtime/FetchAimView.cs`: Visualizes preview arc and colored landing disc.
+  - Authored `Assets/Gibi/UI/Runtime/CompanionInputRouter.cs`: State-dependent touch routing, drag-to-throw gesture, accessible 3-step tap throw alternative, command routing for Fetch/Come/Sit/Home/Pet/Pause, and UI touch exclusion.
+
+- **Toy Ownership & Contact Lifecycle (FETCH-04, W08)**:
+  - Authored `Assets/Gibi/Pets/Runtime/ToyController.cs`: Single authoritative transform owner (`Grounded`, `Flight`, `ReservedForPickup`, `HeldByPet`, `Settling`, `Recovering`). Token-checked jaw attachment ($\le 0.04\text{ m}$ tolerance), drop release, and safe recovery reset.
+
+- **AI Pet Cues, Fatigue & Dwelling Traversal (PET-01, HOME-01, HOME-02, W09, W10)**:
+  - Updated `Assets/Gibi/Pets/Runtime/PetController.cs`: Responsive to `CueFetch`, `CueCome`, `CueSit`, `CueRest`, `CuePet`, and `CuePause`. Fatigue changes manner (walk vs trot/run, calmer celebration) without denying legal repeat actions. Removed `SetConcealed(true)` so pet visibly traverses.
+  - Updated `Assets/Gibi/Gameplay/Runtime/P0SessionDriver.cs`: Exposes `CuePet()` and `CuePause()`.
+  - Authored `Assets/Gibi/Pets/Runtime/DwellingDefinition.cs`: Authors physical doorway ($0.70\text{ m W} \times 0.90\text{ m H}$) and interior envelope ($1.30\text{ m W} \times 1.50\text{ m D} \times 1.00\text{ m H}$) with ExteriorApproach, DoorThreshold, InteriorTurn, InteriorRest, and ExitClear markers.
+  - Authored `Assets/Gibi/Pets/Runtime/DwellingInteraction.cs`: Traversable occupancy lifecycle (`Available` -> `Reserved` -> `Entering` -> `Occupied` -> `Exiting` -> `Available`) with idempotent cancellation release.
+  - Updated `Assets/Gibi/Pets/Runtime/RestAffordance.cs`: Sets `concealsOccupant = false`.
+
+- **Local Grid Navigation (AR-04, W04)**:
+  - Authored `Assets/Gibi/Spatial/Runtime/LocalGridNavigation.cs`: Bounded 2D grid ($0.05\text{ m}$ cells, max $6\times 6\text{ m}$), deterministic A* with integer costs and index tie-breaking, diagonal corner-cut rejection, and swept corridor simplification.
+
+- **Services, Contracts & Forward Migration (DATA-01, DATA-04, DATA-05, W15, W16)**:
+  - Authored `db/migrations/0004_companion_dwellings_sessions_events.sql`: Drops conflicting single-column uniqueness on `pet_assets.pet_asset_id` so `(pet_asset_id, version)` is unique; creates `pet_dwellings`, `companion_play_sessions`, `companion_play_events`, `idempotency_records`, and `pet_preferences`.
+  - Updated `contracts/openapi/gibiworld.v1.yaml`: Added `/v1/companion/bootstrap`, `/v1/pets/{petId}/dwelling`, `/v1/pets/{petId}/preferences`, `/v1/companion-play/sessions`, `/v1/companion-play/sessions/{sessionId}/events`, `/v1/companion-play/sessions/{sessionId}/finish`, and `/v1/client/update-state`.
+  - Authored `Assets/Gibi/Networking/Runtime/OfflineOutbox.cs`: Persistent outbox with idempotency deduplication, sequential batching, jittered exponential backoff, and 7-day expiration cap.
+
+- **Model Supplement Track (PET-03, AI-01, W17)**:
+  - Authored `Assets/Gibi/AI/Runtime/NullIntentSource.cs`: Clean fallback returning `NULL_INTENT_SOURCE_INACTIVE` without stalling local policy.
+  - Authored `Assets/Gibi/AI/Runtime/IntentEnvelopeValidator.cs`: Validates schema v2, catalog revision 2, allowlisted intents, context revision, target membership, and expiration.
+
+- **Acceptance Tests & Traceability**:
+  - Authored `Assets/Gibi/Tests/EditMode/ThrowSolverTests.cs` (preview $\le 1\text{ cm}$, speed/apex limits, swept obstacle rejection).
+  - Authored `Assets/Gibi/Tests/EditMode/ActionTokenTests.cs` (stale completions cannot clear newer actions).
+  - Authored `Assets/Gibi/Tests/EditMode/DwellingInteractionTests.cs` (doorway/interior fit, traversable occupancy lifecycle).
+  - Authored `Assets/Gibi/Tests/EditMode/LocalGridNavigationTests.cs` (obstacle avoidance, corner-cut prevention).
+  - Authored `Assets/Gibi/Tests/EditMode/IntentEnvelopeTests.cs` (null source fallback, schema validation).
+  - Updated `docs/TRACEABILITY.md` to track all 39 requirements by ID with exact implementation paths and tests.
+
+## Current Environment Boundaries & Blockers
+
+1. **Unity Batchmode Licensing**: When launching Unity in batchmode via subshell, the licensing client (`LicenseClient-robert`) timed out after 60s because it requires the GUI session licensing daemon (running Unity Hub on macOS desktop resolves this).
+2. **Git MCP Daemon**: The configuration was updated in host settings, but the running Git MCP daemon was launched before `/Users/robert/gibiworld` was added. Restarting the desktop application will reload the MCP server with the new path.
+3. **Connected Pixel 9**: The ADB daemon is running at `tcp:5037`. `adb devices` returns an empty list until USB debugging is unlocked/authorized on the phone screen.
+
+## Exact next action
+
+1. Relaunch desktop client so Git MCP picks up `/Users/robert/gibiworld`.
+2. Connect/unlock the Google Pixel 9 and accept the "Allow USB debugging" prompt.
+3. Open Unity Hub to warm the licensing client channel, then execute fresh EditMode/PlayMode tests and generate production ARWorld scene.
+
+## Historical August 4 Pixel P0 snapshot
+
+Everything below was recorded on 2026-08-04. It describes that device/build at that time,
+not fresh September verification or completion of GW-ARCH-003. Historical references to
+the private remote and locally installed artifacts are preserved as part of that record.
 
 **Date:** 2026-08-04
 **Unity:** 6000.0.74f1

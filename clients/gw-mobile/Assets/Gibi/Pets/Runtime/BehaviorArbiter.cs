@@ -1,8 +1,6 @@
-// GW-ARCH-001 section 8.1 — Deterministic behavior layers.
+// GW-ARCH-001 section 8.1 & GW-ARCH-003 PET-02 — Deterministic behavior layers and ActionTokens.
 // GW-GAME-001: safety override interrupts ALL lower-priority behavior within one 10 Hz tick.
-// NORMATIVE (section 0): "Frame-level behavior, physics, navigation, course scoring,
-// and safety SHALL be deterministic on the client or authoritative session server.
-// AI MAY choose only validated high-level intents from a fixed allowlist."
+// PET-02: ActionToken concurrency guards ensure stale completion callbacks cannot clear a newer action.
 using System;
 using Gibi.Core;
 
@@ -13,7 +11,7 @@ namespace Gibi.Pets
     {
         SafetyOverride  = 0, // client deterministic: stop, freeze, return to safe zone
         SessionRule     = 1, // authoritative course/session: start, gate order, finish
-        PlayerCue       = 2, // client validated input: sit, come, fetch, stay
+        PlayerCue       = 2, // client validated input: sit, come, fetch, stay, home, pet
         AiIntent        = 3, // backend proposal, client validator
         NeedsScheduler  = 4, // client deterministic: rest, idle variety
         AmbientAnimation= 5  // client: blink, ear twitch, breathing
@@ -23,17 +21,26 @@ namespace Gibi.Pets
     {
         public readonly BehaviorLayer Layer;
         public readonly string ActionKey;
-        public readonly long   Sequence;        // monotonic
-        public readonly long   StartMs;
-        public readonly long   MaxDurationMs;
-        public readonly bool   Interruptible;
+        public readonly ActionToken Token;
+        public readonly long Sequence;        // monotonic
+        public readonly long StartMs;
+        public readonly long MaxDurationMs;
+        public readonly bool Interruptible;
         public readonly string FallbackState;
 
-        public BehaviorAction(BehaviorLayer layer, string actionKey, long sequence,
-                              long startMs, long maxDurationMs, bool interruptible,
-                              string fallbackState)
-        { Layer = layer; ActionKey = actionKey; Sequence = sequence; StartMs = startMs;
-          MaxDurationMs = maxDurationMs; Interruptible = interruptible; FallbackState = fallbackState; }
+        public BehaviorAction(BehaviorLayer layer, string actionKey, ActionToken token,
+                              long sequence, long startMs, long maxDurationMs,
+                              bool interruptible, string fallbackState)
+        {
+            Layer = layer;
+            ActionKey = actionKey;
+            Token = token;
+            Sequence = sequence;
+            StartMs = startMs;
+            MaxDurationMs = maxDurationMs;
+            Interruptible = interruptible;
+            FallbackState = fallbackState;
+        }
 
         public bool IsExpired(long nowMs) => nowMs - StartMs >= MaxDurationMs;
     }
@@ -56,6 +63,7 @@ namespace Gibi.Pets
 
         public BehaviorAction? Current => _current;
         public string CurrentActionKey => _current?.ActionKey ?? "CALM_IDLE";
+        public ActionToken CurrentToken => _current?.Token ?? ActionToken.None;
 
         /// <summary>Layers that lock out lower-priority interruption while running.</summary>
         private static bool IsLocking(BehaviorLayer l) =>
@@ -68,10 +76,10 @@ namespace Gibi.Pets
         /// interrupt to land within one tick; taking effect immediately satisfies that
         /// bound with margin and removes any dependence on tick phase.
         /// </summary>
-        public BehaviorAction ForceSafety(string actionKey, long maxDurationMs)
+        public BehaviorAction ForceSafety(string actionKey, long maxDurationMs, ActionToken token = default)
         {
             long now = _clock.ElapsedMilliseconds;
-            var a = new BehaviorAction(BehaviorLayer.SafetyOverride, actionKey,
+            var a = new BehaviorAction(BehaviorLayer.SafetyOverride, actionKey, token,
                                        ++_sequence, now, maxDurationMs,
                                        interruptible: false, fallbackState: "CALM_IDLE");
             _current = a;
@@ -84,6 +92,11 @@ namespace Gibi.Pets
         /// </summary>
         public bool Propose(BehaviorLayer layer, string actionKey, long maxDurationMs,
                             bool interruptible = true, string fallbackState = "CALM_IDLE")
+            => ProposeWithToken(layer, actionKey, ActionToken.None, maxDurationMs, interruptible, fallbackState);
+
+        public bool ProposeWithToken(BehaviorLayer layer, string actionKey, ActionToken token,
+                                     long maxDurationMs, bool interruptible = true,
+                                     string fallbackState = "CALM_IDLE")
         {
             long now = _clock.ElapsedMilliseconds;
 
@@ -109,7 +122,7 @@ namespace Gibi.Pets
                 }
             }
 
-            _current = new BehaviorAction(layer, actionKey, ++_sequence, now,
+            _current = new BehaviorAction(layer, actionKey, token, ++_sequence, now,
                                           maxDurationMs, interruptible, fallbackState);
             return true;
         }
@@ -123,6 +136,22 @@ namespace Gibi.Pets
             if (!_current.HasValue ||
                 !string.Equals(_current.Value.ActionKey, expectedActionKey,
                                StringComparison.Ordinal))
+                return false;
+
+            _current = null;
+            return true;
+        }
+
+        /// <summary>
+        /// Complete by ActionToken verification (PET-02). Ensures same-named newer actions
+        /// cannot be cleared by a stale callback from an older sequence.
+        /// </summary>
+        public bool CompleteIfCurrent(ActionToken token)
+        {
+            if (!_current.HasValue) return false;
+            if (!token.IsValid) return CompleteIfCurrent(_current.Value.ActionKey);
+
+            if (!_current.Value.Token.Matches(token))
                 return false;
 
             _current = null;

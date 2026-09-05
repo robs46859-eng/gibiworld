@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "specification": "GW-ARCH-003",
+  "status": "PROPOSED_INITIAL_TUNING_NOT_RUNTIME_CONFIGURATION",
+  "simulation": {
+    "fixedHz": 50,
+    "behaviorHz": 10,
+    "maxRoundActiveSeconds": 45
+  },
+  "navigation": {
+    "cellSizeM": 0.05,
+    "maxExtentM": 6.0,
+    "maxCells": 14400,
+    "maxReplansHz": 5,
+    "rebuildDebounceMs": 250,
+    "bodyMarginM": 0.05,
+    "walkSpeedMps": 0.65,
+    "trotSpeedMps": 1.2,
+    "maxSpeedMps": 1.8,
+    "maxAccelerationMps2": 2.5,
+    "maxTurnDegreesPerSecond": 180
+  },
+  "throw": {
+    "ballDiameterM": 0.067,
+    "minDistanceM": 0.6,
+    "maxDistanceM": 2.5,
+    "launchHeightAboveSupportM": 0.2,
+    "gravityMps2": 9.81,
+    "minFlightSeconds": 0.45,
+    "maxFlightSeconds": 0.9,
+    "maxLaunchSpeedMps": 6.0,
+    "maxApexAboveSupportM": 0.8,
+    "maxSettleDistanceM": 0.15,
+    "maxSettleSeconds": 0.3,
+    "pickupContactToleranceM": 0.04,
+    "pickupHeadingToleranceDegrees": 15
+  },
+  "returnZone": {
+    "distanceFromCameraGroundM": 0.8,
+    "maxRefreshHz": 2,
+    "movementThresholdM": 0.25,
+    "finalApproachFreezeM": 0.35
+  },
+  "dwelling": {
+    "heroShoulderHeightM": 0.5,
+    "initialDoorClearWidthM": 0.7,
+    "initialDoorClearHeightM": 0.9,
+    "initialInteriorWidthM": 1.3,
+    "initialInteriorDepthM": 1.5,
+    "initialInteriorHeightM": 1.0,
+    "requiresMeasuredAnimationEnvelope": true
+  },
+  "tracking": {
+    "stopOnFirstTrackingLoss": true,
+    "visibleDegradeAfterMs": 250,
+    "stableResumeDwellMs": 1000,
+    "cancelRoundAfterLossMs": 3000,
+    "poseJumpThresholdM": 0.35
+  },
+  "defaults": {
+    "automatedDemoEnabled": false,
+    "localBrainEnabled": false,
+    "constrainedPracticeEnabled": false,
+    "rankedFetchEnabled": false
+  }
+}

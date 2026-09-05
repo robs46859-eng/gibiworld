@@ -1,0 +1,20 @@
+Unity Editor version:    6000.0.74f1 (7685f01dc6be)
+Branch:                  6000.0/staging
+Build type:              Release
+Batch mode:              YES
+macOS version:           Version 26.6.2 (Build 25G83)
+Darwin version:          25.6.0
+Architecture:            arm64
+Running under Rosetta:   NO
+Available memory:        16384 MB
+2026-09-05 10:56:20.621 Unity[41253:1036084] *** -[_NSActivityAssertion _initWithActivityOptions:reason:expirationHandler:]: Warning: Could not create system idle sleep assertion (-536870199)
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Channel LicenseClient-robert doesn't exist
+Launching external process: /Applications/Unity/Hub/Editor/6000.0.74f1/Unity.app/Contents/Frameworks/UnityLicensingClient.app/Contents/MacOS/Unity.Licensing.Client
+[Licensing::Module] Successfully launched the LicensingClient (PId: 41255)
+2026-09-05 10:56:20.905 Unity[41253:1036119] Connection Invalid error for service com.apple.hiservices-xpcservice.
+2026-09-05 10:56:20.905 Unity[41253:1036084] Error received in message reply handler: Connection invalid
+CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
+[Licensing::IpcConnector] Channel LicenseClient-robert doesn't exist
+[Licensing::Module] Timed-out after 60.01s, waiting for channel: "LicenseClient-robert"
+[Licensing::Module] Error: Licensing initialization failed after 74.84s

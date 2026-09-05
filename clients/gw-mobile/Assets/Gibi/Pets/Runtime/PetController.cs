@@ -242,9 +242,35 @@ namespace Gibi.Pets
             _postFetchCelebration = false;
             _targetPosition = toyPosition;
             _hasTarget = true;
-            _motion.SetGait(Gait.Run);
-            _animator?.PlayImmediate("run", loop: true);
+            // Fatigue changes manner/speed (walk vs trot/run), never whether an otherwise legal repeat action is available
+            Gait fetchGait = _biometrics != null && _biometrics.Fatigue > 0.7f ? Gait.Trot : Gait.Run;
+            _motion.SetGait(fetchGait);
+            _animator?.PlayImmediate(fetchGait == Gait.Trot ? "trot" : "run", loop: true);
             return true;
+        }
+
+        /// <summary>Direct player Pet cue (priority 2).</summary>
+        public bool CuePet()
+        {
+            if (_arbiter.CurrentActionKey == "STOP") return false;
+            CancelFetch(dropToy: true);
+            _hasTarget = false;
+            _motion.SetGait(Gait.Idle);
+            bool accepted = _arbiter.Propose(BehaviorLayer.PlayerCue, "PET", 3000, interruptible: true);
+            if (accepted)
+            {
+                _animator?.PlayImmediate("pet_react");
+            }
+            return accepted;
+        }
+
+        /// <summary>Player Pause cue: freezes interaction.</summary>
+        public void CuePause()
+        {
+            _hasTarget = false;
+            _motion.SetGait(Gait.Idle);
+            _arbiter.Propose(BehaviorLayer.PlayerCue, "PAUSE", 10000, interruptible: true);
+            _animator?.PlayImmediate("idle_a", loop: true);
         }
 
         public bool CueRest(RestAffordance shelter)
@@ -362,7 +388,9 @@ namespace Gibi.Pets
             transform.SetPositionAndRotation(a.EngagedAnchorWorld, a.ApproachFacingWorld);
             _animator?.PlayImmediate(a.EngagedClipKey, loop: true);
 
-            if (a.ConcealsOccupant) SetConcealed(true);
+            // GW-ARCH-003 HOME-02: Real visible dwelling entry and rest.
+            // Do not hide the dog renderer to simulate entry. The pet remains visible.
+            SetConcealed(false);
         }
 
         /// <summary>Leaves at the threshold, facing out, never inside the geometry.</summary>

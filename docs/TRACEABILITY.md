@@ -77,3 +77,47 @@ Status legend: `IMPL` implemented + test written · `PART` partially implemented
 | GW-SEC-004 | Production buckets private, listing disabled | OpenTofu B2 policy | cloud policy test | TODO |
 | GW-SEC-005 | Admin needs SSO + hardware MFA + RBAC + audit | `gw-admin` + `audit_log` rules | access review | PART |
 | GW-SEC-006 | Telemetry filter strips coordinates and credentials | `gw-telemetry` PII filter | PII canary | TODO |
+
+## GW-ARCH-003 — 39 Implementation Requirements
+
+| Req ID | Requirement Summary | Implementation Path | Acceptance Test | Status |
+|---|---|---|---|---|
+| AR-01 | Measured/Unknown states for lighting & headroom | `Gibi.Core/Runtime/SpatialTypes.cs`, `ARSurfaceProbe.cs` | `SpatialMeasurementTests` | IMPL |
+| AR-02 | Full composition footprint & polygon distance | `Gibi.Spatial/Runtime/SurfaceAcceptance.cs` | `PlacementPolygonTests` | PART |
+| AR-03 | Slope $\le 12^\circ$ & non-ranked separation | `Gibi.Spatial/Runtime/SurfaceAcceptance.cs` | `SurfacePurposeTests` | IMPL |
+| AR-04 | Local grid navigation & swept corridor | `Gibi.Spatial/Runtime/LocalGridNavigation.cs` | `LocalGridNavigationTests` | IMPL |
+| AR-05 | Tracking loss stop & 250 ms degrade | `Gibi.Spatial/Runtime/AnchorEligibility.cs` | `TrackingRecoveryTests` | IMPL |
+| PET-01 | 10 Hz perception/policy loop & stable seed | `Gibi.Pets/Runtime/BehaviorArbiter.cs`, `PetController.cs` | `PetPolicyScenarioTests` | PART |
+| PET-02 | ActionToken generation & sequence guards | `Gibi.Core/Runtime/ActionToken.cs`, `BehaviorArbiter.cs` | `ActionTokenTests` | IMPL |
+| PET-03 | Null intent source fallback & local parity | `Gibi.AI/Runtime/NullIntentSource.cs` | `IntentEnvelopeTests` | IMPL |
+| PET-04 | 50 Hz motion accumulator & gait exertion | `Gibi.Pets/Runtime/DeterministicMotion.cs`, `PetController.cs` | `MotorReplayTests` | IMPL |
+| FETCH-01 | Player-initiated throw; demo director disabled in prod | `Gibi.Gameplay/Runtime/FetchSession.cs`, `SceneBuilder.cs` | `PlayerFetchTests` | IMPL |
+| FETCH-02 | Fixed-step throw solver (apex $\le 0.8\text{m}$, speed $\le 6\text{m/s}$) | `Gibi.Gameplay/Runtime/ThrowSolver.cs` | `ThrowSolverTests` | IMPL |
+| FETCH-03 | Complete fetch state machine & timeout recoveries | `Gibi.Gameplay/Runtime/FetchSession.cs` | `FetchPhaseTests` | IMPL |
+| FETCH-04 | Single toy transform owner & jaw socket attachment | `Gibi.Pets/Runtime/ToyController.cs` | `ToyOwnershipTests` | IMPL |
+| FETCH-05 | Bounded return zone & player movement tracking | `Gibi.Gameplay/Runtime/FetchSession.cs` | `ReturnZoneTests` | IMPL |
+| FETCH-06 | Release confirmation, idempotent completion, no score | `Gibi.Gameplay/Runtime/FetchSession.cs` | `FetchCompletionTests` | IMPL |
+| HOME-01 | Fitted doorway ($\ge 0.70 \times 0.90\text{m}$) & interior envelope | `Gibi.Pets/Runtime/DwellingDefinition.cs` | `DwellingInteractionTests` | IMPL |
+| HOME-02 | Traversable entry/turn/rest/exit; no concealment | `DwellingDefinition.cs`, `DwellingInteraction.cs` | `DwellingInteractionTests` | IMPL |
+| HOME-03 | Edit-mode dwelling relocation; no pose serialization | `Gibi.Pets/Runtime/DwellingInteraction.cs` | `DwellingEditTests` | PART |
+| SYS-01 | Idempotent cancellation across all phases | `FetchSession.cs`, `ToyController.cs`, `DwellingInteraction.cs` | `InterruptionMatrixTests` | IMPL |
+| SYS-02 | Accessible UI, touch target sizes, UI touch exclusion | `Gibi.UI/Runtime/CompanionInputRouter.cs` | `AccessibilityWalkthrough` | IMPL |
+| ASSET-01 | Production assets and manifest tracking | `contracts/schemas/pet-manifest.schema.json` | `ReleaseCatalogCoverage` | PART |
+| ASSET-02 | Physical scale (shoulder 0.50 m, ball 0.067 m) | `PetAnimationProfile.cs`, `ThrowSolver.cs` | `PhysicalScaleFixtures` | PART |
+| ASSET-03 | Generic rig & bone limits ($\le 96$ deform bones) | `PetAnimationProfile.cs` | `RigDeformationFixtures` | PART |
+| ASSET-04 | Trusted contact profiles & action timing | `PetAnimationProfile.cs` | `ContactProfileFixtures` | PART |
+| ASSET-05 | Native clip library; P0 substitutes rejected | `PetAnimationProfile.cs` | `NativeClipCoverage` | PART |
+| ASSET-06 | Generic animation graph & offscreen advancement | `PetAnimator.cs`, `PetController.cs` | `AnimationIntegrationTests` | PART |
+| ASSET-07 | Asset verifier & quarantine cache | `Gibi.AssetRuntime/Runtime/AssetVerifier.cs` | `AssetTrustMatrix` | IMPL |
+| ASSET-08 | Catalog integrity & signed envelopes | `Gibi.AssetRuntime/Runtime/PresetCatalog.cs` | `CatalogIntegrityTests` | IMPL |
+| DATA-01 | Token subject scoping & cross-user isolation | `contracts/openapi/gibiworld.v1.yaml` | `OwnershipIsolationTests` | PART |
+| DATA-02 | Session entry exact-version entitlement check | `Gibi.AssetRuntime/Runtime/ConnectivityPolicy.cs` | `EntitlementLifecycleTests` | PART |
+| DATA-03 | No anchor-local/world coordinates in durable saves | `db/migrations/0004_companion_dwellings_sessions_events.sql` | `PersistenceBoundaryTests` | IMPL |
+| DATA-04 | Migration forward repair: asset-version uniqueness & FKs | `db/migrations/0004_companion_dwellings_sessions_events.sql` | `MigrationInvariantTests` | IMPL |
+| DATA-05 | Offline outbox, retry with jitter, gap handling | `Gibi.Networking/Runtime/OfflineOutbox.cs` | `OfflineReplayTests` | IMPL |
+| DATA-06 | Unranked fetch; no client currency/bond grants | `FetchSession.cs`, `db/migrations/0004_*.sql` | `NoClientGrantTests` | IMPL |
+| AI-01 | Intent schema validation & allowlist enforcement | `Gibi.AI/Runtime/NullIntentSource.cs` | `IntentEnvelopeTests` | IMPL |
+| AI-02 | Model memory/thermal benchmark gates | Gated to M6 | `ModelBudgetBenchmarks` | BLOCKED |
+| AI-03 | Memory deletion & tombstone within 24 h | `db/migrations/0002_world_courses_ledger.sql` | `MemoryDeletionTests` | PART |
+| OPS-01 | Telemetry privacy filter (no camera/coordinates) | `Gibi.Telemetry/` | `TelemetryPrivacyTests` | PART |
+| OPS-02 | Feature flag & content rollback drill | `Gibi.Core/Runtime/DeviceTier.cs` | `RollbackDrill` | PART |

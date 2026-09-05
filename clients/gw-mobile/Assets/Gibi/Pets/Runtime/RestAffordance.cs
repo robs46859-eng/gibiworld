@@ -20,7 +20,7 @@ namespace Gibi.Pets
         [SerializeField] private Transform interiorAnchor;
 
         [Header("Behaviour")]
-        [SerializeField] private bool concealsOccupant = true;
+        [SerializeField] private bool concealsOccupant = false;
         [SerializeField] private string engagedClipKey = "sleep";
         [SerializeField] private bool available = true;
 

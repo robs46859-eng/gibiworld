@@ -183,7 +183,8 @@ namespace Gibi.Editor
 
             // The complete sandbox moves as one placement unit. It is hidden until the
             // first accepted tap, and ordinary later taps can no longer relocate it.
-            var sandbox = BuildSandboxComposition(originGo.transform, includeValidationFloor: false);
+            // GW-ARCH-003 W01/FETCH-01: In production ARWorld, SandboxDemoDirector is disabled.
+            var sandbox = BuildSandboxComposition(originGo.transform, includeValidationFloor: false, includeDemoDirector: false);
             sandbox.Root.gameObject.SetActive(false);
 
             // Without these two the scene renders a camera feed and nothing else — no
@@ -217,7 +218,7 @@ namespace Gibi.Editor
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            var sandbox = BuildSandboxComposition(null, includeValidationFloor: true);
+            var sandbox = BuildSandboxComposition(null, includeValidationFloor: true, includeDemoDirector: true);
 
             var session = new GameObject("SandboxSession");
             var p0 = session.AddComponent<Gibi.Gameplay.P0SessionDriver>();
@@ -253,7 +254,7 @@ namespace Gibi.Editor
         }
 
         private static SandboxComposition BuildSandboxComposition(
-            Transform parent, bool includeValidationFloor)
+            Transform parent, bool includeValidationFloor, bool includeDemoDirector = false)
         {
             var rootGo = new GameObject("PlacedWorldRoot");
             if (parent != null) rootGo.transform.SetParent(parent, worldPositionStays: false);
@@ -292,10 +293,14 @@ namespace Gibi.Editor
             // Measured: centre X 0.0287 m; Unity depth 1.084 m.
             rest.ConfigureVisibleThresholdRest(0.0287f, 1.084f);
 
-            var directorGo = new GameObject("SandboxDemoDirector");
-            directorGo.transform.SetParent(content.transform, false);
-            var director = directorGo.AddComponent<Gibi.Pets.SandboxDemoDirector>();
-            director.Configure(fetchToy, rest, returnPoint.transform, shouldLoop: true);
+            Gibi.Pets.SandboxDemoDirector director = null;
+            if (includeDemoDirector)
+            {
+                var directorGo = new GameObject("SandboxDemoDirector");
+                directorGo.transform.SetParent(content.transform, false);
+                director = directorGo.AddComponent<Gibi.Pets.SandboxDemoDirector>();
+                director.Configure(fetchToy, rest, returnPoint.transform, shouldLoop: true);
+            }
 
             return new SandboxComposition
             {

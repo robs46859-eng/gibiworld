@@ -245,10 +245,12 @@ namespace Gibi.Gameplay
                 $"viewportCenter={viewportCenter}");
         }
 
-        // ---- P0 player cues ----
+        // ---- Player cues (Fetch, Come, Sit, Home, Pet, Pause) ----
         public void CueSit()   => _pet?.CueSit();
         public void CueCome(Vector3 playerPos) => _pet?.CueCome(playerPos);
         public void CueFetch(Vector3 toyPos)   => _pet?.CueFetch(toyPos);
+        public void CuePet()   => _pet?.CuePet();
+        public void CuePause() => _pet?.CuePause();
 
         public bool ResetPlacedWorld()
         {

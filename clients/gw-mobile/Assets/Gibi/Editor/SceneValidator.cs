@@ -110,7 +110,7 @@ namespace Gibi.Editor
                 RequireUnder<Gibi.Pets.SandboxBoundary>(placed, "P0 AR contract", errors);
                 RequireUnder<Gibi.Pets.FetchToy>(placed, "P0 AR contract", errors);
                 RequireUnder<Gibi.Pets.RestAffordance>(placed, "P0 AR contract", errors);
-                RequireUnder<Gibi.Pets.SandboxDemoDirector>(placed, "P0 AR contract", errors);
+                RequireAbsentUnder<Gibi.Pets.SandboxDemoDirector>(placed, "GW-ARCH-003 production contract: SandboxDemoDirector must be absent from production ARWorld", errors);
             }
 
             return errors;
@@ -192,6 +192,14 @@ namespace Gibi.Editor
             int count = root.GetComponentsInChildren<T>(true).Length;
             if (count != 1)
                 errors.Add($"{contract}: expected one {typeof(T).Name} under {root.name}; found {count}.");
+        }
+
+        private static void RequireAbsentUnder<T>(Transform root, string contract,
+                                                  List<string> errors) where T : Component
+        {
+            int count = root.GetComponentsInChildren<T>(true).Length;
+            if (count != 0)
+                errors.Add($"{contract}: expected NO {typeof(T).Name} under {root.name}; found {count}.");
         }
 
         private static List<string> ValidateBootstrap()

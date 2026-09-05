@@ -443,3 +443,81 @@ paths:
                 reason: { type: string, enum: [UNSAFE, INACCESSIBLE, PRIVATE_PROPERTY, OFFENSIVE, OTHER] }
       responses:
         '202': { description: Accepted. Threshold breach disables discovery immediately without deleting evidence. }
+
+  /v1/companion/bootstrap:
+    get:
+      summary: Bootstrap read models, active dwelling selection, config revision and entitlement status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [serverTimeUtc, configRevision, catalogRevision]
+                properties:
+                  serverTimeUtc: { type: string, format: date-time }
+                  configRevision: { type: integer }
+                  catalogRevision: { type: integer }
+
+  /v1/pets/{petId}/dwelling:
+    get:
+      summary: Get active dwelling selection for pet
+      parameters:
+        - { name: petId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: Update active dwelling selection
+      parameters:
+        - { name: petId, in: path, required: true, schema: { type: string } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '200':
+          description: Dwelling selection updated
+
+  /v1/pets/{petId}/preferences:
+    patch:
+      summary: Update allowlisted pet preferences
+      parameters:
+        - { name: petId, in: path, required: true, schema: { type: string } }
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '200':
+          description: Preferences updated
+
+  /v1/companion-play/sessions:
+    post:
+      summary: Create or restore local unranked companion play session
+      parameters:
+        - { $ref: '#/components/parameters/IdempotencyKey' }
+      responses:
+        '201':
+          description: Session created
+
+  /v1/companion-play/sessions/{sessionId}/events:
+    post:
+      summary: Ingest ordered companion play event batch
+      parameters:
+        - { name: sessionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Events accepted
+
+  /v1/companion-play/sessions/{sessionId}/finish:
+    post:
+      summary: Conclude companion play session
+      parameters:
+        - { name: sessionId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Session finished
+
+  /v1/client/update-state:
+    get:
+      summary: Fetch configuration, catalog revisions, revocations and kill switches
+      responses:
+        '200':
+          description: Current client update state
